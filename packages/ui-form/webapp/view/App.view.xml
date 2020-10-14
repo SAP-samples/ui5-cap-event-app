@@ -1,0 +1,9 @@
+<mvc:View
+	controllerName="sap.ui.eventregistration.form.controller.App"
+	displayBlock="true"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+
+	<App id="app" autoFocus="false" />
+
+</mvc:View>

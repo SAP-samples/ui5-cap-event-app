@@ -1,0 +1,34 @@
+{
+  "name": "ui5-cap-event-app-server",
+  "version": "0.0.0",
+  "description": "A simple CAP-based UI5 Event Application Server.",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^4.1.9",
+    "@sap/xsenv": "^3.0.0",
+    "@sap/xssec": "^3.0.3",
+    "express": "*",
+    "hdb": "^0.18.0",
+    "passport": "^0.4.1",
+    "sqlite3": "^5.0.0"
+  },
+  "scripts": {
+    "cds:build": "cds build",
+    "cds:start": "cds run",
+    "cds:watch": "cds watch",
+    "cds:debug": "node --inspect bin/cds run",
+    "cds:debug-brk": "node --inspect-brk bin/cds run",
+    "start": "npm run cds:start"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sql",
+        "model": [
+          "db",
+          "srv"
+        ]
+      }
+    }
+  }
+}

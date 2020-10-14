@@ -1,0 +1,44 @@
+{
+    "auth": {
+        "passport": {
+            "strategy": "mock",
+            "users": {
+                "Employee": {
+                    "password": "123",
+                    "ID": "employee@test.com",
+                    "roles": [
+                        "Employee"
+                    ]
+                },
+                "Employee2": {
+                    "password": "123",
+                    "ID": "employee2@test.com",
+                    "roles": [
+                        "Employee"
+                    ]
+                },
+                "firstname1": {
+                    "password": "123",
+                    "ID": "firstname1.lastname1@sap.com",
+                    "roles": [
+                        "Employee"
+                    ]
+                },
+                "F2": {
+                    "password": "123",
+                    "ID": "firstname2.lastname2@sap.com",
+                    "roles": [
+                        "Employee"
+                    ]
+                },
+                "Admin": {
+                    "password": "123",
+                    "ID": "admin@test.com",
+                    "roles": [
+                        "Admin"
+                    ]
+                }
+            }
+        }
+    }
+}

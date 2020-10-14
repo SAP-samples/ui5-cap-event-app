@@ -1,0 +1,20 @@
+<mvc:View
+	controllerName="sap.ui.eventregistration.form.controller.Confirmation"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+
+	<MessagePage
+		title="{i18n>confirmationTitle}"
+		text="{i18n>confirmationText}"
+		icon="sap-icon://accept"
+		id="page"
+		description="">
+		<buttons>
+			<Button
+				text="{i18n>confirmationLogout}"
+				press=".getOwnerComponent().doLogout()"
+				type="Reject"/>
+		</buttons>
+	</MessagePage>
+
+</mvc:View>

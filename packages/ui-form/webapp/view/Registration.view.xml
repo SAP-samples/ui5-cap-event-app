@@ -1,0 +1,127 @@
+<mvc:View controllerName="sap.ui.eventregistration.form.controller.Registration" 
+	xmlns="sap.m" 
+	xmlns:l="sap.ui.layout" 
+	xmlns:f="sap.ui.layout.form" 
+	xmlns:core="sap.ui.core" 
+	xmlns:mvc="sap.ui.core.mvc">
+	<Page id="page" floatingFooter="true">
+		<customHeader>
+			<Bar>
+				<contentLeft>
+					<!-- <Image src="img/logo.png" height="32px" /> -->
+					<Label text="{i18n>pageHeaderTitle}" class="sapUiMediumMarginBegin" wrapping="true"/>
+					<!-- wrapping helps with keeping at least parts of the title visible on very small screens -->
+				</contentLeft>
+				<contentRight>
+					<Button icon="sap-icon://log" tooltip="{i18n>logout}" press=".getOwnerComponent().doLogout()" type="Reject" />
+				</contentRight>
+			</Bar>
+		</customHeader>
+
+		<f:Form editable="true" class="sapUiResponsiveMargin">
+			<f:toolbar>
+				<Toolbar>
+					<Title text="{i18n>registrationViewTitle}" />
+				</Toolbar>
+			</f:toolbar>
+			<f:layout>
+				<f:ResponsiveGridLayout labelSpanXL="4" labelSpanL="4" labelSpanM="4" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="3" emptySpanL="3" emptySpanM="1" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="true" />
+			</f:layout>
+			<f:formContainers>
+				<f:FormContainer title="{i18n>personalData}">
+					<f:formElements>
+						<f:FormElement label="{i18n>firstName}">
+							<f:fields>
+								<Input id="firstName" required="true" value="{
+									path: 'FirstName',
+									type: 'sap.ui.model.type.String'
+								}" maxLength="100" fieldGroupIds="RegForm"/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="{i18n>name}">
+							<f:fields>
+								<Input required="true" value="{
+									path: 'LastName',
+									type: 'sap.ui.model.type.String'
+								}" maxLength="100" fieldGroupIds="RegForm"/>
+							</f:fields>
+						</f:FormElement>
+						<f:FormElement label="{i18n>dateOfBirth}">
+							<f:fields>
+								<DatePicker required="true" value="{
+									path: 'Birthday',
+									type: 'sap.ui.model.type.Date',
+									formatOptions: {
+										source: {
+											pattern: 'yyyy-MM-dd'
+										}
+									}
+								}" placeholder=" " fieldGroupIds="RegForm"/>
+							</f:fields>
+						</f:FormElement>
+					</f:formElements>
+				</f:FormContainer>
+			</f:formContainers>
+		</f:Form>
+			
+		
+		<Table id="familyMembersTable"
+				class="sapUiResponsiveMargin"
+				width="auto"
+				backgroundDesign="Transparent"
+				inset="false"
+				items="{FamilyMembers}" 
+				noDataText="{i18n>noFamilyMembers}">
+			<headerToolbar>
+				<Toolbar>
+					<Title text="{i18n>familyMembers}" />
+					<ToolbarSpacer />
+					<Button text="{i18n>addFamilyMembers}" press=".addFamilyMember" />
+				</Toolbar>
+			</headerToolbar>
+			<columns>
+				<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Left" popinDisplay="WithoutHeader">
+				</Column>
+				<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Left" popinDisplay="WithoutHeader">
+				</Column>
+				<Column minScreenWidth="Desktop" demandPopin="true" hAlign="Left" popinDisplay="WithoutHeader">
+				</Column>
+				<Column width="6rem" hAlign="End" minScreenWidth="Desktop" demandPopin="true" popinDisplay="WithoutHeader">
+				</Column>
+			</columns>
+			<items>
+				<ColumnListItem>
+					<Input value="{
+						path: 'LastName',
+						type: 'sap.ui.model.type.String'
+					}" required="true" placeholder="{i18n>name}" maxLength="100" fieldGroupIds="RegForm"/>
+					<Input value="{
+						path: 'FirstName',
+						type: 'sap.ui.model.type.String'
+					}" required="true" placeholder="{i18n>firstName}" maxLength="100" fieldGroupIds="RegForm"/>
+					<DatePicker value="{
+						path: 'Birthday',
+						type: 'sap.ui.model.type.Date',
+						formatOptions: {
+							source: {
+								pattern: 'yyyy-MM-dd'
+							}
+						}
+					}" required="true" placeholder="{i18n>dateOfBirth}" fieldGroupIds="RegForm"/>
+					<Button text="{i18n>delete}" press=".deleteFamilyMember" />
+				</ColumnListItem>
+			</items>
+		</Table>
+
+		<footer>
+			<OverflowToolbar>
+				<content>
+					<ToolbarSpacer />
+					<Button id="submitButton" text="{i18n>save}" press="onSubmit" type="Emphasized" />
+					<Button text="{i18n>logout}" press=".getOwnerComponent().doLogout()" />
+				</content>
+			</OverflowToolbar>
+		</footer>
+	</Page>
+
+</mvc:View>

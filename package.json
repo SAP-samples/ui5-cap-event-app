@@ -1,0 +1,37 @@
+{
+  "name": "ui5-cap-event-app",
+  "version": "0.0.0",
+  "description": "UI5 CAP Event Application",
+  "private": true,
+  "scripts": {
+    "build": "npm-run-all build:clean --parallel build:server build:ui-form build:ui-admin --parallel build:server:copy-app build:server:copy-cdsrc build:server:copy-gen build:ui-form:copy build:ui-admin:copy",
+    "build:clean": "rimraf dist",
+    "build:server": "yarn workspace ui5-cap-event-app-server cds:build",
+    "build:server:copy-app": "cpy \"packages/server/app/sandbox.html\" dist/app --rename=index.html",
+    "build:server:copy-cdsrc": "cpx \"packages/server/.cdsrc.json\" dist",
+    "build:server:copy-gen": "cpx \"packages/server/gen/srv/**\" dist",
+    "build:ui-form": "yarn workspace ui5-cap-event-app-ui-form build",
+    "build:ui-form:copy": "cpx \"packages/ui-form/dist/**\" dist/app/form",
+    "build:ui-admin": "yarn workspace ui5-cap-event-app-ui-admin build",
+    "build:ui-admin:copy": "cpx \"packages/ui-admin/dist/**\" dist/app/admin",
+    "start": "npm-run-all --parallel start:server start:ui-form start:ui-admin",
+    "start:server": "yarn workspace ui5-cap-event-app-server cds:start",
+    "start:ui-form": "yarn workspace ui5-cap-event-app-ui-form start",
+    "start:ui-admin": "yarn workspace ui5-cap-event-app-ui-admin start",
+    "debug": "npm-run-all --parallel debug:server start:ui-form start:ui-admin",
+    "debug:server": "yarn workspace ui5-cap-event-app-server cds:debug"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.wdf.sap.corp:uics-innersource/ui5-cap-event-app.git"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {
+    "cpx": "^1.5.0",
+    "cpy-cli": "^3.1.1",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2"
+  }
+}

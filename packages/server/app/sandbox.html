@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Event Registration - Launchpad</title>
+
+        <script>
+            window["sap-ushell-config"] = {
+                defaultRenderer: "fiori2",
+                bootstrapPlugins: {
+                    "RuntimeAuthoringPlugin": {
+                        component: "sap.ushell.plugins.rta",
+                        config: {
+                            validateAppVersion: false
+                        }
+                    }
+                },
+                renderers: {
+                    fiori2: {
+                        componentData: {
+                            config: {
+                                //rootIntent: "fe-lrop-v4",
+                                search: "hidden"
+                            }
+                        }
+                    }
+                },
+                applications: {
+                    "fs-form": {
+                        title: "Form UI",
+                        description: "Form UI",
+                        additionalInformation: "SAPUI5.Component=sap.ui.eventregistration.form",
+                        applicationType: "URL",
+                        url: "./form",
+                        navigationMode: "embedded"
+                    },
+                    "fe-lrop-v4": {
+                        title: "Admin UI",
+                        description: "Admin UI",
+                        additionalInformation: "SAPUI5.Component=sap.ui.eventregistration.admin",
+                        applicationType: "URL",
+                        url: "./admin",
+                        navigationMode: "embedded"
+                    }
+                }
+            };
+        </script>
+
+        <script src="https://sapui5.hana.ondemand.com/1.82.0/resources/sap-ui-core.js"
+            data-sap-ui-async="true"
+            data-sap-ui-libs="sap.m, sap.ushell, sap.ui.core, sap.f, sap.fe.templates, sap.ui.table, sap.ui.layout"
+            data-sap-ui-compatVersion="edge"
+            data-sap-ui-theme="sap_fiori_3"
+            data-sap-ui-frameOptions="allow"
+            data-sap-ui-bindingSyntax="complex"
+        ></script>
+
+        <!-- moved the sandbox.js script after the UI5 bootstrap -->
+        <script src="https://sapui5.hana.ondemand.com/1.82.0/test-resources/sap/ushell/bootstrap/sandbox.js"></script>
+
+        <script>
+
+            sap.ui.getCore().attachInit(function () {
+                // call the boot-task of the sandbox.js manually
+                window['sap-ui-config']['xx-bootTask'](function() {
+                    // initialize the ushell sandbox component
+                    sap.ushell.Container.createRenderer().placeAt("content");
+                });
+            });
+
+        </script>
+    </head>
+    <body class="sapUiBody" id="content"></body>
+</html>

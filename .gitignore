@@ -1,0 +1,15 @@
+# build results
+packages/server/gen
+dist
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+node_modules/
+
+.DS_Store

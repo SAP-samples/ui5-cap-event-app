@@ -1,0 +1,18 @@
+<mvc:View
+	controllerName="sap.ui.eventregistration.form.controller.NotAuthorized"
+	displayBlock="true"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc">
+
+	<MessagePage
+		title="{i18n>notAuthorizedTitle}"
+		text="{i18n>notAuthorizedText}"
+		icon="sap-icon://employee-rejections"
+		id="page"
+		description="">
+		<buttons>
+			<Button text="{i18n>relogin}" press=".getOwnerComponent().doLogout()" />
+		</buttons>
+	</MessagePage>
+
+</mvc:View>

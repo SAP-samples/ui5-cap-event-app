@@ -1,0 +1,28 @@
+specVersion: "2.0"
+metadata:
+  name: sap.ui.eventregistration.form
+type: application
+framework:
+  name: SAPUI5
+  version: "1.82.0"
+  libraries:
+    - name: sap.m
+    - name: sap.ui.core
+    - name: sap.ui.layout
+    - name: sap.ui.unified
+    - name: themelib_sap_fiori_3
+server:
+  customMiddleware:
+  - name: ui5-middleware-simpleproxy
+    mountPath: /event-registration/
+    afterMiddleware: compression
+    configuration:
+      baseUri: http://localhost:4004/event-registration/ 
+      removeETag: true
+  - name: ui5-middleware-livereload
+    afterMiddleware: compression
+    configuration:
+      debug: true
+      extraExts: "xml,json,properties"
+      port: 35729
+      path: "webapp"
