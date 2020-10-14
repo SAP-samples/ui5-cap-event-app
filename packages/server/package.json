@@ -4,7 +4,7 @@
   "description": "A simple CAP-based UI5 Event Application Server.",
   "private": true,
   "dependencies": {
-    "@sap/cds": "^4.1.9",
+    "@sap/cds": "^4.2.3",
     "@sap/xsenv": "^3.0.0",
     "@sap/xssec": "^3.0.3",
     "express": "*",
