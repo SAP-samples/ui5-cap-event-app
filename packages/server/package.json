@@ -5,10 +5,7 @@
   "private": true,
   "dependencies": {
     "@sap/cds": "^4.2.3",
-    "@sap/xsenv": "^3.0.0",
-    "@sap/xssec": "^3.0.3",
     "express": "*",
-    "hdb": "^0.18.0",
     "passport": "^0.4.1",
     "sqlite3": "^5.0.0"
   },

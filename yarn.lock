@@ -71,41 +71,39 @@
     "@nodelib/fs.scandir" "2.1.3"
     fastq "^1.6.0"
 
-"@sap-cloud-sdk/analytics@^1.30.0":
-  version "1.30.0"
-  resolved "https://registry.yarnpkg.com/@sap-cloud-sdk/analytics/-/analytics-1.30.0.tgz#847920a58ec3c2a63b9080b1f833eb3aa3611e9c"
-  integrity sha512-veXlbVRzndDDHE3OwfmqBnsGwHTjE1uAdRGbkSNraYOx6aYn/XyS3OQ9GbyAKRopW0UaG/C6AUnHLbAR+0Xg7w==
+"@sap-cloud-sdk/analytics@^1.31.0":
+  version "1.31.0"
+  resolved "https://registry.yarnpkg.com/@sap-cloud-sdk/analytics/-/analytics-1.31.0.tgz#e390b2900135e5080cf678c13f78678096177256"
+  integrity sha512-v8PQhnPr86v0+rkIkE97CZ1HWgR7Xtzm2AxhC2HxX7mj+2HrXBeAkC8cstz/8jbCEreaOcfsla4btNygk+MG2Q==
   dependencies:
-    "@sap-cloud-sdk/util" "^1.30.0"
-    axios "^0.19.2"
+    "@sap-cloud-sdk/util" "^1.31.0"
+    axios "^0.21.0"
 
 "@sap-cloud-sdk/core@^1.18.1":
-  version "1.30.0"
-  resolved "https://registry.yarnpkg.com/@sap-cloud-sdk/core/-/core-1.30.0.tgz#61e02776f6edddcb4666da873c5289b07f4c6bc4"
-  integrity sha512-IkY0gW3Ai/Becq0UFGcpjiddgb8q0vuPLVHakSOw6paujjd244LMCXUhYIyhQft66wwwEtptNzts0c7B3sFBQg==
+  version "1.31.0"
+  resolved "https://registry.yarnpkg.com/@sap-cloud-sdk/core/-/core-1.31.0.tgz#84be20447eb601c3af440e18083cf29df15d85b6"
+  integrity sha512-iocPsn8FU97WeGyV2QURpP9CWPABBzpymLzoubzT3Rw1LU2cfoC4Ciq+/QQY8jl2aX9GIKSePK0buteONPAKxw==
   dependencies:
-    "@sap-cloud-sdk/analytics" "^1.30.0"
-    "@sap-cloud-sdk/util" "^1.30.0"
+    "@sap-cloud-sdk/analytics" "^1.31.0"
+    "@sap-cloud-sdk/util" "^1.31.0"
     "@sap/xsenv" "^3.0.0"
-    axios "^0.19.2"
+    axios "^0.21.0"
     bignumber.js "^9.0.0"
     http-proxy-agent "^4.0.1"
     https-proxy-agent "^5.0.0"
     jsonwebtoken "^8.5.1"
-    moment "~2.29.0"
+    moment "^2.29.0"
     opossum "^5.0.0"
-    rambda "^6.1.0"
     uuid "^8.2.0"
     voca "^1.4.0"
 
-"@sap-cloud-sdk/util@^1.30.0":
-  version "1.30.0"
-  resolved "https://registry.yarnpkg.com/@sap-cloud-sdk/util/-/util-1.30.0.tgz#eae13b5f70f559c4891577d8782ffa59874daffd"
-  integrity sha512-+92+xiR4O1Quk36veBbGeGeSY2qk7wn/mcgS7Lstungy2mLR3DqJzixc80oGy3ylAMNVoDu7ki6KR8notLlYIw==
+"@sap-cloud-sdk/util@^1.31.0":
+  version "1.31.0"
+  resolved "https://registry.yarnpkg.com/@sap-cloud-sdk/util/-/util-1.31.0.tgz#614ea476eafa8e931ffb5b15d5c6d70d7a920574"
+  integrity sha512-shA2MnrVtfAwWkFRA07lk4llh7NLPBXPBhzJaukEW63YHQcPo5yzkJ5FX3lj9vZi2mz/tLC5yu+wjjO2oyNVbg==
   dependencies:
     chalk "^4.1.0"
     logform "^2.2.0"
-    rambda "~6.2.0"
     winston "^3.3.3"
 
 "@sap/cds-compiler@^1.43.1":
@@ -159,18 +157,6 @@
   dependencies:
     debug "3.1.0"
     verror "1.10.0"
-
-"@sap/xssec@^3.0.3":
-  version "3.0.10"
-  resolved "https://registry.yarnpkg.com/@sap/xssec/-/xssec-3.0.10.tgz#a2cee569045cc56c87de1bc1a75b0fd7a4586b89"
-  integrity sha512-d5dxbtiB6DZ/tQxMdxvPuuJ4UwVnPUIsQvtxwrbfoume6jp03/OMlzpOfVRy2lHXN/uzXNIuqntuhiUqTzGj/Q==
-  dependencies:
-    debug "4.1.1"
-    jsonwebtoken "^8.5.1"
-    lru-cache "5.1.1"
-    request "^2.88.2"
-    requestretry "4.0.0"
-    valid-url "1.0.9"
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -631,12 +617,12 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.11.0.tgz#d61f46d83b2519250e2784daf5b09479a8b41c59"
   integrity sha512-xh1Rl34h6Fi1DC2WWKfxUTVqRsNnr6LsKz2+hfwDxQJWmrx8+c7ylaqBMcHfl1U1r2dsifOvKX3LQuLNZ+XSvA==
 
-axios@^0.19.2:
-  version "0.19.2"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-0.19.2.tgz#3ea36c5d8818d0d5f8a8a97a6d36b86cdc00cb27"
-  integrity sha512-fjgm5MvRHLhx+osE2xoekY70AhARk3a6hkN+3Io1jc00jtquGvxYlKlsFUhmUET0V5te6CcZI7lcv2Ym61mjHA==
+axios@^0.21.0:
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.0.tgz#26df088803a2350dff2c27f96fef99fe49442aca"
+  integrity sha512-fmkJBknJKoZwem3/IKSSLpkdNXZeBu5Q7GA/aRsr2btgrptmSCxi2oFjZHqGdK9DoTil9PIHlPIZw2EcRJXRvw==
   dependencies:
-    follow-redirects "1.5.10"
+    follow-redirects "^1.10.0"
 
 babel-runtime@^6.9.2:
   version "6.26.0"
@@ -1377,7 +1363,7 @@ debug@2.6.9, debug@^2.2.0, debug@^2.3.3:
   dependencies:
     ms "2.0.0"
 
-debug@3.1.0, debug@=3.1.0:
+debug@3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-3.1.0.tgz#5bb5a0672628b64149566ba16819e61518c67261"
   integrity sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g==
@@ -1390,13 +1376,6 @@ debug@4, debug@^4.1.0:
   integrity sha512-IX2ncY78vDTjZMFUdmsvIRFY2Cf4FnD0wRs+nQwJU8Lu99/tPFdb0VybiiMTPe3I6rQmwsqQqRBvxU+bZ/I8sg==
   dependencies:
     ms "2.1.2"
-
-debug@4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
-  integrity sha512-pYAIzeRo8J6KPEaJ0VWOh5Pzkbw/RetuzehGM7QRRX5he4fPHx2rdKMB256ehJCkX+XRQm16eZLqLNS8RSZXZw==
-  dependencies:
-    ms "^2.1.1"
 
 debug@^3.0.1, debug@^3.1.0, debug@^3.1.1, debug@^3.2.6:
   version "3.2.6"
@@ -2015,7 +1994,7 @@ extend-shallow@^3.0.0, extend-shallow@^3.0.2:
     assign-symbols "^1.0.0"
     is-extendable "^1.0.1"
 
-extend@^3.0.0, extend@^3.0.2, extend@~3.0.2:
+extend@^3.0.0, extend@~3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
   integrity sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==
@@ -2196,14 +2175,7 @@ fn.name@1.x.x:
   resolved "https://registry.yarnpkg.com/fn.name/-/fn.name-1.1.0.tgz#26cad8017967aea8731bc42961d04a3d5988accc"
   integrity sha512-GRnmB5gPyJpAhTQdSZTSp9uaPSvl09KoYcMQtsB9rQoOmzs9dH6ffeccH+Z+cv6P68Hu5bC6JjRh4Ah/mHSNRw==
 
-follow-redirects@1.5.10:
-  version "1.5.10"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.5.10.tgz#7b7a9f9aea2fdff36786a94ff643ed07f4ff5e2a"
-  integrity sha512-0V5l4Cizzvqt5D44aTXbFZz+FtyXV1vrDN6qrelxtfYQKW0KO0W2T/hkE8xvGa/540LkZlkaUjO4ailYTFtHVQ==
-  dependencies:
-    debug "=3.1.0"
-
-follow-redirects@^1.0.0:
+follow-redirects@^1.0.0, follow-redirects@^1.10.0:
   version "1.13.0"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.0.tgz#b42e8d93a2a7eea5ed88633676d6597bc8e384db"
   integrity sha512-aq6gF1BEKje4a9i9+5jimNFIpq4Q1WiwBToeRK5NvZBd/TRsmW8BsJfOEGkr76TbOyPVD3OVDN910EcUNtRYEA==
@@ -2595,13 +2567,6 @@ has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
-hdb@^0.18.0:
-  version "0.18.1"
-  resolved "https://registry.yarnpkg.com/hdb/-/hdb-0.18.1.tgz#160941a6cbacb2ec891f2314ea7a420d67659b4c"
-  integrity sha512-0Rod65lEa7NarCQX4FjVznBgNeJEvQFBAYh8KzA7kYaTsrz0EeppF8IGxTB/PucNcZNHHT3y4BvBY3p6vvZBoQ==
-  dependencies:
-    iconv-lite "^0.4.18"
-
 hosted-git-info@^2.1.4, hosted-git-info@^2.7.1:
   version "2.8.8"
   resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.8.tgz#7539bd4bc1e0e0a895815a2e0262420b12858488"
@@ -2724,7 +2689,7 @@ humanize-ms@^1.2.1:
   dependencies:
     ms "^2.0.0"
 
-iconv-lite@0.4.24, iconv-lite@^0.4.18, iconv-lite@^0.4.4:
+iconv-lite@0.4.24, iconv-lite@^0.4.4:
   version "0.4.24"
   resolved "https://registry.yarnpkg.com/iconv-lite/-/iconv-lite-0.4.24.tgz#2022b4b25fbddc21d2f524974a474aafe733908b"
   integrity sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==
@@ -2886,9 +2851,9 @@ is-ci@^2.0.0:
     ci-info "^2.0.0"
 
 is-core-module@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.0.0.tgz#58531b70aed1db7c0e8d4eb1a0a2d1ddd64bd12d"
-  integrity sha512-jq1AH6C8MuteOoBPwkxHafmByhL9j5q4OaPGdbuD+ZtQJVzH+i6E3BJDQcBA09k57i2Hh2yQbEG8yObZ0jdlWw==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/is-core-module/-/is-core-module-2.1.0.tgz#a4cc031d9b1aca63eecbd18a650e13cb4eeab946"
+  integrity sha512-YcV7BgVMRFRua2FqQzKtTDMz8iCuLEyGKjr70q8Zm1yy2qKcurbFEd79PAdHV77oL3NrAaOVQIbMmiHQCHB7ZA==
   dependencies:
     has "^1.0.3"
 
@@ -3529,7 +3494,7 @@ lodash.some@^4.4.0:
   resolved "https://registry.yarnpkg.com/lodash.some/-/lodash.some-4.6.0.tgz#1bb9f314ef6b8baded13b549169b2a945eb68e4d"
   integrity sha1-G7nzFO9ri63tE7VJFpsqlF62jk0=
 
-lodash@^4.17.10, lodash@^4.17.14:
+lodash@^4.17.14:
   version "4.17.20"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.20.tgz#b44a9b6297bcb698f1c51a3545a2b3b368d59c52"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
@@ -3555,7 +3520,7 @@ lowercase-keys@^2.0.0:
   resolved "https://registry.yarnpkg.com/lowercase-keys/-/lowercase-keys-2.0.0.tgz#2603e78b7b4b0006cbca2fbcc8a3202558ac9479"
   integrity sha512-tqNXrS78oMOE73NMxK4EMLQsQowWf8jKooH9g7xPavRT706R6bkQJ6DY2Te7QukaZsulxa30wQ7bk0pm4XiHmA==
 
-lru-cache@5.1.1, lru-cache@^5.1.1:
+lru-cache@^5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-5.1.1.tgz#1da27e6710271947695daf6848e847f01d84b920"
   integrity sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==
@@ -3844,7 +3809,7 @@ mock-require@^3.0.3:
     get-caller-file "^1.0.2"
     normalize-path "^2.1.1"
 
-moment@~2.29.0:
+moment@^2.29.0:
   version "2.29.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.29.1.tgz#b2be769fa31940be9eeea6469c075e35006fa3d3"
   integrity sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ==
@@ -4650,16 +4615,6 @@ quick-lru@^4.0.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-4.0.1.tgz#5b8878f113a58217848c6482026c73e1ba57727f"
   integrity sha512-ARhCpm70fzdcvNQfPoy49IaanKkTlRWF2JMzqhcJbhSFRZv7nPTvZJdcY7301IPmvW+/p0RgIWnQDLJxifsQ7g==
 
-rambda@^6.1.0:
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/rambda/-/rambda-6.3.1.tgz#15bffd4b1f26a30e9f6af78674eba842b1954ef8"
-  integrity sha512-/iUE52vD8cfRcV/4gqcTZFvooLExJavzO9dcNI+vGLIzNU0e/OOi0jztE2OFFF/AvAKLCChgNfbJAFYnj5Lj2Q==
-
-rambda@~6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/rambda/-/rambda-6.2.0.tgz#4afb776b198b054341bdf53f40edc300bea9a969"
-  integrity sha512-2fIT02e45V2orajVC/TlmNtSyqbaWi/0hB6hfzNigV7qfrllS+mQeST1OQaveKWeVCNVKlXus0F2CAO8lDQNvw==
-
 random-int@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/random-int/-/random-int-2.0.1.tgz#d072fe298e2fd12a730edde7729168b7b88dcea3"
@@ -4874,15 +4829,6 @@ request@^2.87.0, request@^2.88.2:
     tough-cookie "~2.5.0"
     tunnel-agent "^0.6.0"
     uuid "^3.3.2"
-
-requestretry@4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/requestretry/-/requestretry-4.0.0.tgz#4e9e7280a7d8561bf33e9925264cf026e2be3e89"
-  integrity sha512-ST8m0+5FQH2FA+gbzUQyOQjUwHf22kbPQnd6TexveR0p+2UV1YYBg+Roe7BnKQ1Bb/+LtJwwm0QzxK2NA20Cug==
-  dependencies:
-    extend "^3.0.2"
-    lodash "^4.17.10"
-    when "^3.7.7"
 
 require-directory@^2.1.1:
   version "2.1.1"
@@ -5869,11 +5815,6 @@ uuid@^8.2.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.1.tgz#2ba2e6ca000da60fce5a196954ab241131e05a31"
   integrity sha512-FOmRr+FmWEIG8uhZv6C2bTgEVXsHk08kE7mPlrBbEe+c3r9pjceVPgupIfNIhc4yx55H69OXANrUaSuu9eInKg==
 
-valid-url@1.0.9:
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/valid-url/-/valid-url-1.0.9.tgz#1c14479b40f1397a75782f115e4086447433a200"
-  integrity sha1-HBRHm0DxOXp1eC8RXkCGRHQzogA=
-
 validate-npm-package-license@^3.0.1:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/validate-npm-package-license/-/validate-npm-package-license-3.0.4.tgz#fc91f6b9c7ba15c857f4cb2c5defeec39d4f410a"
@@ -5914,11 +5855,6 @@ wbuf@^1.1.0, wbuf@^1.7.3:
   integrity sha512-O84QOnr0icsbFGLS0O3bI5FswxzRr8/gHwWkDlQFskhSPryQXvrTMxjxGP4+iWYoauLoBvfDpkrOauZ+0iZpDA==
   dependencies:
     minimalistic-assert "^1.0.0"
-
-when@^3.7.7:
-  version "3.7.8"
-  resolved "https://registry.yarnpkg.com/when/-/when-3.7.8.tgz#c7130b6a7ea04693e842cdc9e7a1f2aa39a39f82"
-  integrity sha1-xxMLan6gRpPoQs3J56Hyqjmjn4I=
 
 which@1, which@^1.2.9, which@^1.3.1:
   version "1.3.1"
