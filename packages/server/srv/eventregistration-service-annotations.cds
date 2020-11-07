@@ -4,7 +4,7 @@ annotate EventRegistrationService.Person with @odata.draft.enabled;
 
 annotate EventRegistrationService.Person with {
 	ID              @title: '{i18n>GUID}'  @Core.Computed;
-	Email           @title: '{i18n>Email}'; 
+	Email           @title: '{i18n>Email}';
 	LastName        @title: '{i18n>Lastname}';
 	FirstName       @title: '{i18n>Firstname}';
 	Birthday        @title: '{i18n>Birthdate}';
@@ -30,7 +30,7 @@ annotate EventRegistrationService.Person with @(
 			{Value: Birthday}
 		],
 		Facets: [
-			{$Type: 'UI.ReferenceFacet', Label: '{i18n>Familienmitglieder}', Target: 'FamilyMembers/@UI.LineItem'}
+			{$Type: 'UI.ReferenceFacet', Label: '{i18n>Familymembers}', Target: 'FamilyMembers/@UI.LineItem'}
 		],
 		FieldGroup#Main: {
 			Data: [
@@ -44,7 +44,7 @@ annotate EventRegistrationService.Person with @(
 			{$Type: 'UI.ReferenceFacet', Label: '{i18n>PersonData}', Target: '@UI.FieldGroup#Main'}
 		]
 	},
-); 
+);
 
 annotate EventRegistrationService.FamilyMember with @(
 	UI: {
