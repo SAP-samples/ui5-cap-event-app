@@ -306,7 +306,7 @@ if (!aContexts || aContexts.length === 0) { // no data for this user yet
 	var oBinding = this.oDataModel.bindList("/Person");
 	oBinding.attachCreateCompleted(function(oEvent) {
 		if (oEvent.getParameter("success")) {
-			this.getView().setBindingContext(oEvent.getParameter("context"));
+			this.getView().bindObject({path: oEvent.getParameter("context").getPath()});
 		} else {
 			var sText = this.oBundle.getText("emptyCreateErrorText");
 			var sTitle = this.oBundle.getText("emptyCreateErrorTitle");
@@ -348,14 +348,14 @@ if (isActive) { // bring to draft/edit mode
 	);
 	oOperation.execute()
 	.then(function (oUpdatedContext) {
-		this.getView().setBindingContext(oUpdatedContext);
+		this.getView().bindObject({path: oUpdatedContext.getPath()});
 		MessageToast.show(this.oBundle.getText("existingDataLoaded"), {duration: 5000});
 	}.bind(this))
 	.catch(function() {
 		alert("draft edit failure");
 	});
 } else { // already in draft/edit mode
-	this.getView().setBindingContext(oContext);
+	this.getView().bindObject({path: oContext.getPath()});
 	MessageToast.show(this.oBundle.getText("existingDraftLoaded"), {duration: 5000});
 }
 ```
