@@ -61,7 +61,7 @@ sap.ui.define([
 				var oBinding = this.oDataModel.bindList("/Person");
 				oBinding.attachCreateCompleted(function(oEvent) {
 					if (oEvent.getParameter("success")) {
-						this.getView().bindObject({path: oEvent.getParameter("context").getPath()});
+						this.getView().setBindingContext(oEvent.getParameter("context"));
 					} else {
 						var sText = this.oBundle.getText("emptyCreateErrorText");
 						var sTitle = this.oBundle.getText("emptyCreateErrorTitle");
@@ -96,14 +96,14 @@ sap.ui.define([
 					);
 					oOperation.execute()
 					.then(function (oUpdatedContext) {
-						this.getView().bindObject({path: oUpdatedContext.getPath()});
+						this.getView().setBindingContext(oUpdatedContext);
 						MessageToast.show(this.oBundle.getText("existingDataLoaded"), {duration: 5000});
 					}.bind(this))
 					.catch(function() {
 						alert("draft edit failure");
 					});
 				} else { // already in draft/edit mode
-					this.getView().bindObject({path: oContext.getPath()});
+					this.getView().setBindingContext(oContext);
 					MessageToast.show(this.oBundle.getText("existingDraftLoaded"), {duration: 5000});
 				}
 
