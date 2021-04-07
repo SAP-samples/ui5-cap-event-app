@@ -17,12 +17,12 @@ Further details about how the functionality is implemented can be found [in the 
 
 ## Download and Installation
 
-1. Clone the project.
+1. Clone the project and check out the "typescript" branch.
 
     ```sh
     git clone https://github.com/SAP-samples/ui5-cap-event-app.git
-    git checkout typescript
     cd ui5-cap-event-app
+    git checkout typescript
     ```
 
     (or download from https://github.com/SAP-samples/ui5-cap-event-app/archive/refs/heads/typescript.zip)
@@ -37,13 +37,7 @@ Further details about how the functionality is implemented can be found [in the 
 
 ## Running the Project
 
-Before starting the project for the first time, you need to build it once:
-
-```sh
-yarn build
-```
-
-Once this is done, execute the following command to run the project locally for development (start form UI, admin UI, and CDS server):
+Execute the following command to run the project locally for development (start form UI, admin UI, and CDS server):
 
 ```sh
 yarn start
