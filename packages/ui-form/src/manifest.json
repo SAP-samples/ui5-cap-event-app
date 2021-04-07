@@ -10,6 +10,8 @@
 		"applicationVersion": {
 			"version": "1.0.0"
 		},
+		"ach": "set-ach",
+
 		"resources": "resources.json",
 		"dataSources": {
 			"eventregistration": {
@@ -54,7 +56,7 @@
 		},
 
 		"dependencies": {
-			"minUI5Version": "1.80.0",
+			"minUI5Version": "1.76.0",
 			"libs": {
 				"sap.ui.core": {},
 				"sap.ui.layout": {},
@@ -120,10 +122,6 @@
 				"confirmation": {
 					"viewName": "Confirmation",
 					"viewId": "confirmation"
-				},
-				"notAuthorized": {
-					"viewName": "NotAuthorized",
-					"viewId": "NotAuthorized"
 				}
 			}
 		}

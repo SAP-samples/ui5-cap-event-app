@@ -1,8 +1,8 @@
-# ui5-cap-event-app
-
-[![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/ui5-cap-event-app)](https://api.reuse.software/info/github.com/SAP-samples/ui5-cap-event-app)
+# ui5-cap-event-app - in TypeScript flavor
 
 Showcase of two UI5 user interfaces, one built with freestyle [SAPUI5](https://sapui5.hana.ondemand.com/) (or rather [OpenUI5](https://openui5.org/)), the other using [SAP Fiori elements](https://community.sap.com/topics/fiori-elements), with a [CAP](https://cap.cloud.sap/docs/) backend, using [OData V4](https://www.odata.org/) with [Draft mode](https://experience.sap.com/fiori-design-web/draft-handling/).
+
+The freestyle SAPUI5 app in this repository branch is written in TypeScript and uses a preview copy of the new UI5 type definitions.
 
 ## Description
 
@@ -20,9 +20,12 @@ Further details about how the functionality is implemented can be found [in the 
 1. Clone the project.
 
     ```sh
-    git clone https://github.com/SAP-samples/ui5-cap-event-app
+    git clone https://github.com/SAP-samples/ui5-cap-event-app.git
+    git checkout typescript
     cd ui5-cap-event-app
     ```
+
+    (or download from https://github.com/SAP-samples/ui5-cap-event-app/archive/refs/heads/typescript.zip)
 
 2. Use Yarn to install the dependencies.
 
@@ -30,15 +33,25 @@ Further details about how the functionality is implemented can be found [in the 
     yarn
     ```
 
+    (if you do not have yarn installed, simply get it with `npm install --global yarn`)
+
 ## Running the Project
 
-Execute the following command to run the project locally for development (start form UI, admin UI, and CDS server):
+Before starting the project for the first time, you need to build it once:
+
+```sh
+yarn build
+```
+
+Once this is done, execute the following command to run the project locally for development (start form UI, admin UI, and CDS server):
 
 ```sh
 yarn start
 ```
 
-As also shown in the terminal after executing this command, the form UI is then running on http://localhost:8080/index.html, the admin UI on http://localhost:8081/index.html, and the CDS server on http://localhost:4004/.
+This actually starts the ui-form project in 'watch' mode, so the browser will reload when the source files are changed and re-compiled.
+
+As shown in the terminal after executing this command, the form UI is then running on http://localhost:8080/index.html, the admin UI on http://localhost:8081/index.html, and the CDS server on http://localhost:4004/.
 
 For the form UI, you can use user name `employee@test.com` with password `123`. For the admin UI, use `admin@test.com` and password `123`.
 
@@ -61,7 +74,11 @@ To start the generated package, just run `npm install` and `npm start` inside th
 
 ## Debugging the Project
 
-We have prepared two ways of debugging the Node.js part of the app easily:
+While the client-side part of the project can of course be debugged inside the browser, we have prepared two ways of debugging the Node.js part of the app easily.
+
+When debugging the client-side code, you can directly debug the original TypeScript code, which is supplied via sourcemaps (need to be enabled in the browser's developer console). If the browser doesn't automatically jump to the TypeScript code when setting breakpoints, use e.g. Ctrl+P in Chrome to open the *.ts file you want to debug.
+
+The two options for debugging the Node.js part of the app are:
 
 ### Debugging with VSCode
 
@@ -107,5 +124,5 @@ Other projects demonstrating similar use-cases:
 
 ## License
 
-Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+Copyright (c) 2021 SAP SE or an SAP affiliate company. All rights reserved.
 This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSE) file.

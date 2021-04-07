@@ -19,11 +19,12 @@
     "start:ui-form": "yarn workspace ui5-cap-event-app-ui-form start",
     "start:ui-admin": "yarn workspace ui5-cap-event-app-ui-admin start",
     "debug": "npm-run-all --parallel debug:server start:ui-form start:ui-admin",
-    "debug:server": "yarn workspace ui5-cap-event-app-server cds:debug"
+    "debug:server": "yarn workspace ui5-cap-event-app-server cds:debug",
+    "verify:ui-form": "yarn workspace ui5-cap-event-app-ui-form ts-typecheck"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.wdf.sap.corp:uics-innersource/ui5-cap-event-app.git"
+    "url": "https://github.com/SAP-samples/ui5-cap-event-app.git"
   },
   "workspaces": [
     "packages/*"

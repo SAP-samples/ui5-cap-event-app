@@ -1,5 +1,6 @@
 # build results
 packages/server/gen
+packages/ui-form/webapp
 dist
 
 # Logs
