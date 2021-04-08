@@ -4,6 +4,17 @@ Showcase of two UI5 user interfaces, one built with freestyle [SAPUI5](https://s
 
 The freestyle SAPUI5 app in this repository branch is written in TypeScript and uses a preview copy of the new UI5 type definitions.
 
+
+| :point_up: TypeScript Remarks |
+|:---------------------------|
+| In the folder [packages/ui-form/types](packages/ui-form/types), this project contains a number of \*.d.ts files - a preview version of the new UI5 type definitions.<br/> 
+ The file [packages/ui-form/tsconfig.json](packages/ui-form/tsconfig.json) contains the configuration for the TypeScript compilation, including a reference to these \*.d.ts files <br/>
+ Normally, the UI5 JavaScript files (controllers, Component.js etc.) would reside in the `webapp` folder. Now they are in the [packages/ui-form/src](packages/ui-form/src) folder and the TypeScript compilation will create the `webapp` folder and place all output there. <br/>
+ In addition to the TypeScript compilation, there is also a conversion from the ES6 module and class syntax ued in the source files to the classic UI5 module loading and class definition syntax (`sap.ui.define(...)` and `superClass.extend(...)`). This conversion is using the [babel-plugin-transform-modules-ui5](https://github.com/r-murphy/babel-plugin-transform-modules-ui5) project from Ryan Murphy. <br/> 
+ Both, the TypeScript compilation and the ES6 syntax transformation, are executed by Babel, as configured in the file [packages/ui-form/.babelrc](packages/ui-form/.babelrc)<br/> 
+ This combined transformation is triggered by the `build:ts` and `watch:ts` scripts in [packages/ui-form/package.json](packages/ui-form/package.json#L9) |
+ 
+
 ## Description
 
 This app uses simple attendee registration and administration for events as an example scenario for demonstrating the data handling and overall setup. The app consists of three parts: an end-user UI implemented in freestyle SAPUI5, a metadata-driven administrator UI generated with Fiori elements and a Node.js-based CAP backend.
