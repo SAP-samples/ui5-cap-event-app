@@ -46,7 +46,7 @@ export default class RegistrationController extends Controller {
 	public onInit() {
 
 		// keep the reference to the OData model
-		this.oDataModel = this.getOwnerComponent().getModel() as ODataModel;
+		this.oDataModel = this.getOwnerComponent().getModel<ODataModel>();
 
 		// load previous data
 		const oBinding = this.oDataModel.bindList("/Person");
@@ -62,7 +62,7 @@ export default class RegistrationController extends Controller {
 		});
 
 		// store the reference to the i18n model
-		this.oBundle = (this.getOwnerComponent().getModel("i18n") as ResourceModel).getResourceBundle() as ResourceBundle;
+		this.oBundle = this.getOwnerComponent().getModel<ResourceModel>("i18n").getResourceBundle() as ResourceBundle;
 
 		// listen to focusleave on the fields to validate the user input
 		const aControls = Core.byFieldGroupId("RegForm");
@@ -77,7 +77,7 @@ export default class RegistrationController extends Controller {
 		this.getView().addEventDelegate({
 			onAfterShow: () => {
 				this.byId("firstName").focus();
-				(this.byId("page") as Page).scrollTo(0);
+				this.byId<Page>("page").scrollTo(0);
 			}
 		})
 
@@ -141,7 +141,7 @@ export default class RegistrationController extends Controller {
 				MessageToast.show(this.oBundle.getText("existingDraftLoaded"), {duration: 5000});
 			}
 
-			(this.byId("submitButton") as Button).setText(this.oBundle.getText("updateButtonText"));
+			this.byId<Button>("submitButton").setText(this.oBundle.getText("updateButtonText"));
 		}
 	};
 
@@ -150,12 +150,12 @@ export default class RegistrationController extends Controller {
 	};
 
 	public addFamilyMember() {
-		const oListBinding = this.byId("familyMembersTable").getBinding("items") as ODataListBinding;
+		const oListBinding = this.byId("familyMembersTable").getBinding<ODataListBinding>("items");
 		oListBinding.create({});
 	};
 
 	public deleteFamilyMember(oEvent: UI5Event) {
-		((oEvent.getSource() as Control).getBindingContext() as V4Context).delete("$auto").then(() => {
+		oEvent.getSource<Control>().getBindingContext<V4Context>().delete("$auto").then(() => {
 			// deletion success
 		}, (oError: Error) => {
 			// TODO: ignore deletion failure?
@@ -175,15 +175,15 @@ export default class RegistrationController extends Controller {
 	};
 
 	public validateData() {
-		const oNewObject = this.getView().getBindingContext().getObject() as Employee;
+		const oNewObject = this.getView().getBindingContext().getObject<Employee>();
 
 		// determine field names for validation dialog
 		const oBundle = this.oBundle;
-		const mFields = {
+		const mFields: Person = {
 			LastName: oBundle.getText("name"),
 			FirstName: oBundle.getText("firstName"),
 			Birthday: oBundle.getText("dateOfBirth")
-		} as Person;
+		};
 
 		// check for missing fields
 		const aMissing = [];
@@ -225,7 +225,7 @@ export default class RegistrationController extends Controller {
 			return;
 		}
 
-		const oContext = this.getView().getBindingContext() as V4Context;
+		const oContext = this.getView().getBindingContext<V4Context>();
 
 		/* omit this block as failing "draftActivate" is not expected (no data checks in backend) aand a failing PATCH would not be dramatic
 		// ensure there are no pending changes (because otherwise with a failing "save" the last PATCH which might be in the same batch would also fail)
@@ -235,7 +235,7 @@ export default class RegistrationController extends Controller {
 		*/
 
 		// submit the person data
-		(this.byId("submitButton") as Button).setEnabled(false);
+		this.byId<Button>("submitButton").setEnabled(false);
 
 		// trigger OData operation for persisting the draft as real data
 
@@ -246,7 +246,7 @@ export default class RegistrationController extends Controller {
 		oOperation.execute()
 		.then(() => {
 			// navigate without hash change
-			(this.getOwnerComponent() as UIComponent).getRouter().getTargets().display("confirmation");
+			this.getOwnerComponent<UIComponent>().getRouter().getTargets().display("confirmation");
 		})
 		.catch((err: Error) => {
 			this.showErrorDialog()
@@ -256,7 +256,7 @@ export default class RegistrationController extends Controller {
 	public showErrorDialog() {
 		const sText = this.oBundle.getText("submitErrorText");
 		const sTitle = this.oBundle.getText("submitErrorTitle");
-		(this.byId("submitButton") as Button).setEnabled(true);
+		this.byId<Button>("submitButton").setEnabled(true);
 		MessageBox.error(sText, {
 			title: sTitle
 		});

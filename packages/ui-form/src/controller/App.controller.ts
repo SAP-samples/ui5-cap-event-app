@@ -8,7 +8,7 @@ export default class AppController extends Controller {
 
 	public onInit() {
 		// apply content density mode to root view
-		this.getView().addStyleClass((this.getOwnerComponent() as AppComponent).getContentDensityClass());
+		this.getView().addStyleClass(this.getOwnerComponent<AppComponent>().getContentDensityClass());
 	};
 
 };
