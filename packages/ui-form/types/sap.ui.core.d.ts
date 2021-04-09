@@ -6125,7 +6125,7 @@ declare module "sap/ui/base/Event" {
     /**
      * Returns the event provider on which the event was fired.
      */
-    getSource(): EventProvider;
+    getSource<T = EventProvider>(): T;
     /**
      * Prevent the default action of this event.
      *
@@ -7876,12 +7876,12 @@ declare module "sap/ui/base/ManagedObject" {
     /**
      * Get the binding object for a specific aggregation/property
      */
-    getBinding(
+    getBinding<T = Binding>(
       /**
        * the name of the property or aggregation
        */
       sName: string
-    ): Binding;
+    ): T;
     /**
      * Get the binding context of this object for the given model name.
      *
@@ -7897,12 +7897,12 @@ declare module "sap/ui/base/ManagedObject" {
      *
      * **Note:** A ManagedObject inherits binding contexts from the Core only when it is a descendant of a UIArea.
      */
-    getBindingContext(
+    getBindingContext<T = Context>(
       /**
        * the name of the model or `undefined`
        */
       sModelName?: string
-    ): Context;
+    ): T;
     /**
      * Returns the binding info for the given property or aggregation.
      *
@@ -7965,12 +7965,12 @@ declare module "sap/ui/base/ManagedObject" {
      * 	 - string literals `"null"` or `"undefined"`  Omitting the model name (or using the value `undefined`)
      * 			is explicitly allowed and refers to the default model.
      */
-    getModel(
+    getModel<T = Model>(
       /**
        * name of the model to be retrieved
        */
       sModelName?: string | undefined
-    ): Model;
+    ): T;
     /**
      * Get the object binding object for a specific model.
      *
@@ -25625,12 +25625,12 @@ declare module "sap/ui/core/mvc/Controller" {
      * If no view is connected or if the view doesn't contain an element with the given local ID, undefined
      * is returned.
      */
-    byId(
+    byId<T = UI5Element>(
       /**
        * View-local ID
        */
       sId: string
-    ): UI5Element;
+    ): T;
     /**
      * @SINCE 1.56.0
      *
@@ -25692,7 +25692,7 @@ declare module "sap/ui/core/mvc/Controller" {
      * If there is no Component connected to the view or the view is not connected to the controller, undefined
      * is returned.
      */
-    getOwnerComponent(): Component;
+    getOwnerComponent<T = Component>(): T;
     /**
      * Returns the view associated with this controller or undefined.
      */
@@ -41851,7 +41851,7 @@ declare module "sap/ui/model/Context" {
      * Gets the (model dependent) object the context points to or the object with the given relative binding
      * path
      */
-    getObject(
+    getObject<T = object>(
       /**
        * the binding path
        */
@@ -41860,7 +41860,7 @@ declare module "sap/ui/model/Context" {
        * additional model specific parameters (optional)
        */
       mParameters?: object
-    ): object;
+    ): T;
     /**
      * Getter for path of the context itself or a subpath
      */
