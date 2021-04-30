@@ -1,4 +1,4 @@
-// For Library Version: 1.89.0
+// For Library Version: 1.90.0
 
 declare module "sap/uxap/library" {
   /**
@@ -3809,6 +3809,8 @@ declare module "sap/uxap/ObjectPageLayout" {
 
   import ElementMetadata from "sap/ui/core/ElementMetadata";
 
+  import ScrollEnablement from "sap/ui/core/delegate/ScrollEnablement";
+
   import {
     default as ManagedObject,
     PropertyBindingInfo,
@@ -4395,9 +4397,9 @@ declare module "sap/uxap/ObjectPageLayout" {
      */
     getPreserveHeaderStateOnScroll(): boolean;
     /**
-     * Returns an sap.ui.core.delegate.ScrollEnablement object used to handle scrolling
+     * Returns the `sap.ui.core.ScrollEnablement` delegate which is used with this control.
      */
-    getScrollDelegate(): object;
+    getScrollDelegate(): ScrollEnablement;
     /**
      * Returns the UI5 ID of the Section that is currently being scrolled.
      */

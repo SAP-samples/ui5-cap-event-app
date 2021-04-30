@@ -1,4 +1,4 @@
-// For Library Version: 1.89.0
+// For Library Version: 1.90.0
 
 declare namespace sap {
   interface IUI5DefineDependencyNames {
@@ -114,15 +114,19 @@ declare namespace sap {
 
     "sap/ui/mdc/odata/v4/FieldValueHelpDelegate": undefined;
 
+    "sap/ui/mdc/p13n/AdaptationProvider": undefined;
+
     "sap/ui/mdc/p13n/DefaultProviderRegistry": undefined;
 
-    "sap/ui/mdc/p13n/Engine": undefined;
-
     "sap/ui/mdc/p13n/modification/ModificationHandler": undefined;
+
+    "sap/ui/mdc/p13n/panels/P13nWrapper": undefined;
 
     "sap/ui/mdc/p13n/StateUtil": undefined;
 
     "sap/ui/mdc/p13n/subcontroller/BaseController": undefined;
+
+    "sap/ui/mdc/p13n/UIManager": undefined;
 
     "sap/ui/mdc/util/DateUtil": undefined;
 

@@ -20,7 +20,8 @@
     "start:ui-admin": "yarn workspace ui5-cap-event-app-ui-admin start",
     "debug": "npm-run-all --parallel debug:server start:ui-form start:ui-admin",
     "debug:server": "yarn workspace ui5-cap-event-app-server cds:debug",
-    "verify:ui-form": "yarn workspace ui5-cap-event-app-ui-form ts-typecheck"
+    "verify:ui-form": "yarn workspace ui5-cap-event-app-ui-form ts-typecheck",
+    "lint:ui-form": "yarn workspace ui5-cap-event-app-ui-form ts-lint"
   },
   "repository": {
     "type": "git",

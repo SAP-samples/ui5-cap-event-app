@@ -1,255 +1,11 @@
-// For Library Version: 1.89.0
-
-declare module "sap/ui/commons/library/__$enums" {
-  /**
-   * @deprecated (since 1.38)
-   *
-   * Value set for the background design of areas
-   */
-  export enum AreaDesign {
-    /**
-     * Shows the label in a filled look
-     */
-    Fill = "Fill",
-    /**
-     * Shows the area in a plain look
-     */
-    Plain = "Plain",
-    /**
-     * Shows the background as transparent
-     */
-    Transparent = "Transparent",
-  }
-  /**
-   * @deprecated (since 1.38)
-   *
-   * Value set for the border design of areas
-   */
-  export enum BorderDesign {
-    /**
-     * Draws the border as a box around the area
-     */
-    Box = "Box",
-    /**
-     * Suppresses the border
-     */
-    None = "None",
-  }
-  /**
-   * @deprecated (since 1.38)
-   *
-   * Orientation of a UI element
-   */
-  export enum Orientation {
-    /**
-     * Horizontal orientation
-     */
-    horizontal = "horizontal",
-    /**
-     * Vertical orientation
-     */
-    vertical = "vertical",
-  }
-}
-
-declare module "sap/ui/commons/library/__$form" {
-  import { form } from "sap/ui/layout/library";
-
-  /**
-   * @deprecated (since 1.16.0) - Use {@link sap.ui.layout.form.SimpleFormLayout} instead.
-   *
-   * Available FormLayouts used for the SimpleForm.
-   *
-   * This is an alias for {@link sap.ui.layout.form.SimpleFormLayout} and only kept for compatibility reasons.
-   */
-  export type SimpleFormLayout =
-    | form.SimpleFormLayout
-    | keyof typeof form.SimpleFormLayout;
-}
-
-declare module "sap/ui/commons/library/__$layout" {
-  /**
-   * @deprecated (since 1.38)
-   *
-   * Background design (i.e. color), e.g. of a layout cell.
-   */
-  export enum BackgroundDesign {
-    /**
-     * A background design suitable for borders.
-     */
-    Border = "Border",
-    /**
-     * An opaque background design that looks dark filled.
-     */
-    Fill1 = "Fill1",
-    /**
-     * An opaque background design that looks medium filled.
-     */
-    Fill2 = "Fill2",
-    /**
-     * An opaque background design that looks light filled.
-     */
-    Fill3 = "Fill3",
-    /**
-     * A background design suitable for headers.
-     */
-    Header = "Header",
-    /**
-     * A plain but opaque background design.
-     */
-    Plain = "Plain",
-    /**
-     * A transparent background.
-     */
-    Transparent = "Transparent",
-  }
-  /**
-   * @deprecated (since 1.38)
-   *
-   * The type (=position) of a BorderLayoutArea
-   */
-  export enum BorderLayoutAreaTypes {
-    /**
-     * Value to identify the begin area.
-     */
-    begin = "begin",
-    /**
-     * Value to identify the bottom area.
-     */
-    bottom = "bottom",
-    /**
-     * Value to identify the center area.
-     */
-    center = "center",
-    /**
-     * Value to identify the end area.
-     */
-    end = "end",
-    /**
-     * Value to identify the top area.
-     */
-    top = "top",
-  }
-  /**
-   * @deprecated (since 1.38)
-   *
-   * Horizontal alignment, e.g. of a layout cell's content within the cell's borders. Note that some values
-   * depend on the current locale's writing direction while others do not.
-   */
-  export enum HAlign {
-    /**
-     * Aligned towards the beginning of a line, in the current locale's writing direction.
-     */
-    Begin = "Begin",
-    /**
-     * Horizontally centered.
-     */
-    Center = "Center",
-    /**
-     * Aligned towards the end of a line, in the current locale's writing direction.
-     */
-    End = "End",
-    /**
-     * Left aligned, regardless of the current locale's writing direction.
-     */
-    Left = "Left",
-    /**
-     * Right aligned, regardless of the current locale's writing direction.
-     */
-    Right = "Right",
-  }
-  /**
-   * @deprecated (since 1.38)
-   *
-   * Padding, e.g. of a layout cell's content within the cell's borders. Note that all options except "None"
-   * include a padding of 2px at the top and bottom, and differ only in the presence of a 4px padding towards
-   * the beginning or end of a line, in the current locale's writing direction.
-   */
-  export enum Padding {
-    /**
-     * Top and bottom padding of 2px. Padding of 4px towards the beginning of a line, in the current locale's
-     * writing direction, but none towards its end.
-     */
-    Begin = "Begin",
-    /**
-     * Top and bottom padding of 2px. Padding of 4px towards both the beginning and end of a line.
-     */
-    Both = "Both",
-    /**
-     * Top and bottom padding of 2px. Padding of 4px towards the end of a line, in the current locale's writing
-     * direction, but none towards its beginning.
-     */
-    End = "End",
-    /**
-     * Top and bottom padding of 2px. No padding towards neither the beginning nor end of a line.
-     */
-    Neither = "Neither",
-    /**
-     * No padding at all.
-     */
-    None = "None",
-  }
-  /**
-   * @deprecated (since 1.38)
-   *
-   * Separation, e.g. of a layout cell from its neighbor, via a vertical gutter of defined width, with or
-   * without a vertical line in its middle.
-   */
-  export enum Separation {
-    /**
-     * A large (63px) vertical gutter without a vertical line.
-     */
-    Large = "Large",
-    /**
-     * A large (63px) vertical gutter with a vertical line in its middle.
-     */
-    LargeWithLine = "LargeWithLine",
-    /**
-     * A medium (31px) vertical gutter without a vertical line.
-     */
-    Medium = "Medium",
-    /**
-     * A medium (31px) vertical gutter with a vertical line in its middle.
-     */
-    MediumWithLine = "MediumWithLine",
-    /**
-     * No gutter at all (0px), and without a vertical line, of course.
-     */
-    None = "None",
-    /**
-     * A small (17px) vertical gutter without a vertical line.
-     */
-    Small = "Small",
-    /**
-     * A small (17px) vertical gutter with a vertical line in its middle.
-     */
-    SmallWithLine = "SmallWithLine",
-  }
-  /**
-   * @deprecated (since 1.38)
-   *
-   * Vertical alignment, e.g. of a layout cell's content within the cell's borders.
-   */
-  export enum VAlign {
-    /**
-     * Aligned at the bottom.
-     */
-    Bottom = "Bottom",
-    /**
-     * Vertically centered.
-     */
-    Middle = "Middle",
-    /**
-     * Aligned at the top.
-     */
-    Top = "Top",
-  }
-}
+// For Library Version: 1.90.0
 
 declare module "sap/ui/commons/library" {
   import { ColorPickerMode as ColorPickerMode1 } from "sap/ui/unified/library";
 
   import { TitleLevel as TitleLevel1 } from "sap/ui/core/library";
+
+  import { form as form1 } from "sap/ui/layout/library";
 
   /**
    * @deprecated (since 1.38)
@@ -282,12 +38,8 @@ declare module "sap/ui/commons/library" {
    * This enum is an alias for {@link sap.ui.unified.ColorPickerMode} and was only kept for compatibility
    * reasons. Please switch to the {@link sap.ui.unified.ColorPicker} API.
    */
-  export type ColorPickerMode =
-    | ColorPickerMode1
-    | keyof typeof ColorPickerMode1;
+  export type ColorPickerMode = ColorPickerMode1;
 
-  export * as enums from "sap/ui/commons/library/__$enums";
-  export * as form from "sap/ui/commons/library/__$form";
   /**
    * @deprecated (since 1.38)
    *
@@ -350,7 +102,6 @@ declare module "sap/ui/commons/library" {
      */
     Standard = "Standard",
   }
-  export * as layout from "sap/ui/commons/library/__$layout";
   /**
    * @deprecated (since 1.38)
    *
@@ -543,7 +294,7 @@ declare module "sap/ui/commons/library" {
    *
    * This is an alias for {@link sap.ui.core.TitleLevel} and only kept for compatibility reasons.
    */
-  export type TitleLevel = TitleLevel1 | keyof typeof TitleLevel1;
+  export type TitleLevel = TitleLevel1;
 
   /**
    * @deprecated (since 1.38)
@@ -636,6 +387,248 @@ declare module "sap/ui/commons/library" {
      * unchecked, default value for tri-state checkbox
      */
     Unchecked = "Unchecked",
+  }
+
+  export namespace enums {
+    /**
+     * @deprecated (since 1.38)
+     *
+     * Value set for the background design of areas
+     */
+    enum AreaDesign {
+      /**
+       * Shows the label in a filled look
+       */
+      Fill = "Fill",
+      /**
+       * Shows the area in a plain look
+       */
+      Plain = "Plain",
+      /**
+       * Shows the background as transparent
+       */
+      Transparent = "Transparent",
+    }
+    /**
+     * @deprecated (since 1.38)
+     *
+     * Value set for the border design of areas
+     */
+    enum BorderDesign {
+      /**
+       * Draws the border as a box around the area
+       */
+      Box = "Box",
+      /**
+       * Suppresses the border
+       */
+      None = "None",
+    }
+    /**
+     * @deprecated (since 1.38)
+     *
+     * Orientation of a UI element
+     */
+    enum Orientation {
+      /**
+       * Horizontal orientation
+       */
+      horizontal = "horizontal",
+      /**
+       * Vertical orientation
+       */
+      vertical = "vertical",
+    }
+  }
+
+  export namespace form {
+    /**
+     * @deprecated (since 1.16.0) - Use {@link sap.ui.layout.form.SimpleFormLayout} instead.
+     *
+     * Available FormLayouts used for the SimpleForm.
+     *
+     * This is an alias for {@link sap.ui.layout.form.SimpleFormLayout} and only kept for compatibility reasons.
+     */
+    type SimpleFormLayout = form1.SimpleFormLayout;
+  }
+
+  export namespace layout {
+    /**
+     * @deprecated (since 1.38)
+     *
+     * Background design (i.e. color), e.g. of a layout cell.
+     */
+    enum BackgroundDesign {
+      /**
+       * A background design suitable for borders.
+       */
+      Border = "Border",
+      /**
+       * An opaque background design that looks dark filled.
+       */
+      Fill1 = "Fill1",
+      /**
+       * An opaque background design that looks medium filled.
+       */
+      Fill2 = "Fill2",
+      /**
+       * An opaque background design that looks light filled.
+       */
+      Fill3 = "Fill3",
+      /**
+       * A background design suitable for headers.
+       */
+      Header = "Header",
+      /**
+       * A plain but opaque background design.
+       */
+      Plain = "Plain",
+      /**
+       * A transparent background.
+       */
+      Transparent = "Transparent",
+    }
+    /**
+     * @deprecated (since 1.38)
+     *
+     * The type (=position) of a BorderLayoutArea
+     */
+    enum BorderLayoutAreaTypes {
+      /**
+       * Value to identify the begin area.
+       */
+      begin = "begin",
+      /**
+       * Value to identify the bottom area.
+       */
+      bottom = "bottom",
+      /**
+       * Value to identify the center area.
+       */
+      center = "center",
+      /**
+       * Value to identify the end area.
+       */
+      end = "end",
+      /**
+       * Value to identify the top area.
+       */
+      top = "top",
+    }
+    /**
+     * @deprecated (since 1.38)
+     *
+     * Horizontal alignment, e.g. of a layout cell's content within the cell's borders. Note that some values
+     * depend on the current locale's writing direction while others do not.
+     */
+    enum HAlign {
+      /**
+       * Aligned towards the beginning of a line, in the current locale's writing direction.
+       */
+      Begin = "Begin",
+      /**
+       * Horizontally centered.
+       */
+      Center = "Center",
+      /**
+       * Aligned towards the end of a line, in the current locale's writing direction.
+       */
+      End = "End",
+      /**
+       * Left aligned, regardless of the current locale's writing direction.
+       */
+      Left = "Left",
+      /**
+       * Right aligned, regardless of the current locale's writing direction.
+       */
+      Right = "Right",
+    }
+    /**
+     * @deprecated (since 1.38)
+     *
+     * Padding, e.g. of a layout cell's content within the cell's borders. Note that all options except "None"
+     * include a padding of 2px at the top and bottom, and differ only in the presence of a 4px padding towards
+     * the beginning or end of a line, in the current locale's writing direction.
+     */
+    enum Padding {
+      /**
+       * Top and bottom padding of 2px. Padding of 4px towards the beginning of a line, in the current locale's
+       * writing direction, but none towards its end.
+       */
+      Begin = "Begin",
+      /**
+       * Top and bottom padding of 2px. Padding of 4px towards both the beginning and end of a line.
+       */
+      Both = "Both",
+      /**
+       * Top and bottom padding of 2px. Padding of 4px towards the end of a line, in the current locale's writing
+       * direction, but none towards its beginning.
+       */
+      End = "End",
+      /**
+       * Top and bottom padding of 2px. No padding towards neither the beginning nor end of a line.
+       */
+      Neither = "Neither",
+      /**
+       * No padding at all.
+       */
+      None = "None",
+    }
+    /**
+     * @deprecated (since 1.38)
+     *
+     * Separation, e.g. of a layout cell from its neighbor, via a vertical gutter of defined width, with or
+     * without a vertical line in its middle.
+     */
+    enum Separation {
+      /**
+       * A large (63px) vertical gutter without a vertical line.
+       */
+      Large = "Large",
+      /**
+       * A large (63px) vertical gutter with a vertical line in its middle.
+       */
+      LargeWithLine = "LargeWithLine",
+      /**
+       * A medium (31px) vertical gutter without a vertical line.
+       */
+      Medium = "Medium",
+      /**
+       * A medium (31px) vertical gutter with a vertical line in its middle.
+       */
+      MediumWithLine = "MediumWithLine",
+      /**
+       * No gutter at all (0px), and without a vertical line, of course.
+       */
+      None = "None",
+      /**
+       * A small (17px) vertical gutter without a vertical line.
+       */
+      Small = "Small",
+      /**
+       * A small (17px) vertical gutter with a vertical line in its middle.
+       */
+      SmallWithLine = "SmallWithLine",
+    }
+    /**
+     * @deprecated (since 1.38)
+     *
+     * Vertical alignment, e.g. of a layout cell's content within the cell's borders.
+     */
+    enum VAlign {
+      /**
+       * Aligned at the bottom.
+       */
+      Bottom = "Bottom",
+      /**
+       * Vertically centered.
+       */
+      Middle = "Middle",
+      /**
+       * Aligned at the top.
+       */
+      Top = "Top",
+    }
   }
 }
 
@@ -4695,9 +4688,13 @@ declare module "sap/ui/commons/DatePicker" {
      */
     fireChange(
       /**
-       * true is value is invalid
+       * Parameters to pass along with the event - do not use: value is ignored
        */
-      bInvalidValue: boolean
+      mParameters?: object,
+      /**
+       * true if value is invalid
+       */
+      bInvalidValue?: boolean
     ): this;
     /**
      * See:

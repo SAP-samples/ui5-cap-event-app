@@ -1,4 +1,4 @@
-// For Library Version: 1.89.0
+// For Library Version: 1.90.0
 
 declare module "sap/f/library" {
   export interface IShellBar {
@@ -10,51 +10,92 @@ declare module "sap/f/library" {
   }
 }
 
-declare module "sap/m/library/__$semantic" {
-  /**
-   * Marker interface for controls which are suitable as items of the filter aggregation of sap.m.Semantic.MasterPage.
-   */
-  export interface IFilter {
-    __implements__sap_m_semantic_IFilter: boolean;
-  }
-
-  /**
-   * Marker interface for controls which are suitable as items of the group aggregation of sap.m.Semantic.MasterPage.
-   */
-  export interface IGroup {
-    __implements__sap_m_semantic_IGroup: boolean;
-  }
-
-  /**
-   * Marker interface for controls which are suitable as items of the sort aggregation of sap.m.Semantic.MasterPage.
-   */
-  export interface ISort {
-    __implements__sap_m_semantic_ISort: boolean;
-  }
-
-  /**
-   * @SINCE 1.44
-   *
-   * Declares the type of semantic ruleset that will govern the styling and positioning of semantic content.
-   */
-  export enum SemanticRuleSetType {
-    /**
-     * The default ruleset type, for which the Share Menu is always in the footer of the page.
-     */
-    Classic = "Classic",
-    /**
-     * Offers an optimized user experience, with displaying the Share Menu in the header, rather than the footer,
-     * for Fullscreen mode.
-     */
-    Optimized = "Optimized",
-  }
-}
-
 declare module "sap/m/library" {
+  import Control from "sap/ui/core/Control";
+
+  import Locale from "sap/ui/core/Locale";
+
+  import LocaleData from "sap/ui/core/LocaleData";
+
   import Slider from "sap/m/Slider";
 
   import RangeSlider from "sap/m/RangeSlider";
 
+  import RenderManager from "sap/ui/core/RenderManager";
+
+  import { CSSColor, URI } from "sap/ui/core/library";
+
+  import Image from "sap/m/Image";
+
+  import Icon from "sap/ui/core/Icon";
+
+  import Event from "sap/ui/base/Event";
+
+  /**
+   * @SINCE 1.20
+   *
+   * Hide the soft keyboard.
+   */
+  export function closeKeyboard(): void;
+  /**
+   * @SINCE 1.10
+   * @deprecated (since 1.12) - UI5 returns null for invalid date
+   *
+   * Returns invalid date value of UI5.
+   */
+  export function getInvalidDate(): null;
+  /**
+   * @SINCE 1.11
+   *
+   * Search given control's parents and try to find iScroll.
+   */
+  export function getIScroll(
+    /**
+     * Control to start the search at
+     */
+    oControl: Control
+  ): Object | undefined;
+  /**
+   * @SINCE 1.10
+   *
+   * Finds default locale settings once and returns always the same.
+   *
+   * We should not need to create new instance to get same locale settings This method keeps the locale instance
+   * in the scope and returns the same after first run
+   */
+  export function getLocale(): Locale;
+  /**
+   * @SINCE 1.10
+   *
+   * Finds default locale data once and returns always the same.
+   */
+  export function getLocaleData(): LocaleData;
+  /**
+   * @SINCE 1.11
+   *
+   * Search given control's parents and try to find a ScrollDelegate.
+   */
+  export function getScrollDelegate(
+    /**
+     * Starting point for the search
+     */
+    oControl: Control,
+    /**
+     * Whether the search should stop on component level (`false`) or not
+     */
+    bGlobal: boolean
+  ): Object | undefined;
+  /**
+   * @SINCE 1.10
+   *
+   * Checks if the given parameter is a valid JsDate Object.
+   */
+  export function isDate(
+    /**
+     * Any variable to test.
+     */
+    value: any
+  ): boolean;
   /**
    * Available Background Design.
    */
@@ -72,7 +113,6 @@ declare module "sap/m/library" {
      */
     Transparent = "Transparent",
   }
-
   /**
    * @SINCE 1.87
    *
@@ -890,7 +930,6 @@ declare module "sap/m/library" {
      */
     Standard = "Standard",
   }
-
   /**
    * @SINCE 1.30.0
    *
@@ -908,7 +947,6 @@ declare module "sap/m/library" {
      */
     Image = "Image",
   }
-
   /**
    * @SINCE 1.44.0
    *
@@ -1853,7 +1891,6 @@ declare module "sap/m/library" {
      */
     GridSmall = "GridSmall",
   }
-
   /**
    * QuickViewGroupElement is a combination of one label and another control (Link or Text) associated to
    * this label.
@@ -2017,7 +2054,6 @@ declare module "sap/m/library" {
      */
     IconOnly = "IconOnly",
   }
-  export * as semantic from "sap/m/library/__$semantic";
   /**
    * @SINCE 1.34.0
    *
@@ -2355,7 +2391,6 @@ declare module "sap/m/library" {
      */
     Standard = "Standard",
   }
-
   /**
    * States of the upload process of {@link sap.m.UploadCollectionItem}.
    */
@@ -2527,7 +2562,11 @@ declare module "sap/m/library" {
       /**
        * Blind carbon copy email address
        */
-      sBCC?: string
+      sBCC?: string,
+      /**
+       * Opens email template in a new browser window or tab.
+       */
+      bNewWindow?: boolean
     ): void;
     /**
      * Trigger SMS application to send SMS to given telephone number.
@@ -2639,6 +2678,199 @@ declare module "sap/m/library" {
      * Normal text wrapping will be used. Words won't break based on hyphenation.
      */
     Normal = "Normal",
+  }
+
+  export namespace BackgroundHelper {
+    /**
+     * Adds CSS classes and styles to the given RenderManager, depending on the given configuration for background
+     * color and background image. To be called by control renderers supporting the global themable background
+     * image within their root tag, before they call writeClasses() and writeStyles().
+     */
+    function addBackgroundColorStyles(
+      /**
+       * The RenderManager
+       */
+      rm: RenderManager,
+      /**
+       * A configured custom background color for the control, if any
+       */
+      sBgColor?: CSSColor,
+      /**
+       * The configured custom background image for the control, if any
+       */
+      sBgImgUrl?: URI
+    ): void;
+    /**
+     * Renders an HTML tag into the given RenderManager which carries the background image which is either configured
+     * and given or coming from the current theme. Should be called right after the opening root tag has been
+     * completed, so this is the first child element inside the control.
+     */
+    function renderBackgroundImageTag(
+      /**
+       * The RenderManager
+       */
+      rm: RenderManager,
+      /**
+       * Control within which the tag will be rendered; its ID will be used to generate the element ID
+       */
+      oControl: Control,
+      /**
+       * A CSS class or an array of CSS classes to add to the element
+       */
+      vCssClass: string | string[],
+      /**
+       * The image of a configured background image; if this is not given, the theme background will be used and
+       * also the other settings are ignored.
+       */
+      sBgImgUrl?: URI,
+      /**
+       * Whether the background image should be repeated/tiled (or stretched)
+       */
+      bRepeat?: boolean,
+      /**
+       * The background image opacity, if any
+       */
+      fOpacity?: float
+    ): void;
+  }
+
+  export namespace ImageHelper {
+    /**
+     * Creates or updates an image control.
+     */
+    function getImageControl(
+      /**
+       * UD of the image to be dealt with.
+       */
+      sImgId: string,
+      /**
+       * The image to update. If undefined, a new image will be created.
+       */
+      oImageControl: Image,
+      /**
+       * oImageControl's parentControl.
+       */
+      oParent: Control,
+      /**
+       * Settings for the image control; the `src` property MUST be contained; the keys of the object must be
+       * valid names of image settings
+       */
+      mProperties: object,
+      /**
+       * Array of CSS classes which will be added if the image needs to be created.
+       */
+      aCssClassesToAdd: string[],
+      /**
+       * All CSS classes that oImageControl has and which are contained in this array are removed before adding
+       * the CSS classes listed in aCssClassesToAdd.
+       */
+      aCssClassesToRemove: string[]
+    ): Image | Icon;
+  }
+
+  export namespace InputODataSuggestProvider {
+    /**/
+    function suggest(
+      oEvent: Event,
+      /**
+       * SuggestProvider resolves all input parameters for the data query
+       */
+      bResolveInput: boolean,
+      /**
+       * SuggestProvider writes back all output parameters.
+       */
+      bResolveOutput: boolean,
+      /**
+       * If iLength is provided only these number of entries will be requested.
+       */
+      iLength: int
+    ): void;
+  }
+
+  export namespace PopupHelper {
+    /**
+     * Converts the given percentage value to an absolute number based on the given base size.
+     */
+    function calcPercentageSize(
+      /**
+       * A percentage value in string format, for example "25%"
+       */
+      sPercentage: string,
+      /**
+       * A float number which the calculation is based on.
+       */
+      fBaseSize: float
+    ): int;
+  }
+
+  export namespace semantic {
+    /**
+     * Marker interface for controls which are suitable as items of the filter aggregation of sap.m.Semantic.MasterPage.
+     */
+    interface IFilter {
+      __implements__sap_m_semantic_IFilter: boolean;
+    }
+
+    /**
+     * Marker interface for controls which are suitable as items of the group aggregation of sap.m.Semantic.MasterPage.
+     */
+    interface IGroup {
+      __implements__sap_m_semantic_IGroup: boolean;
+    }
+
+    /**
+     * Marker interface for controls which are suitable as items of the sort aggregation of sap.m.Semantic.MasterPage.
+     */
+    interface ISort {
+      __implements__sap_m_semantic_ISort: boolean;
+    }
+
+    /**
+     * @SINCE 1.44
+     *
+     * Declares the type of semantic ruleset that will govern the styling and positioning of semantic content.
+     */
+    enum SemanticRuleSetType {
+      /**
+       * The default ruleset type, for which the Share Menu is always in the footer of the page.
+       */
+      Classic = "Classic",
+      /**
+       * Offers an optimized user experience, with displaying the Share Menu in the header, rather than the footer,
+       * for Fullscreen mode.
+       */
+      Optimized = "Optimized",
+    }
+  }
+
+  export namespace touch {
+    /**
+     * Given a list of touches, count the number of touches related with the given element.
+     */
+    function countContained(
+      /**
+       * The list of touch objects to search.
+       */
+      oTouchList: TouchList,
+      /**
+       * A jQuery element or an element reference or an element id.
+       */
+      vElement: jQuery | Element | string
+    ): number;
+    /**
+     * Given a list of touch objects, find the touch that matches the given one.
+     */
+    function find(
+      /**
+       * The list of touch objects to search.
+       */
+      oTouchList: TouchList,
+      /**
+       * A touch object to find or a Touch.identifier that uniquely identifies the current finger in the touch
+       * session.
+       */
+      oTouch: Touch | number
+    ): object | undefined;
   }
 }
 
@@ -15493,8 +15725,8 @@ declare module "sap/m/Dialog" {
      * Gets current value of property {@link #getStretch stretch}.
      *
      * Determines if the Dialog will be stretched to full screen on mobile. On desktop, the Dialog will be stretched
-     * to 93% of the viewport. This property is only applicable to a Standard Dialog. Message-type Dialog ignores
-     * it.
+     * to approximately 90% of the viewport. This property is only applicable to a Standard Dialog. Message-type
+     * Dialog ignores it.
      *
      * Default value is `false`.
      */
@@ -15948,8 +16180,8 @@ declare module "sap/m/Dialog" {
      * Sets a new value for property {@link #getStretch stretch}.
      *
      * Determines if the Dialog will be stretched to full screen on mobile. On desktop, the Dialog will be stretched
-     * to 93% of the viewport. This property is only applicable to a Standard Dialog. Message-type Dialog ignores
-     * it.
+     * to approximately 90% of the viewport. This property is only applicable to a Standard Dialog. Message-type
+     * Dialog ignores it.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -16185,8 +16417,8 @@ declare module "sap/m/Dialog" {
      * @SINCE 1.13.1
      *
      * Determines if the Dialog will be stretched to full screen on mobile. On desktop, the Dialog will be stretched
-     * to 93% of the viewport. This property is only applicable to a Standard Dialog. Message-type Dialog ignores
-     * it.
+     * to approximately 90% of the viewport. This property is only applicable to a Standard Dialog. Message-type
+     * Dialog ignores it.
      */
     stretch?: boolean | PropertyBindingInfo;
 
@@ -24772,6 +25004,20 @@ declare module "sap/m/IconTabBar" {
      */
     getTabDensityMode(): IconTabDensityMode | keyof typeof IconTabDensityMode;
     /**
+     * @SINCE 1.90
+     *
+     * Gets current value of property {@link #getTabsOverflowMode tabsOverflowMode}.
+     *
+     * Specifies the overflow mode of the header.
+     *
+     * The default `End` mode shows as many tabs that can fit on the screen, then shows one overflow at the
+     * end containing the remaining items. The `StartAndEnd` is used to keep the order of tabs intact and offers
+     * two overflow tabs on both ends of the bar.
+     *
+     * Default value is `End`.
+     */
+    getTabsOverflowMode(): /* was: sap.m.TabsOverflowMode */ any;
+    /**
      * @SINCE 1.22
      *
      * Gets current value of property {@link #getUpperCase upperCase}.
@@ -25048,6 +25294,27 @@ declare module "sap/m/IconTabBar" {
       mode: IconTabHeaderMode | keyof typeof IconTabHeaderMode
     ): this;
     /**
+     * @SINCE 1.90
+     *
+     * Sets a new value for property {@link #getTabsOverflowMode tabsOverflowMode}.
+     *
+     * Specifies the overflow mode of the header.
+     *
+     * The default `End` mode shows as many tabs that can fit on the screen, then shows one overflow at the
+     * end containing the remaining items. The `StartAndEnd` is used to keep the order of tabs intact and offers
+     * two overflow tabs on both ends of the bar.
+     *
+     * When called with a value of `null` or `undefined`, the default value of the property will be restored.
+     *
+     * Default value is `End`.
+     */
+    setTabsOverflowMode(
+      /**
+       * New value for property `tabsOverflowMode`
+       */
+      sTabsOverflowMode?: /* was: sap.m.TabsOverflowMode */ any
+    ): this;
+    /**
      * @SINCE 1.22
      *
      * Sets a new value for property {@link #getUpperCase upperCase}.
@@ -25244,6 +25511,19 @@ declare module "sap/m/IconTabBar" {
      * `headerDescription` - text to serve as a description for the header.
      */
     ariaTexts?: object | PropertyBindingInfo;
+
+    /**
+     * @SINCE 1.90
+     *
+     * Specifies the overflow mode of the header.
+     *
+     * The default `End` mode shows as many tabs that can fit on the screen, then shows one overflow at the
+     * end containing the remaining items. The `StartAndEnd` is used to keep the order of tabs intact and offers
+     * two overflow tabs on both ends of the bar.
+     */
+    tabsOverflowMode?: /* was: sap.m.TabsOverflowMode */
+      | any
+      | PropertyBindingInfo;
 
     /**
      * The items displayed in the IconTabBar.
@@ -25605,7 +25885,7 @@ declare module "sap/m/IconTabFilter" {
       /**
        * the select list in which this filter is rendered
        */
-      oSelectList: any,
+      oSelectList: /* was: sap.m.IconTabBarSelectList */ any,
       /**
        * this item's index within the aggregation of items
        */
@@ -26075,6 +26355,20 @@ declare module "sap/m/IconTabHeader" {
      */
     getTabDensityMode(): IconTabDensityMode | keyof typeof IconTabDensityMode;
     /**
+     * @SINCE 1.90
+     *
+     * Gets current value of property {@link #getTabsOverflowMode tabsOverflowMode}.
+     *
+     * Specifies the overflow mode of the header.
+     *
+     * The default `End` mode shows as many tabs that can fit on the screen, then shows one overflow at the
+     * end containing the remaining items. The `StartAndEnd` is used to keep the order of tabs intact and offers
+     * overflow tabs on both ends of the bar.
+     *
+     * Default value is `End`.
+     */
+    getTabsOverflowMode(): /* was: sap.m.TabsOverflowMode */ any;
+    /**
      * @SINCE 1.15.0
      *
      * Gets current value of property {@link #getVisible visible}.
@@ -26286,6 +26580,27 @@ declare module "sap/m/IconTabHeader" {
       sTabDensityMode?: IconTabDensityMode | keyof typeof IconTabDensityMode
     ): this;
     /**
+     * @SINCE 1.90
+     *
+     * Sets a new value for property {@link #getTabsOverflowMode tabsOverflowMode}.
+     *
+     * Specifies the overflow mode of the header.
+     *
+     * The default `End` mode shows as many tabs that can fit on the screen, then shows one overflow at the
+     * end containing the remaining items. The `StartAndEnd` is used to keep the order of tabs intact and offers
+     * overflow tabs on both ends of the bar.
+     *
+     * When called with a value of `null` or `undefined`, the default value of the property will be restored.
+     *
+     * Default value is `End`.
+     */
+    setTabsOverflowMode(
+      /**
+       * New value for property `tabsOverflowMode`
+       */
+      sTabsOverflowMode?: /* was: sap.m.TabsOverflowMode */ any
+    ): this;
+    /**
      * @SINCE 1.15.0
      *
      * Sets a new value for property {@link #getVisible visible}.
@@ -26421,6 +26736,19 @@ declare module "sap/m/IconTabHeader" {
     ariaTexts?: object | PropertyBindingInfo;
 
     /**
+     * @SINCE 1.90
+     *
+     * Specifies the overflow mode of the header.
+     *
+     * The default `End` mode shows as many tabs that can fit on the screen, then shows one overflow at the
+     * end containing the remaining items. The `StartAndEnd` is used to keep the order of tabs intact and offers
+     * overflow tabs on both ends of the bar.
+     */
+    tabsOverflowMode?: /* was: sap.m.TabsOverflowMode */
+      | any
+      | PropertyBindingInfo;
+
+    /**
      * The items displayed in the IconTabHeader.
      */
     items?: IconTab[] | IconTab | AggregationBindingInfo;
@@ -26553,7 +26881,7 @@ declare module "sap/m/IconTabSeparator" {
       /**
        * the select list in which this filter is rendered
        */
-      oSelectList: any,
+      oSelectList: /* was: sap.m.IconTabBarSelectList */ any,
       /**
        * this item's index within the aggregation of items
        */
@@ -28044,7 +28372,7 @@ declare module "sap/m/Input" {
    * **When not to use:** Don't use the control for long texts, dates, designated search fields, fields for
    * multiple selection.
    *
-   * Known Limitations:
+   * Known Restrictions:
    *
    * If `showValueHelp` or if `showSuggestion` is `true`, the native browser autofill will not fire a change
    * event.
@@ -28587,6 +28915,19 @@ declare module "sap/m/Input" {
      */
     getEnableSuggestionsHighlighting(): boolean;
     /**
+     * @SINCE 1.89
+     *
+     * Gets current value of property {@link #getEnableTableAutoPopinMode enableTableAutoPopinMode}.
+     *
+     * Enables the `autoPopinMode` of `sap.m.Table`, when the input has tabular suggestions. **Note:** The `autoPopinMode`
+     * overwrites the `demandPopin` and the `minScreenWidth` properties of the `sap.m.Column`. When setting,
+     * `enableTableAutoPopinMode`, from true to false, the application must reconfigure the `demandPopin` and
+     * `minScreenWidth` properties of the `sap.m.Column` control by itself.
+     *
+     * Default value is `false`.
+     */
+    getEnableTableAutoPopinMode(): boolean;
+    /**
      * Gets current value of property {@link #getFieldWidth fieldWidth}.
      *
      * This property only takes effect if the description property is set. It controls the distribution of space
@@ -28754,7 +29095,8 @@ declare module "sap/m/Input" {
      * the `suggestionRows` aggregation.
      *
      * **Note:** Disabled items are not visualized in the list with the suggestions, however they can still
-     * be accessed through the aggregation.
+     * be accessed through the aggregation. **Note:** If `suggestionItems` & `suggestionRows` are set in parallel,
+     * the last aggeragtion to come would overwrite the previous ones.
      */
     getSuggestionItems(): Item[];
     /**
@@ -28764,7 +29106,8 @@ declare module "sap/m/Input" {
      *
      * The suggestionColumns and suggestionRows are for tabular input suggestions. This aggregation allows for
      * binding the table cells. The items of this aggregation are to be bound directly or to set in the suggest
-     * event method. **Note:** If this aggregation is filled, the aggregation suggestionItems will be ignored.
+     * event method. **Note:** If `suggestionItems` & `suggestionRows` are set in parallel, the last aggeragtion
+     * to come would overwrite the previous ones.
      */
     getSuggestionRows(): Array<ColumnListItem | GroupHeaderListItem>;
     /**
@@ -29184,6 +29527,26 @@ declare module "sap/m/Input" {
       bEnableSuggestionsHighlighting?: boolean
     ): this;
     /**
+     * @SINCE 1.89
+     *
+     * Sets a new value for property {@link #getEnableTableAutoPopinMode enableTableAutoPopinMode}.
+     *
+     * Enables the `autoPopinMode` of `sap.m.Table`, when the input has tabular suggestions. **Note:** The `autoPopinMode`
+     * overwrites the `demandPopin` and the `minScreenWidth` properties of the `sap.m.Column`. When setting,
+     * `enableTableAutoPopinMode`, from true to false, the application must reconfigure the `demandPopin` and
+     * `minScreenWidth` properties of the `sap.m.Column` control by itself.
+     *
+     * When called with a value of `null` or `undefined`, the default value of the property will be restored.
+     *
+     * Default value is `false`.
+     */
+    setEnableTableAutoPopinMode(
+      /**
+       * New value for property `enableTableAutoPopinMode`
+       */
+      bEnableTableAutoPopinMode?: boolean
+    ): this;
+    /**
      * Sets a new value for property {@link #getFieldWidth fieldWidth}.
      *
      * This property only takes effect if the description property is set. It controls the distribution of space
@@ -29320,13 +29683,24 @@ declare module "sap/m/Input" {
       oListItem: ColumnListItem
     ): this;
     /**
-     * Shows suggestions.
+     * @SINCE 1.16.1
+     *
+     * Sets a new value for property {@link #getShowSuggestion showSuggestion}.
+     *
+     * If this is set to true, suggest event is fired when user types in the input. Changing the suggestItems
+     * aggregation in suggest event listener will show suggestions within a popup. When runs on phone, input
+     * will first open a dialog where the input and suggestions are shown. When runs on a tablet, the suggestions
+     * are shown in a popup next to the input.
+     *
+     * When called with a value of `null` or `undefined`, the default value of the property will be restored.
+     *
+     * Default value is `false`.
      */
     setShowSuggestion(
       /**
-       * Show suggestions.
+       * New value for property `showSuggestion`
        */
-      bValue: boolean
+      bShowSuggestion?: boolean
     ): this;
     /**
      * Shows value help suggestions in table.
@@ -29854,6 +30228,16 @@ declare module "sap/m/Input" {
     enableSuggestionsHighlighting?: boolean | PropertyBindingInfo;
 
     /**
+     * @SINCE 1.89
+     *
+     * Enables the `autoPopinMode` of `sap.m.Table`, when the input has tabular suggestions. **Note:** The `autoPopinMode`
+     * overwrites the `demandPopin` and the `minScreenWidth` properties of the `sap.m.Column`. When setting,
+     * `enableTableAutoPopinMode`, from true to false, the application must reconfigure the `demandPopin` and
+     * `minScreenWidth` properties of the `sap.m.Column` control by itself.
+     */
+    enableTableAutoPopinMode?: boolean | PropertyBindingInfo;
+
+    /**
      * @SINCE 1.61
      *
      * Specifies whether autocomplete is enabled. Works only if "showSuggestion" property is set to true. **Note:**
@@ -29876,7 +30260,8 @@ declare module "sap/m/Input" {
      * the `suggestionRows` aggregation.
      *
      * **Note:** Disabled items are not visualized in the list with the suggestions, however they can still
-     * be accessed through the aggregation.
+     * be accessed through the aggregation. **Note:** If `suggestionItems` & `suggestionRows` are set in parallel,
+     * the last aggeragtion to come would overwrite the previous ones.
      */
     suggestionItems?: Item[] | Item | AggregationBindingInfo;
 
@@ -29893,7 +30278,8 @@ declare module "sap/m/Input" {
      *
      * The suggestionColumns and suggestionRows are for tabular input suggestions. This aggregation allows for
      * binding the table cells. The items of this aggregation are to be bound directly or to set in the suggest
-     * event method. **Note:** If this aggregation is filled, the aggregation suggestionItems will be ignored.
+     * event method. **Note:** If `suggestionItems` & `suggestionRows` are set in parallel, the last aggeragtion
+     * to come would overwrite the previous ones.
      */
     suggestionRows?:
       | Array<GroupHeaderListItem | ColumnListItem>
@@ -30033,6 +30419,17 @@ declare module "sap/m/InputBase" {
      */
     bShowLabelAsPlaceholder: undefined;
 
+    /**
+     * @SINCE 1.90
+     *
+     * Adds some ariaDescribedBy into the association {@link #getAriaDescribedBy ariaDescribedBy}.
+     */
+    addAriaDescribedBy(
+      /**
+       * The ariaDescribedBy to add; if empty, nothing is inserted
+       */
+      vAriaDescribedBy: ID | Control
+    ): this;
     /**
      * @SINCE 1.27.0
      *
@@ -30189,6 +30586,13 @@ declare module "sap/m/InputBase" {
      * 	sap.ui.core.Control#getAccessibilityInfo
      */
     getAccessibilityInfo(): Object;
+    /**
+     * @SINCE 1.90
+     *
+     * Returns array of IDs of the elements which are the current targets of the association {@link #getAriaDescribedBy
+     * ariaDescribedBy}.
+     */
+    getAriaDescribedBy(): ID[];
     /**
      * @SINCE 1.27.0
      *
@@ -30401,11 +30805,28 @@ declare module "sap/m/InputBase" {
       oEvent?: jQuery.Event
     ): boolean;
     /**
+     * @SINCE 1.90
+     *
+     * Removes all the controls in the association named {@link #getAriaDescribedBy ariaDescribedBy}.
+     */
+    removeAllAriaDescribedBy(): ID[];
+    /**
      * @SINCE 1.27.0
      *
      * Removes all the controls in the association named {@link #getAriaLabelledBy ariaLabelledBy}.
      */
     removeAllAriaLabelledBy(): ID[];
+    /**
+     * @SINCE 1.90
+     *
+     * Removes an ariaDescribedBy from the association named {@link #getAriaDescribedBy ariaDescribedBy}.
+     */
+    removeAriaDescribedBy(
+      /**
+       * The ariaDescribedBy to be removed or its index or ID
+       */
+      vAriaDescribedBy: int | ID | Control
+    ): ID;
     /**
      * @SINCE 1.27.0
      *
@@ -30783,6 +31204,13 @@ declare module "sap/m/InputBase" {
      * Association to controls / IDs that label this control (see WAI-ARIA attribute aria-labelledby).
      */
     ariaLabelledBy?: Array<Control | string>;
+
+    /**
+     * @SINCE 1.90
+     *
+     * Association to controls / IDs that describe this control (see WAI-ARIA attribute aria-describedby).
+     */
+    ariaDescribedBy?: Array<Control | string>;
 
     /**
      * Is fired when the text in the input field has changed and the focus leaves the input field or the enter
@@ -34081,12 +34509,7 @@ declare module "sap/m/ListBase" {
      *
      * **Note:** Enabling sticky column headers in List controls will not have any effect.
      *
-     * There is limited browser support. Browsers that do not support this feature are listed below:
-     * 	 - IE
-     * 	 - Edge lower than version 41 (EdgeHTML 16)
-     * 	 - Firefox lower than version 59
-     *
-     * There are also some known restrictions. A few are given below:
+     * There are some known restrictions. A few are given below:
      * 	 - If the control is placed in layout containers that have the `overflow: hidden` or `overflow: auto`
      * 			style definition, this can prevent the sticky elements of the control from becoming fixed at the top
      * 			of the viewport.
@@ -34602,12 +35025,7 @@ declare module "sap/m/ListBase" {
      *
      * **Note:** Enabling sticky column headers in List controls will not have any effect.
      *
-     * There is limited browser support. Browsers that do not support this feature are listed below:
-     * 	 - IE
-     * 	 - Edge lower than version 41 (EdgeHTML 16)
-     * 	 - Firefox lower than version 59
-     *
-     * There are also some known restrictions. A few are given below:
+     * There are some known restrictions. A few are given below:
      * 	 - If the control is placed in layout containers that have the `overflow: hidden` or `overflow: auto`
      * 			style definition, this can prevent the sticky elements of the control from becoming fixed at the top
      * 			of the viewport.
@@ -35058,12 +35476,7 @@ declare module "sap/m/ListBase" {
      *
      * **Note:** Enabling sticky column headers in List controls will not have any effect.
      *
-     * There is limited browser support. Browsers that do not support this feature are listed below:
-     * 	 - IE
-     * 	 - Edge lower than version 41 (EdgeHTML 16)
-     * 	 - Firefox lower than version 59
-     *
-     * There are also some known restrictions. A few are given below:
+     * There are some known restrictions. A few are given below:
      * 	 - If the control is placed in layout containers that have the `overflow: hidden` or `overflow: auto`
      * 			style definition, this can prevent the sticky elements of the control from becoming fixed at the top
      * 			of the viewport.
@@ -44450,6 +44863,70 @@ declare module "sap/m/NewsContent" {
      */
     press?: Function;
   }
+}
+
+declare module "sap/m/NotificationList" {
+  import { default as ListBase, $ListBaseSettings } from "sap/m/ListBase";
+
+  import ElementMetadata from "sap/ui/core/ElementMetadata";
+
+  /**
+   * @SINCE 1.90
+   *
+   * The NotificationList control provides a container for `NotificationListGroup` and `NotificationListItem`.
+   */
+  export default class NotificationList extends ListBase {
+    /**
+     * Constructor for a new NotificationList.
+     */
+    constructor(
+      /**
+       * Initial settings for the new control
+       */
+      mSettings?: $NotificationListSettings
+    );
+    /**
+     * Constructor for a new NotificationList.
+     */
+    constructor(
+      /**
+       * ID for the new control, generated automatically if no ID is given
+       */
+      sId?: string,
+      /**
+       * Initial settings for the new control
+       */
+      mSettings?: $NotificationListSettings
+    );
+
+    /**
+     * Creates a new subclass of class sap.m.NotificationList with name `sClassName` and enriches it with the
+     * information contained in `oClassInfo`.
+     *
+     * `oClassInfo` might contain the same kind of information as described in {@link sap.m.ListBase.extend}.
+     */
+    static extend<T extends Record<string, unknown>>(
+      /**
+       * Name of the class being created
+       */
+      sClassName: string,
+      /**
+       * Object literal with information about the class
+       */
+      oClassInfo?: sap.ClassInfo<T, NotificationList>,
+      /**
+       * Constructor function for the metadata object; if not given, it defaults to the metadata implementation
+       * used by this class
+       */
+      FNMetaImpl?: Function
+    ): Function;
+    /**
+     * Returns a metadata object for class sap.m.NotificationList.
+     */
+    static getMetadata(): ElementMetadata;
+  }
+
+  export interface $NotificationListSettings extends $ListBaseSettings {}
 }
 
 declare module "sap/m/NotificationListBase" {
@@ -94768,15 +95245,26 @@ declare module "sap/m/Table" {
      * By default, the table is rendered with a fixed layout algorithm (`fixedLayout=true`). This means the
      * horizontal layout only depends on the table's width and the width of the columns, not the content of
      * the cells. Cells in subsequent rows do not affect column width. This allows a browser to provide a faster
-     * table layout since the browser can begin to display the table once the first row has been analyzed. If
-     * this property is set to `false`, `sap.m.Table` is rendered with an auto layout algorithm. This means,
+     * table layout since the browser can begin to display the table once the first row has been analyzed.
+     *
+     * If this property is set to `false`, `sap.m.Table` is rendered with an auto layout algorithm. This means,
      * the width of the table and its cells depends on the content of the cells. The column width is set by
      * the widest unbreakable content inside the cells. This can make the rendering slow, since the browser
-     * needs to go through all the content in the table before determining the final layout. If this property
-     * is set to `Strict` and the `width` property is defined for all columns (and not the expected "auto" value),
-     * then the `sap.m.Table` control renders a placeholder column which occupies the remaining width of the
-     * control to ensure the column width setting is strictly applied. The placeholder column gets rendered
-     * only if there are no columns in the pop-in area.
+     * needs to go through all the content in the table before determining the final layout.
+     *
+     *
+     * If this property is set to `Strict` and the `width` property is defined for all columns (and not the
+     * expected "auto" value), then the `sap.m.Table` control renders a placeholder column which occupies the
+     * remaining width of the control to ensure the column width setting is strictly applied.
+     *
+     *
+     * If there is only one remaining column with a width larger than the table, then this column gets the maximum
+     * width available in the table. If the column width is smaller than the table, then the column width is
+     * retained, and the remaining width of the table is occupied by the placeholder column.
+     *
+     *
+     * The placeholder column gets rendered only if there are no columns in the pop-in area.
+     *
      *
      * **Note:** Since `sap.m.Table` does not have its own scrollbars, setting `fixedLayout` to false can force
      * the table to overflow, which may cause visual problems. It is suggested to use this property when a table
@@ -94972,15 +95460,26 @@ declare module "sap/m/Table" {
      * By default, the table is rendered with a fixed layout algorithm (`fixedLayout=true`). This means the
      * horizontal layout only depends on the table's width and the width of the columns, not the content of
      * the cells. Cells in subsequent rows do not affect column width. This allows a browser to provide a faster
-     * table layout since the browser can begin to display the table once the first row has been analyzed. If
-     * this property is set to `false`, `sap.m.Table` is rendered with an auto layout algorithm. This means,
+     * table layout since the browser can begin to display the table once the first row has been analyzed.
+     *
+     * If this property is set to `false`, `sap.m.Table` is rendered with an auto layout algorithm. This means,
      * the width of the table and its cells depends on the content of the cells. The column width is set by
      * the widest unbreakable content inside the cells. This can make the rendering slow, since the browser
-     * needs to go through all the content in the table before determining the final layout. If this property
-     * is set to `Strict` and the `width` property is defined for all columns (and not the expected "auto" value),
-     * then the `sap.m.Table` control renders a placeholder column which occupies the remaining width of the
-     * control to ensure the column width setting is strictly applied. The placeholder column gets rendered
-     * only if there are no columns in the pop-in area.
+     * needs to go through all the content in the table before determining the final layout.
+     *
+     *
+     * If this property is set to `Strict` and the `width` property is defined for all columns (and not the
+     * expected "auto" value), then the `sap.m.Table` control renders a placeholder column which occupies the
+     * remaining width of the control to ensure the column width setting is strictly applied.
+     *
+     *
+     * If there is only one remaining column with a width larger than the table, then this column gets the maximum
+     * width available in the table. If the column width is smaller than the table, then the column width is
+     * retained, and the remaining width of the table is occupied by the placeholder column.
+     *
+     *
+     * The placeholder column gets rendered only if there are no columns in the pop-in area.
+     *
      *
      * **Note:** Since `sap.m.Table` does not have its own scrollbars, setting `fixedLayout` to false can force
      * the table to overflow, which may cause visual problems. It is suggested to use this property when a table
@@ -95140,15 +95639,26 @@ declare module "sap/m/Table" {
      * By default, the table is rendered with a fixed layout algorithm (`fixedLayout=true`). This means the
      * horizontal layout only depends on the table's width and the width of the columns, not the content of
      * the cells. Cells in subsequent rows do not affect column width. This allows a browser to provide a faster
-     * table layout since the browser can begin to display the table once the first row has been analyzed. If
-     * this property is set to `false`, `sap.m.Table` is rendered with an auto layout algorithm. This means,
+     * table layout since the browser can begin to display the table once the first row has been analyzed.
+     *
+     * If this property is set to `false`, `sap.m.Table` is rendered with an auto layout algorithm. This means,
      * the width of the table and its cells depends on the content of the cells. The column width is set by
      * the widest unbreakable content inside the cells. This can make the rendering slow, since the browser
-     * needs to go through all the content in the table before determining the final layout. If this property
-     * is set to `Strict` and the `width` property is defined for all columns (and not the expected "auto" value),
-     * then the `sap.m.Table` control renders a placeholder column which occupies the remaining width of the
-     * control to ensure the column width setting is strictly applied. The placeholder column gets rendered
-     * only if there are no columns in the pop-in area.
+     * needs to go through all the content in the table before determining the final layout.
+     *
+     *
+     * If this property is set to `Strict` and the `width` property is defined for all columns (and not the
+     * expected "auto" value), then the `sap.m.Table` control renders a placeholder column which occupies the
+     * remaining width of the control to ensure the column width setting is strictly applied.
+     *
+     *
+     * If there is only one remaining column with a width larger than the table, then this column gets the maximum
+     * width available in the table. If the column width is smaller than the table, then the column width is
+     * retained, and the remaining width of the table is occupied by the placeholder column.
+     *
+     *
+     * The placeholder column gets rendered only if there are no columns in the pop-in area.
+     *
      *
      * **Note:** Since `sap.m.Table` does not have its own scrollbars, setting `fixedLayout` to false can force
      * the table to overflow, which may cause visual problems. It is suggested to use this property when a table
@@ -99458,11 +99968,12 @@ declare module "sap/m/TimePicker" {
    * Use this control if you want the user to select a time. If you want the user to select a duration (1
    * hour), use the {@link sap.m.Select} control instead.
    *
-   * The user can enter a date by:
+   * The user can fill time by:
    *
    *
-   * 	 - Using the `TimePicker` dropdown that opens in a popup
-   * 	 - Typing it in directly in the input field
+   * 	 - Using the time picker button that opens a popover with а time picker clock dial
+   * 	 - Using the time input field. On desktop - by changing the time directly via keyboard input. On mobile/touch
+   * 			device - in another input field that opens in a popup after tap.
    *
    * On app level, there are two options to provide value for the `TimePicker` - as a string to the `value`
    * property or as a JavaScript Date object to the `dateValue` property (only one of these properties should
@@ -99585,7 +100096,7 @@ declare module "sap/m/TimePicker" {
       mArguments?: object
     ): this;
     /**
-     * Fires the change event for the listeners
+     * Fires the change event for the listeners.
      */
     fireChangeEvent(
       /**
@@ -99609,7 +100120,7 @@ declare module "sap/m/TimePicker" {
      */
     getDateValue(): object;
     /**
-     * Determines the format, displayed in the input field and the picker sliders.
+     * Determines the format, displayed in the input field and the picker clocks/numeric inputs.
      *
      * The default value is the browser's medium time format locale setting {@link sap.ui.core.LocaleData#getTimePattern}.
      * If data binding with type {@link sap.ui.model.type.Time} or {@link sap.ui.model.odata.type.Time} is used
@@ -99666,8 +100177,8 @@ declare module "sap/m/TimePicker" {
      *
      * Gets current value of property {@link #getMinutesStep minutesStep}.
      *
-     * Sets the minutes slider step. If step is less than 1, it will be automatically converted back to 1. The
-     * minutes slider is populated only by multiples of the step.
+     * Sets the minutes step. If step is less than 1, it will be automatically converted back to 1. The minutes
+     * clock is populated only by multiples of the step.
      *
      * Default value is `1`.
      */
@@ -99691,8 +100202,8 @@ declare module "sap/m/TimePicker" {
      *
      * Gets current value of property {@link #getSecondsStep secondsStep}.
      *
-     * Sets the seconds slider step. If step is less than 1, it will be automatically converted back to 1. The
-     * seconds slider is populated only by multiples of the step.
+     * Sets the seconds step. If step is less than 1, it will be automatically converted back to 1. The seconds
+     * clock is populated only by multiples of the step.
      *
      * Default value is `1`.
      */
@@ -99753,15 +100264,19 @@ declare module "sap/m/TimePicker" {
       iIndex: int
     ): this;
     /**
-     * Called after the picker closes.
+     * Called after the clock picker closes.
      */
     onAfterClose(): void;
     /**
-     * Called after the picker appears.
+     * Called after the clock picker appears.
      */
     onAfterOpen(): void;
     /**
-     * Called before the picker appears.
+     * Called before the clock picker closes.
+     */
+    onBeforeClose(): void;
+    /**
+     * Called before the clock picker appears.
      */
     onBeforeOpen(): void;
     /**
@@ -99779,6 +100294,24 @@ declare module "sap/m/TimePicker" {
        */
       vRule: int | string | MaskInputRule
     ): MaskInputRule;
+    /**
+     * Sets the value of the date.
+     */
+    setDateValue(
+      /**
+       * date object
+       */
+      oDate: object
+    ): this;
+    /**
+     * Sets the display format.
+     */
+    setDisplayFormat(
+      /**
+       * display format to set
+       */
+      sDisplayFormat: string
+    ): this;
     /**
      * Sets the locale of the control.
      *
@@ -99834,11 +100367,11 @@ declare module "sap/m/TimePicker" {
       sMaskMode?: TimePickerMaskMode | keyof typeof TimePickerMaskMode
     ): this;
     /**
-     * Sets the minutes slider step.
+     * Sets the minutes step of clocks and inputs.
      */
     setMinutesStep(
       /**
-       * The step used to generate values for the minutes slider
+       * The step used to generate values for the minutes clock/input
        */
       step: int
     ): any;
@@ -99858,11 +100391,11 @@ declare module "sap/m/TimePicker" {
       sPlaceholderSymbol?: string
     ): this;
     /**
-     * Sets the seconds slider step.
+     * Sets the seconds step of clocks and inputs.
      */
     setSecondsStep(
       /**
-       * The step used to generate values for the seconds slider
+       * The step used to generate values for the seconds clock/input
        */
       step: int
     ): this;
@@ -99872,19 +100405,6 @@ declare module "sap/m/TimePicker" {
      * Allows the control to use 24-hour format. Recommended usage is to not use it with am/pm format.
      */
     setSupport2400(bSupport2400: boolean): this;
-    /**
-     * Sets a new value for property {@link #getTitle title}.
-     *
-     * Displays the text of the general picker label and is read by screen readers. It is visible only on phone.
-     *
-     * When called with a value of `null` or `undefined`, the default value of the property will be restored.
-     */
-    setTitle(
-      /**
-       * New value for property `title`
-       */
-      sTitle?: string
-    ): this;
     /**
      * Sets tooltip of the control.
      */
@@ -99911,16 +100431,16 @@ declare module "sap/m/TimePicker" {
     /**
      * @SINCE 1.40
      *
-     * Sets the minutes slider step. If step is less than 1, it will be automatically converted back to 1. The
-     * minutes slider is populated only by multiples of the step.
+     * Sets the minutes step. If step is less than 1, it will be automatically converted back to 1. The minutes
+     * clock is populated only by multiples of the step.
      */
     minutesStep?: int | PropertyBindingInfo;
 
     /**
      * @SINCE 1.40
      *
-     * Sets the seconds slider step. If step is less than 1, it will be automatically converted back to 1. The
-     * seconds slider is populated only by multiples of the step.
+     * Sets the seconds step. If step is less than 1, it will be automatically converted back to 1. The seconds
+     * clock is populated only by multiples of the step.
      */
     secondsStep?: int | PropertyBindingInfo;
 
@@ -99968,6 +100488,184 @@ declare module "sap/m/TimePicker" {
      */
     rules?: MaskInputRule[] | MaskInputRule | AggregationBindingInfo;
   }
+}
+
+declare module "sap/m/TimePickerClocks" {
+  import { default as Control, $ControlSettings } from "sap/ui/core/Control";
+
+  import ElementMetadata from "sap/ui/core/ElementMetadata";
+
+  /**
+   * @SINCE 1.90
+   *
+   * A picker clocks container control used inside the {@link sap.m.TimePicker}.
+   */
+  export default class TimePickerClocks extends Control {
+    /**
+     * Constructor for a new `TimePickerClocks`.
+     *
+     * Accepts an object literal `mSettings` that defines initial property values, aggregated and associated
+     * objects as well as event handlers. See {@link sap.ui.base.ManagedObject#constructor} for a general description
+     * of the syntax of the settings object.
+     */
+    constructor(
+      /**
+       * Initial settings for the new control
+       */
+      mSettings?: $TimePickerClocksSettings
+    );
+    /**
+     * Constructor for a new `TimePickerClocks`.
+     *
+     * Accepts an object literal `mSettings` that defines initial property values, aggregated and associated
+     * objects as well as event handlers. See {@link sap.ui.base.ManagedObject#constructor} for a general description
+     * of the syntax of the settings object.
+     */
+    constructor(
+      /**
+       * ID for the new control, generated automatically if no ID is given
+       */
+      sId?: string,
+      /**
+       * Initial settings for the new control
+       */
+      mSettings?: $TimePickerClocksSettings
+    );
+
+    /**
+     * Creates a new subclass of class sap.m.TimePickerClocks with name `sClassName` and enriches it with the
+     * information contained in `oClassInfo`.
+     *
+     * `oClassInfo` might contain the same kind of information as described in {@link sap.ui.core.Control.extend}.
+     */
+    static extend<T extends Record<string, unknown>>(
+      /**
+       * Name of the class being created
+       */
+      sClassName: string,
+      /**
+       * Object literal with information about the class
+       */
+      oClassInfo?: sap.ClassInfo<T, TimePickerClocks>,
+      /**
+       * Constructor function for the metadata object; if not given, it defaults to the metadata implementation
+       * used by this class
+       */
+      FNMetaImpl?: Function
+    ): Function;
+    /**
+     * Returns a metadata object for class sap.m.TimePickerClocks.
+     */
+    static getMetadata(): ElementMetadata;
+    /**
+     * Gets the time values from the clocks, as a date object.
+     */
+    getTimeValues(): Object;
+    /**
+     * Initializes the control.
+     */
+    init(): void;
+    /**
+     * Sets the value of the `TimePickerClocks` container.
+     */
+    setValue(
+      /**
+       * The value of the `TimePickerClocks`
+       */
+      sValue: string
+    ): this;
+    /**
+     * Opens first clock.
+     */
+    showFirstClock(): this;
+  }
+
+  export interface $TimePickerClocksSettings extends $ControlSettings {}
+}
+
+declare module "sap/m/TimePickerInputs" {
+  import { default as Control, $ControlSettings } from "sap/ui/core/Control";
+
+  import ElementMetadata from "sap/ui/core/ElementMetadata";
+
+  /**
+   * @SINCE 1.90
+   *
+   * A picker Inputs container control used inside the {@link sap.m.TimePicker}.
+   */
+  export default class TimePickerInputs extends Control {
+    /**
+     * Constructor for a new `TimePickerInputs`.
+     *
+     * Accepts an object literal `mSettings` that defines initial property values, aggregated and associated
+     * objects as well as event handlers. See {@link sap.ui.base.ManagedObject#constructor} for a general description
+     * of the syntax of the settings object.
+     */
+    constructor(
+      /**
+       * Initial settings for the new control
+       */
+      mSettings?: $TimePickerInputsSettings
+    );
+    /**
+     * Constructor for a new `TimePickerInputs`.
+     *
+     * Accepts an object literal `mSettings` that defines initial property values, aggregated and associated
+     * objects as well as event handlers. See {@link sap.ui.base.ManagedObject#constructor} for a general description
+     * of the syntax of the settings object.
+     */
+    constructor(
+      /**
+       * ID for the new control, generated automatically if no ID is given
+       */
+      sId?: string,
+      /**
+       * Initial settings for the new control
+       */
+      mSettings?: $TimePickerInputsSettings
+    );
+
+    /**
+     * Creates a new subclass of class sap.m.TimePickerInputs with name `sClassName` and enriches it with the
+     * information contained in `oClassInfo`.
+     *
+     * `oClassInfo` might contain the same kind of information as described in {@link sap.ui.core.Control.extend}.
+     */
+    static extend<T extends Record<string, unknown>>(
+      /**
+       * Name of the class being created
+       */
+      sClassName: string,
+      /**
+       * Object literal with information about the class
+       */
+      oClassInfo?: sap.ClassInfo<T, TimePickerInputs>,
+      /**
+       * Constructor function for the metadata object; if not given, it defaults to the metadata implementation
+       * used by this class
+       */
+      FNMetaImpl?: Function
+    ): Function;
+    /**
+     * Returns a metadata object for class sap.m.TimePickerInputs.
+     */
+    static getMetadata(): ElementMetadata;
+    /**
+     * Gets the time values from the clocks, as a date object.
+     */
+    getTimeValues(): Object;
+    /**
+     * Sets the value of the `TimePickerInputs` container.
+     */
+    setValue(
+      /**
+       * The value of the `TimePickerInputs`
+       */
+      sValue: string
+    ): this;
+  }
+
+  export interface $TimePickerInputsSettings extends $ControlSettings {}
 }
 
 declare module "sap/m/TimePickerSliders" {
@@ -114032,6 +114730,388 @@ declare module "sap/m/WizardStep" {
 }
 
 declare namespace sap {
+  /**
+   * The main UI5 control library, with responsive controls that can be used in touch devices as well as desktop
+   * browsers.
+   */
+  namespace m {
+    /**
+     * @SINCE 1.11.0
+     *
+     *
+     * ```javascript
+     *
+     * `sap.m.Support` shows the technical information for SAPUI5 Mobile Applications.
+     * This technical information includes
+     *    * SAPUI5 Version
+     *    * User Agent
+     *    * Configurations (Bootstrap and Computed)
+     *    * URI parameters
+     *    * All loaded module names
+     *
+     * In order to show the device information, the user must follow the following gestures.
+     *    1 - Hold two finger for 3 seconds minimum.
+     *    2 - Tab with a third finger while holding the first two fingers.
+     *
+     * NOTE: This class is internal and all its functions must not be used by an application
+     *
+     * As `sap.m.Support` is a static class, a `sap.ui.requireSync("sap/m/Support");`
+     * statement must be implicitly executed before the class is used.
+     *
+     *
+     * Enable Support:
+     * --------------------------------------------------
+     * //import library
+     * sap.ui.requireSync("sap/m/Support");
+     *
+     * //By default after require, support is enabled but implicitly we can call
+     * sap.m.Support.on();
+     *
+     * Disable Support:
+     * --------------------------------------------------
+     * sap.m.Support.off();
+     * ```
+     */
+    export const Support: undefined;
+
+    /**
+     * @SINCE 1.90.0
+     *
+     * Specifies `IconTabBar` tab overflow mode.
+     */
+    export const TabsOverflowMode: undefined;
+
+    /**
+     * @SINCE 1.20
+     *
+     * Hide the soft keyboard.
+     */
+    function closeKeyboard(): void;
+    /**
+     * @SINCE 1.10
+     * @deprecated (since 1.12) - UI5 returns null for invalid date
+     *
+     * Returns invalid date value of UI5.
+     */
+    function getInvalidDate(): null;
+    /**
+     * @SINCE 1.11
+     *
+     * Search given control's parents and try to find iScroll.
+     */
+    function getIScroll(
+      /**
+       * Control to start the search at
+       */
+      oControl: import("sap/ui/core/Control").default
+    ): Object | undefined;
+    /**
+     * @SINCE 1.10
+     *
+     * Finds default locale settings once and returns always the same.
+     *
+     * We should not need to create new instance to get same locale settings This method keeps the locale instance
+     * in the scope and returns the same after first run
+     */
+    function getLocale(): import("sap/ui/core/Locale").default;
+    /**
+     * @SINCE 1.10
+     *
+     * Finds default locale data once and returns always the same.
+     */
+    function getLocaleData(): import("sap/ui/core/LocaleData").default;
+    /**
+     * @SINCE 1.11
+     *
+     * Search given control's parents and try to find a ScrollDelegate.
+     */
+    function getScrollDelegate(
+      /**
+       * Starting point for the search
+       */
+      oControl: import("sap/ui/core/Control").default,
+      /**
+       * Whether the search should stop on component level (`false`) or not
+       */
+      bGlobal: boolean
+    ): Object | undefined;
+    /**
+     * @SINCE 1.10
+     *
+     * Checks if the given parameter is a valid JsDate Object.
+     */
+    function isDate(
+      /**
+       * Any variable to test.
+       */
+      value: any
+    ): boolean;
+    /**
+     * @SINCE 1.12
+     *
+     * Helper for rendering themable background.
+     */
+    namespace BackgroundHelper {
+      /**
+       * Adds CSS classes and styles to the given RenderManager, depending on the given configuration for background
+       * color and background image. To be called by control renderers supporting the global themable background
+       * image within their root tag, before they call writeClasses() and writeStyles().
+       */
+      function addBackgroundColorStyles(
+        /**
+         * The RenderManager
+         */
+        rm: import("sap/ui/core/RenderManager").default,
+        /**
+         * A configured custom background color for the control, if any
+         */
+        sBgColor?: import("sap/ui/core/library").CSSColor,
+        /**
+         * The configured custom background image for the control, if any
+         */
+        sBgImgUrl?: import("sap/ui/core/library").URI
+      ): void;
+      /**
+       * Renders an HTML tag into the given RenderManager which carries the background image which is either configured
+       * and given or coming from the current theme. Should be called right after the opening root tag has been
+       * completed, so this is the first child element inside the control.
+       */
+      function renderBackgroundImageTag(
+        /**
+         * The RenderManager
+         */
+        rm: import("sap/ui/core/RenderManager").default,
+        /**
+         * Control within which the tag will be rendered; its ID will be used to generate the element ID
+         */
+        oControl: import("sap/ui/core/Control").default,
+        /**
+         * A CSS class or an array of CSS classes to add to the element
+         */
+        vCssClass: string | string[],
+        /**
+         * The image of a configured background image; if this is not given, the theme background will be used and
+         * also the other settings are ignored.
+         */
+        sBgImgUrl?: import("sap/ui/core/library").URI,
+        /**
+         * Whether the background image should be repeated/tiled (or stretched)
+         */
+        bRepeat?: boolean,
+        /**
+         * The background image opacity, if any
+         */
+        fOpacity?: float
+      ): void;
+    }
+    /**
+     * @SINCE 1.12
+     *
+     * Helper for Images.
+     */
+    namespace ImageHelper {
+      /**
+       * Creates or updates an image control.
+       */
+      function getImageControl(
+        /**
+         * UD of the image to be dealt with.
+         */
+        sImgId: string,
+        /**
+         * The image to update. If undefined, a new image will be created.
+         */
+        oImageControl: import("sap/m/Image").default,
+        /**
+         * oImageControl's parentControl.
+         */
+        oParent: import("sap/ui/core/Control").default,
+        /**
+         * Settings for the image control; the `src` property MUST be contained; the keys of the object must be
+         * valid names of image settings
+         */
+        mProperties: object,
+        /**
+         * Array of CSS classes which will be added if the image needs to be created.
+         */
+        aCssClassesToAdd: string[],
+        /**
+         * All CSS classes that oImageControl has and which are contained in this array are removed before adding
+         * the CSS classes listed in aCssClassesToAdd.
+         */
+        aCssClassesToRemove: string[]
+      ): import("sap/m/Image").default | import("sap/ui/core/Icon").default;
+    }
+    /**
+     * @SINCE 1.21.2
+     *
+     * Suggestion helper for `sap.m.Input` fields when used with an OData model.
+     *
+     * Creates a multi-column suggest list for an `sap.m.Input` field based on a `ValueList` annotation. The
+     * `ValueList` annotation will be resolved via the binding information of the input field.
+     *
+     * If the annotation describes multiple input parameters, the suggest provider will resolve all of these
+     * relative to the context of the input field and use them for the suggest query. The suggest provider will
+     * write all values that are described as output parameters back to the model (relative to the context of
+     * the input field). This can only be done if the model runs in "TwoWay" binding mode. Both features can
+     * be switched off via the `bResolveInput/bResolveOutput` parameter of the suggest function.
+     */
+    namespace InputODataSuggestProvider {
+      /**/
+      function suggest(
+        oEvent: import("sap/ui/base/Event").default,
+        /**
+         * SuggestProvider resolves all input parameters for the data query
+         */
+        bResolveInput: boolean,
+        /**
+         * SuggestProvider writes back all output parameters.
+         */
+        bResolveOutput: boolean,
+        /**
+         * If iLength is provided only these number of entries will be requested.
+         */
+        iLength: int
+      ): void;
+    }
+    /**
+     * @SINCE 1.16.7
+     *
+     * Helper for Popups.
+     */
+    namespace PopupHelper {
+      /**
+       * Converts the given percentage value to an absolute number based on the given base size.
+       */
+      function calcPercentageSize(
+        /**
+         * A percentage value in string format, for example "25%"
+         */
+        sPercentage: string,
+        /**
+         * A float number which the calculation is based on.
+         */
+        fBaseSize: float
+      ): int;
+    }
+    /**
+     * Touch helper.
+     */
+    namespace touch {
+      /**
+       * Given a list of touches, count the number of touches related with the given element.
+       */
+      function countContained(
+        /**
+         * The list of touch objects to search.
+         */
+        oTouchList: TouchList,
+        /**
+         * A jQuery element or an element reference or an element id.
+         */
+        vElement: jQuery | Element | string
+      ): number;
+      /**
+       * Given a list of touch objects, find the touch that matches the given one.
+       */
+      function find(
+        /**
+         * The list of touch objects to search.
+         */
+        oTouchList: TouchList,
+        /**
+         * A touch object to find or a Touch.identifier that uniquely identifies the current finger in the touch
+         * session.
+         */
+        oTouch: Touch | number
+      ): object | undefined;
+    }
+
+    /**
+     * Helper Class for implementing the IBar interface. Should be created once per IBar instance.
+     */
+    class IBarInPageEnabler {
+      /**/
+      constructor();
+
+      /**
+       * Adds the sapMBarChildClass to a control.
+       */
+      static addChildClassTo(
+        /**
+         * The sap.ui.core.Control to which the sapMBarChildClass will be added
+         */
+        oControl: import("sap/ui/core/Control").default
+      ): void;
+      /**
+       * Renders the tooltip for the given control
+       */
+      static renderTooltip(
+        /**
+         * the RenderManager that can be used for writing to the render output buffer.
+         */
+        oRM: import("sap/ui/core/RenderManager").default,
+        /**
+         * an object representation of the control that should be rendered.
+         */
+        oControl: import("sap/ui/core/Control").default
+      ): void;
+    }
+    /**
+     * @SINCE 1.48.0
+     *
+     * The public facade of the {@link sap.m.SelectionDetailsItem} element.
+     */
+    class SelectionDetailsItemFacade {
+      /**
+       * Describes the public facade of the {@link sap.m.SelectionDetailsItem} element.
+       */
+      constructor();
+
+      /**
+       * Adds some action to the aggregation {@link #getActions actions}.
+       */
+      addAction(
+        /**
+         * The action to add; if empty, nothing is inserted
+         */
+        oAction: import("sap/ui/core/Item").default
+      ): this;
+      /**
+       * Gets current value of property {@link #getEnableNav enableNav}.
+       *
+       * Determines whether or not the item is active and a navigation event is triggered on press.
+       *
+       * Default value is `false`.
+       */
+      getEnableNav(): boolean;
+      /**
+       * Removes a action from the aggregation {@link #getActions actions}.
+       */
+      removeAction(
+        /**
+         * The action to remove or its index or id
+         */
+        vAction: int | string | import("sap/ui/core/Item").default
+      ): import("sap/ui/core/Item").default;
+      /**
+       * Sets a new value for property {@link #getEnableNav enableNav}.
+       *
+       * Determines whether or not the item is active and a navigation event is triggered on press.
+       *
+       * When called with a value of `null` or `undefined`, the default value of the property will be restored.
+       *
+       * Default value is `false`.
+       */
+      setEnableNav(
+        /**
+         * New value for property `enableNav`
+         */
+        bEnableNav?: boolean
+      ): this;
+    }
+  }
+
   interface IUI5DefineDependencyNames {
     "sap/f/library": undefined;
 
@@ -114220,6 +115300,8 @@ declare namespace sap {
     "sap/m/NavContainer": undefined;
 
     "sap/m/NewsContent": undefined;
+
+    "sap/m/NotificationList": undefined;
 
     "sap/m/NotificationListBase": undefined;
 
@@ -114490,6 +115572,10 @@ declare namespace sap {
     "sap/m/TileContent": undefined;
 
     "sap/m/TimePicker": undefined;
+
+    "sap/m/TimePickerClocks": undefined;
+
+    "sap/m/TimePickerInputs": undefined;
 
     "sap/m/TimePickerSliders": undefined;
 

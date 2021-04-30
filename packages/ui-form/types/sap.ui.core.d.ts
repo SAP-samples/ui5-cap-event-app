@@ -8,8 +8,22 @@ declare type int = number;
  */
 declare type float = number;
 
+/**
+ * An alternative name for the global type Element.
+ *
+ * UI5 defines its own type sap.ui.core.Element, which, in the scope of the sap.ui.core
+ * namespace, hides the global type. As there are other entities in the same namespace
+ * that refer to the global Element in their signatures, this naming conflict can cause
+ * type mismatches between sap.ui.core code and other code subclassing from it.
+ *
+ * To avoid these issues, the alternative name can be used in sap.ui.core signatures.
+ *
+ * @todo check if HTMLElement could be used instead in UI5 method signatures
+ */
+declare type global_Element = Element;
+
 declare namespace sap {
-  export type ClassInfo<T, C> = T & ThisType<T & C>;
+  export type ClassInfo<T, C> = T & Partial<C> & ThisType<T & C>;
 }
 
 declare type jQuery<T = HTMLElement> = JQuery<T>;
@@ -23,2061 +37,7 @@ declare namespace QUnit {
   export type Assert = typeof QUnit.assert;
 }
 
-// For Library Version: 1.89.0
-
-declare module "jquery.sap.global/__$sap/__$log" {
-  /**
-   * @deprecated (since 1.58) - use {@link module:sap/base/Log.Level} instead
-   *
-   * Enumeration of the configurable log levels that a Logger should persist to the log.
-   *
-   * Only if the current LogLevel is higher than the level {@link jQuery.sap.log.Level} of the currently added
-   * log entry, then this very entry is permanently added to the log. Otherwise it is ignored.
-   * See:
-   * 	jQuery.sap.log.Logger#setLevel
-   */
-  export enum Level {
-    /**
-     * Trace level to log everything.
-     */
-    ALL = "undefined",
-    /**
-     * Debug level. Use this for logging information necessary for debugging
-     */
-    DEBUG = "undefined",
-    /**
-     * Error level. Use this for logging of erroneous but still recoverable situations
-     */
-    ERROR = "undefined",
-    /**
-     * Fatal level. Use this for logging unrecoverable situations
-     */
-    FATAL = "undefined",
-    /**
-     * Info level. Use this for logging information of purely informative nature
-     */
-    INFO = "undefined",
-    /**
-     * Do not log anything
-     */
-    NONE = "undefined",
-    /**
-     * Trace level. Use this for tracing the program flow.
-     */
-    TRACE = "undefined",
-    /**
-     * Warning level. Use this for logging unwanted but foreseen situations
-     */
-    WARNING = "undefined",
-  }
-  /**
-   * @SINCE 1.1.2
-   * @deprecated (since 1.58) - use {@link module:sap/base/Log.getLogger} instead
-   *
-   * A Logger class
-   */
-  export class Logger {
-    /**
-     * Creates a new Logger instance which will use the given component string for all logged messages without
-     * a specific component.
-     */
-    constructor(
-      /**
-       * The component to use
-       */
-      sDefaultComponent: string
-    );
-
-    /**
-     * Creates a new debug-level entry in the log with the given message, details and calling component.
-     */
-    debug(
-      /**
-       * Message text to display
-       */
-      sMessage: string,
-      /**
-       * Details about the message, might be omitted
-       */
-      sDetails?: string,
-      /**
-       * Name of the component that produced the log entry
-       */
-      sComponent?: string,
-      /**
-       * Callback that returns an additional support object to be logged in support mode. This function is only
-       * called if support info mode is turned on with `logSupportInfo(true)`. To avoid negative effects regarding
-       * execution times and memory consumption, the returned object should be a simple immutable JSON object
-       * with mostly static and stable content.
-       */
-      fnSupportInfo?: Function
-    ): Logger;
-    /**
-     * Creates a new error-level entry in the log with the given message, details and calling component.
-     */
-    error(
-      /**
-       * Message text to display
-       */
-      sMessage: string,
-      /**
-       * Details about the message, might be omitted
-       */
-      sDetails?: string,
-      /**
-       * Name of the component that produced the log entry
-       */
-      sComponent?: string,
-      /**
-       * Callback that returns an additional support object to be logged in support mode. This function is only
-       * called if support info mode is turned on with `logSupportInfo(true)`. To avoid negative effects regarding
-       * execution times and memory consumption, the returned object should be a simple immutable JSON object
-       * with mostly static and stable content.
-       */
-      fnSupportInfo?: Function
-    ): Logger;
-    /**
-     * Creates a new fatal-level entry in the log with the given message, details and calling component.
-     */
-    fatal(
-      /**
-       * Message text to display
-       */
-      sMessage: string,
-      /**
-       * Details about the message, might be omitted
-       */
-      sDetails?: string,
-      /**
-       * Name of the component that produced the log entry
-       */
-      sComponent?: string,
-      /**
-       * Callback that returns an additional support object to be logged in support mode. This function is only
-       * called if support info mode is turned on with `logSupportInfo(true)`. To avoid negative effects regarding
-       * execution times and memory consumption, the returned object should be a simple immutable JSON object
-       * with mostly static and stable content.
-       */
-      fnSupportInfo?: Function
-    ): Logger;
-    /**
-     * @SINCE 1.1.2
-     *
-     * Returns the log level currently effective for the given component. If no component is given or when no
-     * level has been configured for a given component, the log level for the default component of this logger
-     * is returned.
-     */
-    getLevel(
-      /**
-       * Name of the component to retrieve the log level for
-       */
-      sComponent?: string
-    ): int;
-    /**
-     * Creates a new info-level entry in the log with the given message, details and calling component.
-     */
-    info(
-      /**
-       * Message text to display
-       */
-      sMessage: string,
-      /**
-       * Details about the message, might be omitted
-       */
-      sDetails?: string,
-      /**
-       * Name of the component that produced the log entry
-       */
-      sComponent?: string,
-      /**
-       * Callback that returns an additional support object to be logged in support mode. This function is only
-       * called if support info mode is turned on with `logSupportInfo(true)`. To avoid negative effects regarding
-       * execution times and memory consumption, the returned object should be a simple immutable JSON object
-       * with mostly static and stable content.
-       */
-      fnSupportInfo?: Function
-    ): Logger;
-    /**
-     * @SINCE 1.13.2
-     *
-     * Checks whether logging is enabled for the given log level, depending on the currently effective log level
-     * for the given component.
-     *
-     * If no component is given, the default component of this logger will be taken into account.
-     */
-    isLoggable(
-      /**
-       * The log level in question
-       */
-      iLevel?: int,
-      /**
-       * Name of the component to check the log level for
-       */
-      sComponent?: string
-    ): boolean;
-    /**
-     * Defines the maximum `jQuery.sap.log.Level` of log entries that will be recorded. Log entries with a higher
-     * (less important) log level will be omitted from the log. When a component name is given, the log level
-     * will be configured for that component only, otherwise the log level for the default component of this
-     * logger is set. For the global logger, the global default level is set.
-     *
-     * **Note**: Setting a global default log level has no impact on already defined component log levels. They
-     * always override the global default log level.
-     */
-    setLevel(
-      /**
-       * The new log level
-       */
-      iLogLevel: Level,
-      /**
-       * The log component to set the log level for
-       */
-      sComponent?: string
-    ): Logger;
-    /**
-     * Creates a new trace-level entry in the log with the given message, details and calling component.
-     */
-    trace(
-      /**
-       * Message text to display
-       */
-      sMessage: string,
-      /**
-       * Details about the message, might be omitted
-       */
-      sDetails?: string,
-      /**
-       * Name of the component that produced the log entry
-       */
-      sComponent?: string,
-      /**
-       * Callback that returns an additional support object to be logged in support mode. This function is only
-       * called if support info mode is turned on with `logSupportInfo(true)`. To avoid negative effects regarding
-       * execution times and memory consumption, the returned object should be a simple immutable JSON object
-       * with mostly static and stable content.
-       */
-      fnSupportInfo?: Function
-    ): Logger;
-    /**
-     * Creates a new warning-level entry in the log with the given message, details and calling component.
-     */
-    warning(
-      /**
-       * Message text to display
-       */
-      sMessage: string,
-      /**
-       * Details about the message, might be omitted
-       */
-      sDetails?: string,
-      /**
-       * Name of the component that produced the log entry
-       */
-      sComponent?: string,
-      /**
-       * Callback that returns an additional support object to be logged in support mode. This function is only
-       * called if support info mode is turned on with `logSupportInfo(true)`. To avoid negative effects regarding
-       * execution times and memory consumption, the returned object should be a simple immutable JSON object
-       * with mostly static and stable content.
-       */
-      fnSupportInfo?: Function
-    ): Logger;
-  }
-  /**
-   * @deprecated (since 1.1.2) - To streamline the Logging API a bit, the separation between Level and LogLevel
-   * has been given up. Use the (enriched) enumeration {@link jQuery.sap.log.Level} instead.
-   *
-   * Enumeration of levels that can be used in a call to {@link jQuery.sap.log.Logger#setLevel}(iLevel, sComponent).
-   */
-  export enum LogLevel {}
-}
-
-declare module "jquery.sap.global/__$sap" {
-  export * as log from "jquery.sap.global/__$sap/__$log";
-  /**
-   * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement} or {@link module:sap/ui/performance/trace/Interaction}
-   * instead
-   *
-   * Namespace for the jQuery performance measurement plug-in provided by SAP SE.
-   */
-  export interface measure {
-    /**
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.add} instead
-     *
-     * Adds a performance measurement with all data This is useful to add external measurements (e.g. from a
-     * backend) to the common measurement UI
-     */
-    add(
-      /**
-       * ID of the measurement
-       */
-      sId: string,
-      /**
-       * Info for the measurement
-       */
-      sInfo: string,
-      /**
-       * start timestamp
-       */
-      iStart: int,
-      /**
-       * end timestamp
-       */
-      iEnd: int,
-      /**
-       * time in milliseconds
-       */
-      iTime: int,
-      /**
-       * effective time in milliseconds
-       */
-      iDuration: int,
-      /**
-       * An optional list of categories for the measure
-       */
-      aCategories?: string | string[]
-    ): object;
-    /**
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.average} instead
-     *
-     * Starts an average performance measure. The duration of this measure is an avarage of durations measured
-     * for each call. Optionally a category or list of categories can be passed to allow filtering of measurements.
-     */
-    average(
-      /**
-       * ID of the measurement
-       */
-      sId: string,
-      /**
-       * Info for the measurement
-       */
-      sInfo: string,
-      /**
-       * An optional list of categories for the measure
-       */
-      aCategories?: string | string[]
-    ): object;
-    /**
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.clear} instead
-     *
-     * Clears all performance measurements
-     */
-    clear(): void;
-    /**
-     * @SINCE 1.34.0
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/trace/Interaction.clear} instead
-     *
-     * Clears all interaction measurements
-     */
-    clearInteractionMeasurements(): void;
-    /**
-     * @SINCE 1.34.0
-     * @deprecated (since 1.58) - use native function `performance.clearResourceTimings()` where available
-     *
-     * Clears all request timings safely.
-     */
-    clearRequestTimings(): void;
-    /**
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.end} instead
-     *
-     * Ends a performance measure
-     */
-    end(
-      /**
-       * ID of the measurement
-       */
-      sId: string
-    ): object;
-    /**
-     * @SINCE 1.34.0
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/trace/Interaction.end} instead
-     *
-     * End an interaction measurements
-     */
-    endInteraction(
-      /**
-       * forces end of interaction now and ignores further re-renderings
-       */
-      bForce: boolean
-    ): void;
-    /**
-     * @SINCE 1.36.2
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/trace/Interaction.filter} instead
-     *
-     * Gets all interaction measurements for which a provided filter function returns a truthy value. To filter
-     * for certain categories of measurements a fnFilter can be implemented like this ` function(InteractionMeasurement)
-     * { return InteractionMeasurement.duration > 0 }`
-     */
-    filterInteractionMeasurements(
-      /**
-       * a filter function that returns true if the passed measurement should be added to the result
-       */
-      fnFilter: Function
-    ): object[];
-    /**
-     * @SINCE 1.34.0
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.filterMeasurements} instead
-     *
-     * Gets all performance measurements where a provided filter function returns a truthy value. If neither
-     * a filter function nor a category is provided an empty array is returned. To filter for certain properties
-     * of measurements a fnFilter can be implemented like this ` function(oMeasurement) { return oMeasurement.duration
-     * > 50; }`
-     */
-    filterMeasurements(
-      /**
-       * a filter function that returns true if the passed measurement should be added to the result
-       */
-      fnFilter?: Function,
-      /**
-       * Optional parameter to determine if either completed or incomplete measurements should be returned (both
-       * if not set or undefined)
-       */
-      bCompleted?: boolean | undefined,
-      /**
-       * The function returns only measurements which match these specified categories
-       */
-      aCategories?: string[]
-    ): object;
-    /**
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.getActive} instead
-     *
-     * Gets the current state of the performance measurement functionality
-     */
-    getActive(): boolean;
-    /**
-     * @SINCE 1.34.0
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/trace/Interaction.getAll} instead
-     *
-     * Gets all interaction measurements
-     */
-    getAllInteractionMeasurements(
-      /**
-       * finalize the current pending interaction so that it is contained in the returned array
-       */
-      bFinalize: boolean
-    ): object[];
-    /**
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.getAllMeasurements} instead
-     *
-     * Gets all performance measurements
-     */
-    getAllMeasurements(
-      /**
-       * Whether only completed measurements should be returned, if explicitly set to false only incomplete measurements
-       * are returned
-       */
-      bCompleted?: boolean
-    ): object[];
-    /**
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.getMeasurement} instead
-     *
-     * Gets a performance measure
-     */
-    getMeasurement(
-      /**
-       * ID of the measurement
-       */
-      sId: string
-    ): object;
-    /**
-     * @SINCE 1.34.0
-     * @deprecated (since 1.58) - use native function `performance.getEntriesByType("resource")` instead
-     *
-     * Gets the current request timings array for type 'resource' safely
-     */
-    getRequestTimings(): object[];
-    /**
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.pause} instead
-     *
-     * Pauses a performance measure
-     */
-    pause(
-      /**
-       * ID of the measurement
-       */
-      sId: string
-    ): object;
-    /**
-     * @SINCE 1.34.0
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.registerMethod} instead
-     *
-     * Registers an average measurement for a given objects method
-     */
-    registerMethod(
-      /**
-       * the id of the measurement
-       */
-      sId: string,
-      /**
-       * the object of the method
-       */
-      oObject: object,
-      /**
-       * the name of the method
-       */
-      sMethod: string,
-      /**
-       * An optional categories list for the measurement
-       */
-      aCategories?: string[]
-    ): boolean;
-    /**
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.remove} instead
-     *
-     * Removes a performance measure
-     */
-    remove(
-      /**
-       * ID of the measurement
-       */
-      sId: string
-    ): void;
-    /**
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.resume} instead
-     *
-     * Resumes a performance measure
-     */
-    resume(
-      /**
-       * ID of the measurement
-       */
-      sId: string
-    ): object;
-    /**
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.setActive} instead
-     *
-     * Activates or deactivates the performance measure functionality Optionally a category or list of categories
-     * can be passed to restrict measurements to certain categories like "javascript", "require", "xmlhttprequest",
-     * "render"
-     */
-    setActive(
-      /**
-       * state of the performance measurement functionality to set
-       */
-      bOn: boolean,
-      /**
-       * An optional list of categories that should be measured
-       */
-      aCategories: string | string[]
-    ): boolean;
-    /**
-     * @SINCE 1.34.0
-     * @deprecated (since 1.58) - use native function `performance.setResourceTimingBufferSize(iSize)` where
-     * available
-     *
-     * Sets the request buffer size for the measurement safely.
-     */
-    setRequestBufferSize(
-      /**
-       * size of the buffer
-       */
-      iSize: int
-    ): void;
-    /**
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.start} instead
-     *
-     * Starts a performance measure. Optionally a category or list of categories can be passed to allow filtering
-     * of measurements.
-     */
-    start(
-      /**
-       * ID of the measurement
-       */
-      sId: string,
-      /**
-       * Info for the measurement
-       */
-      sInfo: string,
-      /**
-       * An optional list of categories for the measure
-       */
-      aCategories?: string | string[]
-    ): object;
-    /**
-     * @SINCE 1.34.0
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/trace/Interaction.start} instead
-     *
-     * Start an interaction measurements
-     */
-    startInteraction(
-      /**
-       * type of the event which triggered the interaction
-       */
-      sType: string,
-      /**
-       * the control on which the interaction was triggered
-       */
-      oSrcElement: object
-    ): void;
-    /**
-     * @SINCE 1.34.0
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.unregisterAllMethods} instead
-     *
-     * Unregisters all average measurements
-     */
-    unregisterAllMethods(): void;
-    /**
-     * @SINCE 1.34.0
-     * @deprecated (since 1.58) - use {@link module:sap/ui/performance/Measurement.unregisterMethod} instead
-     *
-     * Unregisters an average measurement for a given objects method
-     */
-    unregisterMethod(
-      /**
-       * the id of the measurement
-       */
-      sId: string,
-      /**
-       * the object of the method
-       */
-      oObject: object,
-      /**
-       * the name of the method
-       */
-      sMethod: string
-    ): boolean;
-  }
-  export const measure: measure;
-
-  /**
-   * @SINCE 1.15.0
-   * @deprecated (since 1.58) - use {@link module:sap/base/util/Version} instead
-   *
-   * Represents a version consisting of major, minor, patch version and suffix, e.g. '1.2.7-SNAPSHOT'.
-   */
-  export class Version {
-    /**
-     * Returns a Version instance created from the given parameters.
-     *
-     * This function can either be called as a constructor (using `new`) or as a normal function. It always
-     * returns an immutable Version instance.
-     *
-     * The parts of the version number (major, minor, patch, suffix) can be provided in several ways:
-     * 	 - Version("1.2.3-SNAPSHOT") - as a dot-separated string. Any non-numerical char or a dot followed by
-     * 			a non-numerical char starts the suffix portion. Any missing major, minor or patch versions will be set
-     * 			to 0.
-     * 	 - Version(1,2,3,"-SNAPSHOT") - as individual parameters. Major, minor and patch must be integer numbers
-     * 			or empty, suffix must be a string not starting with digits.
-     * 	 - Version([1,2,3,"-SNAPSHOT"]) - as an array with the individual parts. The same type restrictions
-     * 			apply as before.
-     * 	 - Version(otherVersion) - as a Version instance (cast operation). Returns the given instance instead
-     * 			of creating a new one.
-     *
-     * To keep the code size small, this implementation mainly validates the single string variant. All other
-     * variants are only validated to some degree. It is the responsibility of the caller to provide proper
-     * parts.
-     */
-    constructor(
-      /**
-       * the major part of the version (int) or any of the single parameter variants explained above.
-       */
-      vMajor: int | string | any[] | Version,
-      /**
-       * the minor part of the version number
-       */
-      iMinor: int,
-      /**
-       * the patch part of the version number
-       */
-      iPatch: int,
-      /**
-       * the suffix part of the version number
-       */
-      sSuffix: string
-    );
-
-    /**
-     * @SINCE 1.15.0
-     *
-     * Compares this version with a given one.
-     *
-     * The version with which this version should be compared can be given as a `jQuery.sap.Version` instance,
-     * as a string (e.g. `v.compareto("1.4.5")`). Or major, minor, patch and suffix values can be given as separate
-     * parameters (e.g. `v.compareTo(1, 4, 5)`) or in an array (e.g. `v.compareTo([1, 4, 5])`).
-     */
-    compareTo(): int;
-    /**
-     * @SINCE 1.15.0
-     *
-     * Returns the major version part of this version.
-     */
-    getMajor(): int;
-    /**
-     * @SINCE 1.15.0
-     *
-     * Returns the minor version part of this version.
-     */
-    getMinor(): int;
-    /**
-     * @SINCE 1.15.0
-     *
-     * Returns the patch (or micro) version part of this version.
-     */
-    getPatch(): int;
-    /**
-     * @SINCE 1.15.0
-     *
-     * Returns the version suffix of this version.
-     */
-    getSuffix(): string;
-    /**
-     * @SINCE 1.15.0
-     *
-     * Checks whether this version is in the range of the given interval (start inclusive, end exclusive).
-     *
-     * The boundaries against which this version should be checked can be given as `jQuery.sap.Version` instances
-     * (e.g. `v.inRange(v1, v2)`), as strings (e.g. `v.inRange("1.4", "2.7")`) or as arrays (e.g. `v.inRange([1,4],
-     * [2,7])`).
-     */
-    inRange(
-      /**
-       * the start of the range (inclusive)
-       */
-      vMin: string | any[] | Version,
-      /**
-       * the end of the range (exclusive)
-       */
-      vMax: string | any[] | Version
-    ): boolean;
-    /**
-     * @SINCE 1.15.0
-     *
-     * Returns a string representation of this version.
-     */
-    // @ts-ignore
-    toString(): string;
-  }
-}
-
-declare module "jquery.sap.global" {
-  import Control from "sap/ui/core/Control";
-
-  /**
-   * Provides base functionality of the SAP jQuery plugin as extension of the jQuery framework.
-   *  See also jQuery for details.
-   *  Although these functions appear as static ones, they are meant to be used on jQuery instances.
-   *  If not stated differently, the functions follow the fluent interface paradigm and return the jQuery
-   * instance for chaining of statements.
-   *
-   * Example for usage of an instance method:
-   * ```javascript
-   *
-   *   var oRect = jQuery("#myDiv").rect();
-   *   alert("Top Position: " + oRect.top);
-   * ```
-   */
-  interface jQuery {
-    /**
-     * @SINCE 1.30.0
-     *
-     * Adds the given ID reference to the aria-describedby attribute.
-     */
-    addAriaDescribedBy(
-      /**
-       * The ID reference of an element
-       */
-      sId: string,
-      /**
-       * whether prepend or not
-       */
-      bPrepend?: boolean
-    ): jQuery;
-    /**
-     * @SINCE 1.30.0
-     *
-     * Adds the given ID reference to the aria-labelledby attribute.
-     */
-    addAriaLabelledBy(
-      /**
-       * The ID reference of an element
-       */
-      sId: string,
-      /**
-       * Whether prepend or not
-       */
-      bPrepend?: boolean
-    ): jQuery;
-    /**
-     * Extension function to the jQuery.fn which identifies SAPUI5 controls in the given jQuery context.
-     */
-    control(
-      /**
-       * Optional parameter to return the control instance at the given index in the array.
-       */
-      iIndex?: int,
-      /**
-       * Whether or not to respect the associated DOM elements to a control via `data-sap-ui-related` attribute.
-       */
-      bIncludeRelated?: boolean
-    ): Control[] | Control | null;
-    /**
-     * @SINCE 0.9.0
-     *
-     * Sets or gets the position of the cursor in an element that supports cursor positioning.
-     */
-    cursorPos(
-      /**
-       * The cursor position to set (or no parameter to retrieve the cursor position)
-       */
-      iPos: int
-    ): int | jQuery;
-    /**
-     * @SINCE 1.24.0
-     *
-     * Disable HTML elements selection.
-     */
-    disableSelection(): jQuery;
-    /**
-     * @SINCE 1.24.0
-     *
-     * Enable HTML elements to get selected.
-     */
-    enableSelection(): jQuery;
-    /**
-     * @SINCE 0.9.0
-     *
-     * Returns the first focusable domRef in a given container (the first element of the collection)
-     */
-    firstFocusableDomRef(): Element;
-    /**
-     * @SINCE 1.26.0
-     *
-     * Retrieve the selected text in the first element of the collection.
-     *
-     * **Note**: This feature is only supported for input element’s type of text, search, url, tel and password.
-     */
-    getSelectedText(): string;
-    /**
-     * @SINCE 0.9.0
-     *
-     * Returns `true` if the first element has a set tabindex.
-     */
-    hasTabIndex(): boolean;
-    /**
-     * @SINCE 0.9.0
-     *
-     * Returns the last focusable domRef in a given container
-     */
-    lastFocusableDomRef(): Element;
-    /**
-     * @SINCE 0.9.0
-     * @deprecated (since 1.58) - use native `Element#outerHTML` instead
-     *
-     * Returns the outer HTML of the given HTML element.
-     */
-    outerHTML(): string;
-    /**
-     * @SINCE 0.9.0
-     *
-     * Gets the next parent DOM element with a given attribute and attribute value starting above the first
-     * given element
-     */
-    parentByAttribute(
-      /**
-       * Name of the attribute
-       */
-      sAttribute: string,
-      /**
-       * Value of the attribute (optional)
-       */
-      sValue: string
-    ): Element;
-    /**
-     * @SINCE 0.9.0
-     *
-     * Returns a rectangle describing the current visual positioning of the first DOM object in the collection
-     * (or `null` if no element was given).
-     */
-    rect(): object;
-    /**
-     * @SINCE 0.18.0
-     *
-     * Returns whether a point described by X and Y is inside this Rectangle's boundaries.
-     */
-    rectContains(
-      /**
-       * The X coordinate
-       */
-      iPosX: int,
-      /**
-       * The Y coordinate
-       */
-      iPosY: int
-    ): boolean;
-    /**
-     * @SINCE 1.30.0
-     *
-     * Removes the given ID reference from the aria-describedby attribute.
-     */
-    removeAriaDescribedBy(
-      /**
-       * The ID reference of an element
-       */
-      sId: string
-    ): jQuery;
-    /**
-     * @SINCE 1.30.0
-     *
-     * Removes the given ID reference from the aria-labelledby attribute.
-     */
-    removeAriaLabelledBy(
-      /**
-       * The ID reference of an element
-       */
-      sId: string
-    ): jQuery;
-    /**
-     * @deprecated (since 1.58)
-     */
-    root(
-      /**
-       * The root control
-       */
-      oRootControl: object
-    ): jQuery;
-    /**
-     * @SINCE 0.20.0
-     *
-     * Sets or returns the scrollLeft value of the first element in the given jQuery collection in right-to-left
-     * mode. Precondition: The element is rendered in RTL mode.
-     *
-     * Reason for this method is that the major browsers use three different values for the same scroll position
-     * when in RTL mode. This method hides those differences and returns/applies the same value that would be
-     * returned in LTR mode: The distance in px how far the given container is scrolled away from the leftmost
-     * scroll position.
-     *
-     * Returns "undefined" if no element and no iPos is given.
-     */
-    scrollLeftRTL(
-      /**
-       * The desired scroll position
-       */
-      iPos: int
-    ): jQuery | int;
-    /**
-     * @SINCE 0.20.0
-     *
-     * Returns the MIRRORED scrollLeft value of the first element in the given jQuery collection in right-to-left
-     * mode. Precondition: The element is rendered in RTL mode.
-     *
-     * Reason for this method is that the major browsers return three different values for the same scroll position
-     * when in RTL mode. This method hides those differences and returns the value that would be returned in
-     * LTR mode if the UI would be mirrored horizontally: The distance in px how far the given container is
-     * scrolled away from the rightmost scroll position.
-     *
-     * Returns "undefined" if no element is given.
-     */
-    scrollRightRTL(): int;
-    /**
-     * @SINCE 0.9.0
-     *
-     * Sets the text selection in the first element of the collection.
-     *
-     * **Note**: This feature is only supported for input element’s type of text, search, url, tel and password.
-     */
-    selectText(
-      /**
-       * Start position of the selection (inclusive)
-       */
-      iStart: int,
-      /**
-       * End position of the selection (exclusive)
-       */
-      iEnd: int
-    ): jQuery;
-    /**
-     * @deprecated (since 1.58)
-     *
-     * Returns a single UIArea if an index is provided or an array of UIAreas.
-     */
-    uiarea(
-      /**
-       * Index of the UIArea
-       */
-      iIdx: int
-    ): Object | Array<any>;
-    /**
-     * Get the z-index for an element.
-     */
-    zIndex(
-      /**
-       * The z-index to set
-       */
-      zIndex: int
-    ): number;
-  }
-  const jQuery: jQuery;
-  export default jQuery;
-
-  export * as sap from "jquery.sap.global/__$sap";
-}
-
-declare module "jquery.sap.mobile/__$device" {
-  /**
-   * @deprecated (since 1.20) - use the respective functions of {@link sap.ui.Device} instead
-   *
-   * Holds information about the current device and its state
-   */
-  export interface is {
-    /**
-     * @deprecated (since 1.17.0) - use {@link sap.ui.Device.system.phone} && {@link sap.ui.Device.os.android}
-     * instead
-     *
-     * Whether the application runs on an Android phone - based not on screen size but user-agent (so this is
-     * not guaranteed to be equal to jQuery.device.is.phone on Android) https://developers.google.com/chrome/mobile/docs/user-agent
-     * Some device vendors however do not follow this rule
-     */
-    android_phone: boolean;
-
-    /**
-     * @deprecated (since 1.17.0) - use {@link sap.ui.Device.system.tablet} && {@link sap.ui.Device.os.android}
-     * instead
-     *
-     * Whether the application runs on an Android tablet - based not on screen size but user-agent (so this
-     * is not guaranteed to be equal to jQuery.device.is.tablet on Android) https://developers.google.com/chrome/mobile/docs/user-agent
-     * Some device vendors however do not follow this rule
-     */
-    android_tablet: boolean;
-
-    /**
-     * @deprecated (since 1.17.0) - use {@link sap.ui.Device.system.desktop} instead
-     *
-     * Whether the running device is a desktop browser. If a desktop browser runs in mobile device simulation
-     * mode (with URL parameter sap-ui-xx-test-mobile), this property will be false.
-     */
-    desktop: boolean;
-
-    /**
-     * @deprecated (since 1.20) - shouldn't do device specific coding; if still needed, use {@link sap.ui.Device.os.ios}
-     * && {@link sap.ui.Device.system.tablet}
-     *
-     * Whether the application runs on an iPad
-     */
-    ipad: boolean;
-
-    /**
-     * @deprecated (since 1.20) - shouldn't do device specific coding; if still needed, use {@link sap.ui.Device.os.ios}
-     * && {@link sap.ui.Device.system.phone}
-     *
-     * Whether the application runs on an iPhone
-     */
-    iphone: boolean;
-
-    /**
-     * @deprecated (since 1.20) - use {@link sap.ui.Device.orientation.landscape} instead
-     *
-     * Whether the device is in "landscape" orientation (also "true" when the device does not know about the
-     * orientation)
-     */
-    landscape: boolean;
-
-    /**
-     * @deprecated (since 1.17.0) - use {@link sap.ui.Device.system.phone} instead
-     *
-     * Whether the running device is a phone. If a desktop browser runs in mobile device simulation mode (with
-     * URL parameter sap-ui-xx-test-mobile), this property will also be set according to the simulated platform.
-     * This property will be false when runs in desktop browser.
-     */
-    phone: boolean;
-
-    /**
-     * @deprecated (since 1.20) - use {@link sap.ui.Device.orientation.portrait} instead
-     *
-     * Whether the device is in portrait orientation
-     */
-    portrait: boolean;
-
-    /**
-     * @deprecated (since 1.20) - use window.navigator.standalone instead
-     *
-     * Whether the application runs in standalone mode without browser UI (launched from the iOS home screen)
-     */
-    standalone: boolean;
-
-    /**
-     * @deprecated (since 1.17.0) - use {@link sap.ui.Device.system.tablet} instead
-     *
-     * Whether the running device is a tablet. If a desktop browser runs in mobile device simulation mode (with
-     * URL parameter sap-ui-xx-test-mobile), this property will also be set according to the simulated platform.
-     * This property will be false when runs in desktop browser.
-     */
-    tablet: boolean;
-  }
-  export const is: is;
-}
-
-declare module "jquery.sap.mobile" {
-  export * as device from "jquery.sap.mobile/__$device";
-  /**
-   * @deprecated (since 1.20) - use {@link sap.ui.Device.os} instead
-   *
-   * Holds information about the current operating system
-   */
-  export interface os {
-    /**
-     * @deprecated (since 1.20) - use {@link sap.ui.Device.os.android} instead
-     *
-     * Whether the current operating system is Android
-     */
-    android: boolean;
-
-    /**
-     * @deprecated (since 1.20) - use {@link sap.ui.Device.os.blackberry} instead
-     *
-     * Whether the current operating system is BlackBerry
-     */
-    blackberry: boolean;
-
-    /**
-     * @deprecated (since 1.20) - use {@link sap.ui.Device.os.version} instead
-     *
-     * The version of the operating system parsed as a float (major and first minor version)
-     */
-    fVersion: float;
-
-    /**
-     * @deprecated (since 1.20) - use {@link sap.ui.Device.os.ios} instead
-     *
-     * Whether the current operating system is Apple iOS
-     */
-    ios: boolean;
-
-    /**
-     * @deprecated (since 1.20) - use {@link sap.ui.Device.os.name} instead
-     *
-     * The name of the operating system; currently supported are: "ios", "android", "blackberry"
-     */
-    os: string;
-
-    /**
-     * @deprecated (since 1.20) - use {@link sap.ui.Device.os.versionStr} instead
-     *
-     * The version of the operating system as a string (including minor versions)
-     */
-    version: string;
-  }
-  export const os: os;
-}
-
-declare module "jquery.sap.act/__$sap" {
-  /**
-   * @deprecated (since 1.58) - use {@link module:sap/ui/util/ActivityDetection} instead
-   */
-  export interface act {
-    /**
-     * Registers the given handler to the activity event, which is fired when an activity was detected after
-     * a certain period of inactivity.
-     *
-     * The Event is not fired for Internet Explorer 8.
-     */
-    attachActivate(
-      /**
-       * The function to call, when an activity event occurs.
-       */
-      fnFunction: Function,
-      /**
-       * The 'this' context of the handler function.
-       */
-      oListener?: Object
-    ): void;
-    /**
-     * Deregisters a previously registered handler from the activity event.
-     */
-    detachActivate(
-      /**
-       * The function to call, when an activity event occurs.
-       */
-      fnFunction: Function,
-      /**
-       * The 'this' context of the handler function.
-       */
-      oListener?: Object
-    ): void;
-    /**
-     * Checks whether recently an activity was detected.
-     */
-    isActive(): undefined;
-    /**
-     * Reports an activity.
-     */
-    refresh(): void;
-  }
-  export const act: act;
-}
-
-declare module "jquery.sap.act" {
-  export * as sap from "jquery.sap.act/__$sap";
-}
-
-declare module "jquery.sap.events/__$sap" {
-  /**
-   * @deprecated (since 1.58) - use {@link module:sap/ui/events/ControlEvents.events} instead
-   *
-   * List of DOM events that a UIArea automatically takes care of.
-   *
-   * A control/element doesn't have to bind listeners for these events. It instead can implement an `onevent(oEvent)`
-   * method for any of the following events that it wants to be notified about:
-   *
-   * click, dblclick, contextmenu, focusin, focusout, keydown, keypress, keyup, mousedown, mouseout, mouseover,
-   * mouseup, select, selectstart, dragstart, dragenter, dragover, dragleave, dragend, drop, paste, cut, input,
-   * touchstart, touchend, touchmove, touchcancel, tap, swipe, swipeleft, swiperight, scrollstart, scrollstop
-   *
-   * The mouse events and touch events are supported simultaneously on both desktop and mobile browsers. Do
-   * NOT create both onmouse* and ontouch* functions to avoid one event being handled twice on the same control.
-   */
-  export interface ControlEvents {}
-  export const ControlEvents: ControlEvents;
-
-  /**
-   * @deprecated (since 1.58) - use {@link module:sap/ui/events/PseudoEvents.events} instead
-   *
-   * Enumeration of all so called "pseudo events", a useful classification of standard browser events as implied
-   * by SAP product standards.
-   *
-   * Whenever a browser event is recognized as one or more pseudo events, then this classification is attached
-   * to the original {@link jQuery.Event} object and thereby delivered to any jQuery-style listeners registered
-   * for that browser event.
-   *
-   * Pure JavaScript listeners can evaluate the classification information using the {@link jQuery.Event#isPseudoType}
-   * method.
-   *
-   * Instead of using the procedure as described above, the SAPUI5 controls and elements should simply implement
-   * an `onpseudo-event(oEvent)` method. It will be invoked only when that specific pseudo event has
-   * been recognized. This simplifies event dispatching even further.
-   */
-  export interface PseudoEvents {
-    /**
-     * Pseudo event for keyboard backspace without modifiers (Ctrl, Alt or Shift)
-     */
-    sapbackspace: undefined;
-
-    /**
-     * Pseudo event for keyboard backspace with modifiers (Ctrl, Alt or Shift)
-     */
-    sapbackspacemodifiers: undefined;
-
-    /**
-     * Pseudo event for pseudo bottom event
-     */
-    sapbottom: undefined;
-
-    /**
-     * Pseudo event for pseudo collapse event (keyboard numpad -) without modifiers (Ctrl, Alt or Shift)
-     */
-    sapcollapse: undefined;
-
-    /**
-     * Pseudo event for pseudo collapse event (keyboard numpad *)
-     */
-    sapcollapseall: undefined;
-
-    /**
-     * Pseudo event for pseudo collapse event (keyboard numpad -) with modifiers (Ctrl, Alt or Shift)
-     */
-    sapcollapsemodifiers: undefined;
-
-    /**
-     * Pseudo event for pseudo 'decrease' event without modifiers (Ctrl, Alt or Shift)
-     */
-    sapdecrease: undefined;
-
-    /**
-     * Pseudo event for pseudo 'decrease' event with modifiers (Ctrl, Alt or Shift)
-     */
-    sapdecreasemodifiers: undefined;
-
-    /**
-     * Pseudo event indicating delayed double click (e.g. for inline edit)
-     */
-    sapdelayeddoubleclick: undefined;
-
-    /**
-     * Pseudo event for keyboard delete without modifiers (Ctrl, Alt or Shift)
-     */
-    sapdelete: undefined;
-
-    /**
-     * Pseudo event for keyboard delete with modifiers (Ctrl, Alt or Shift)
-     */
-    sapdeletemodifiers: undefined;
-
-    /**
-     * Pseudo event for keyboard arrow down without modifiers (Ctrl, Alt or Shift)
-     */
-    sapdown: undefined;
-
-    /**
-     * Pseudo event for keyboard arrow down with modifiers (Ctrl, Alt or Shift)
-     */
-    sapdownmodifiers: undefined;
-
-    /**
-     * Pseudo event for keyboard End without modifiers (Ctrl, Alt or Shift)
-     */
-    sapend: undefined;
-
-    /**
-     * Pseudo event for keyboard End with modifiers (Ctrl, Alt or Shift)
-     */
-    sapendmodifiers: undefined;
-
-    /**
-     * Pseudo event for keyboard enter without modifiers (Ctrl, Alt or Shift)
-     */
-    sapenter: undefined;
-
-    /**
-     * Pseudo event for keyboard enter with modifiers (Ctrl, Alt or Shift)
-     */
-    sapentermodifiers: undefined;
-
-    /**
-     * Pseudo event for keyboard escape
-     */
-    sapescape: undefined;
-
-    /**
-     * Pseudo event for pseudo expand event (keyboard numpad +) without modifiers (Ctrl, Alt or Shift)
-     */
-    sapexpand: undefined;
-
-    /**
-     * Pseudo event for pseudo expand event (keyboard numpad +) with modifiers (Ctrl, Alt or Shift)
-     */
-    sapexpandmodifiers: undefined;
-
-    /**
-     * Pseudo event for pseudo 'hide' event (Alt + up-Arrow)
-     */
-    saphide: undefined;
-
-    /**
-     * Pseudo event for keyboard Home/Pos1 with modifiers (Ctrl, Alt or Shift)
-     */
-    saphome: undefined;
-
-    /**
-     * Pseudo event for keyboard Home/Pos1 without modifiers (Ctrl, Alt or Shift)
-     */
-    saphomemodifiers: undefined;
-
-    /**
-     * Pseudo event for pseudo 'increase' event without modifiers (Ctrl, Alt or Shift)
-     */
-    sapincrease: undefined;
-
-    /**
-     * Pseudo event for pseudo 'increase' event with modifiers (Ctrl, Alt or Shift)
-     */
-    sapincreasemodifiers: undefined;
-
-    /**
-     * Pseudo event for keyboard arrow left without modifiers (Ctrl, Alt or Shift)
-     */
-    sapleft: undefined;
-
-    /**
-     * Pseudo event for keyboard arrow left with modifiers (Ctrl, Alt or Shift)
-     */
-    sapleftmodifiers: undefined;
-
-    /**
-     * @SINCE 1.25.0
-     *
-     * Pseudo event for pressing the '-' (minus) sign.
-     */
-    sapminus: undefined;
-
-    /**
-     * Pseudo event for pseudo 'next' event without modifiers (Ctrl, Alt or Shift)
-     */
-    sapnext: undefined;
-
-    /**
-     * Pseudo event for pseudo 'next' event with modifiers (Ctrl, Alt or Shift)
-     */
-    sapnextmodifiers: undefined;
-
-    /**
-     * Pseudo event for keyboard page down without modifiers (Ctrl, Alt or Shift)
-     */
-    sappagedown: undefined;
-
-    /**
-     * Pseudo event for keyboard page down with modifiers (Ctrl, Alt or Shift)
-     */
-    sappagedownmodifiers: undefined;
-
-    /**
-     * Pseudo event for keyboard page up without modifiers (Ctrl, Alt or Shift)
-     */
-    sappageup: undefined;
-
-    /**
-     * Pseudo event for keyboard page up with modifiers (Ctrl, Alt or Shift)
-     */
-    sappageupmodifiers: undefined;
-
-    /**
-     * @SINCE 1.25.0
-     *
-     * Pseudo event for pressing the '+' (plus) sign.
-     */
-    sapplus: undefined;
-
-    /**
-     * Pseudo event for pseudo 'previous' event without modifiers (Ctrl, Alt or Shift)
-     */
-    sapprevious: undefined;
-
-    /**
-     * Pseudo event for pseudo 'previous' event with modifiers (Ctrl, Alt or Shift)
-     */
-    sappreviousmodifiers: undefined;
-
-    /**
-     * Pseudo event for keyboard arrow right without modifiers (Ctrl, Alt or Shift)
-     */
-    sapright: undefined;
-
-    /**
-     * Pseudo event for keyboard arrow right with modifiers (Ctrl, Alt or Shift)
-     */
-    saprightmodifiers: undefined;
-
-    /**
-     * Pseudo event for pseudo 'select' event... space, enter, ... without modifiers (Ctrl, Alt or Shift)
-     */
-    sapselect: undefined;
-
-    /**
-     * Pseudo event for pseudo 'select' event... space, enter, ... with modifiers (Ctrl, Alt or Shift)
-     */
-    sapselectmodifiers: undefined;
-
-    /**
-     * Pseudo event for pseudo 'show' event (F4, Alt + down-Arrow)
-     */
-    sapshow: undefined;
-
-    /**
-     * Pseudo event for pseudo skip back (F6 + shift modifier)
-     */
-    sapskipback: undefined;
-
-    /**
-     * Pseudo event for pseudo skip forward (F6 + no modifier)
-     */
-    sapskipforward: undefined;
-
-    /**
-     * Pseudo event for keyboard space without modifiers (Ctrl, Alt or Shift)
-     */
-    sapspace: undefined;
-
-    /**
-     * Pseudo event for keyboard space with modifiers (Ctrl, Alt or Shift)
-     */
-    sapspacemodifiers: undefined;
-
-    /**
-     * Pseudo event for keyboard tab (TAB + no modifier)
-     */
-    saptabnext: undefined;
-
-    /**
-     * Pseudo event for keyboard tab (TAB + shift modifier)
-     */
-    saptabprevious: undefined;
-
-    /**
-     * Pseudo event for pseudo top event
-     */
-    saptop: undefined;
-
-    /**
-     * Pseudo event for keyboard arrow up without modifiers (Ctrl, Alt or Shift)
-     */
-    sapup: undefined;
-
-    /**
-     * Pseudo event for keyboard arrow up with modifiers (Ctrl, Alt or Shift)
-     */
-    sapupmodifiers: undefined;
-  }
-  export const PseudoEvents: PseudoEvents;
-}
-
-declare module "jquery.sap.events" {
-  export * as sap from "jquery.sap.events/__$sap";
-}
-
-declare module "jquery.sap.history/__$sap/__$history" {
-  /**
-   * @deprecated (since 1.19.1) - Please use {@link sap.ui.core.routing.HistoryDirection} instead.
-   */
-  export enum NavType {
-    /**
-     * This indicates that the new hash is achieved by pressing the back button.
-     */
-    Back = "_back",
-    /**
-     * This indicates that the new hash is restored from the bookmark.
-     */
-    Bookmark = "_bookmark",
-    /**
-     * This indicates that the new hash is achieved by pressing the forward button.
-     */
-    Forward = "_forward",
-    /**
-     * This indicates that the new hash is achieved by some unknown direction. This happens when the user navigates
-     * out of the application and then click on the forward button in the browser to navigate back to the application.
-     */
-    Unknown = "_unknown",
-  }
-}
-
-declare module "jquery.sap.history/__$sap" {
-  export * as history from "jquery.sap.history/__$sap/__$history";
-}
-
-declare module "jquery.sap.history" {
-  export * as sap from "jquery.sap.history/__$sap";
-}
-
-declare module "jquery.sap.trace/__$sap" {
-  /**
-   * @SINCE 1.36
-   * @deprecated (since 1.58) - use {@link module:sap/ui/performance/trace/Interaction} instead
-   */
-  export interface interaction {
-    /**
-     * @SINCE 1.36
-     *
-     * Enables the interaction tracking.
-     */
-    setActive(
-      /**
-       * state of the interaction detection
-       */
-      bActive: boolean
-    ): void;
-  }
-  export const interaction: interaction;
-}
-
-declare module "jquery.sap.trace" {
-  export * as sap from "jquery.sap.trace/__$sap";
-}
-
-declare module "jquery.sap.keycodes/__$sap" {
-  /**
-   * @SINCE 0.9.0
-   * @deprecated (since 1.58) - use {@link module:sap/ui/events/KeyCodes} instead
-   *
-   * Enumeration of key codes.
-   */
-  export enum KeyCodes {
-    A = "undefined",
-
-    ALT = "undefined",
-
-    ARROW_DOWN = "undefined",
-
-    ARROW_LEFT = "undefined",
-
-    ARROW_RIGHT = "undefined",
-
-    ARROW_UP = "undefined",
-
-    B = "undefined",
-
-    BACKSLASH = "undefined",
-
-    BACKSPACE = "undefined",
-
-    BREAK = "undefined",
-
-    C = "undefined",
-
-    CAPS_LOCK = "undefined",
-
-    COMMA = "undefined",
-
-    CONTEXT_MENU = "undefined",
-
-    CONTROL = "undefined",
-
-    D = "undefined",
-
-    DELETE = "undefined",
-
-    DIGIT_0 = "undefined",
-
-    DIGIT_1 = "undefined",
-
-    DIGIT_2 = "undefined",
-
-    DIGIT_3 = "undefined",
-
-    DIGIT_4 = "undefined",
-
-    DIGIT_5 = "undefined",
-
-    DIGIT_6 = "undefined",
-
-    DIGIT_7 = "undefined",
-
-    DIGIT_8 = "undefined",
-
-    DIGIT_9 = "undefined",
-
-    DOT = "undefined",
-
-    E = "undefined",
-
-    END = "undefined",
-
-    ENTER = "undefined",
-
-    EQUALS = "undefined",
-
-    ESCAPE = "undefined",
-
-    F = "undefined",
-
-    F1 = "undefined",
-
-    F10 = "undefined",
-
-    F11 = "undefined",
-
-    F12 = "undefined",
-
-    F2 = "undefined",
-
-    F3 = "undefined",
-
-    F4 = "undefined",
-
-    F5 = "undefined",
-
-    F6 = "undefined",
-
-    F7 = "undefined",
-
-    F8 = "undefined",
-
-    F9 = "undefined",
-
-    G = "undefined",
-
-    GREAT_ACCENT = "undefined",
-
-    H = "undefined",
-
-    HOME = "undefined",
-
-    I = "undefined",
-
-    INSERT = "undefined",
-
-    J = "undefined",
-
-    K = "undefined",
-
-    L = "undefined",
-
-    M = "undefined",
-
-    MINUS = "undefined",
-
-    N = "undefined",
-
-    NUM_LOCK = "undefined",
-
-    NUMPAD_0 = "undefined",
-
-    NUMPAD_1 = "undefined",
-
-    NUMPAD_2 = "undefined",
-
-    NUMPAD_3 = "undefined",
-
-    NUMPAD_4 = "undefined",
-
-    NUMPAD_5 = "undefined",
-
-    NUMPAD_6 = "undefined",
-
-    NUMPAD_7 = "undefined",
-
-    NUMPAD_8 = "undefined",
-
-    NUMPAD_9 = "undefined",
-
-    NUMPAD_ASTERISK = "undefined",
-
-    NUMPAD_COMMA = "undefined",
-
-    NUMPAD_MINUS = "undefined",
-
-    NUMPAD_PLUS = "undefined",
-
-    NUMPAD_SLASH = "undefined",
-
-    O = "undefined",
-
-    OPEN_BRACKET = "undefined",
-
-    P = "undefined",
-
-    PAGE_DOWN = "undefined",
-
-    PAGE_UP = "undefined",
-
-    PIPE = "undefined",
-
-    PLUS = "undefined",
-
-    PRINT = "undefined",
-
-    Q = "undefined",
-
-    R = "undefined",
-
-    S = "undefined",
-
-    SCROLL_LOCK = "undefined",
-
-    SEMICOLON = "undefined",
-
-    SHIFT = "undefined",
-
-    SINGLE_QUOTE = "undefined",
-
-    SLASH = "undefined",
-
-    SLEEP = "undefined",
-
-    SPACE = "undefined",
-
-    T = "undefined",
-
-    TAB = "undefined",
-
-    TURN_OFF = "undefined",
-
-    U = "undefined",
-
-    V = "undefined",
-
-    W = "undefined",
-
-    WINDOWS = "undefined",
-
-    X = "undefined",
-
-    Y = "undefined",
-
-    Z = "undefined",
-  }
-}
-
-declare module "jquery.sap.keycodes" {
-  export * as sap from "jquery.sap.keycodes/__$sap";
-}
-
-declare module "jquery.sap.storage/__$sap/__$storage" {
-  /**
-   * @SINCE 0.11.0
-   *
-   * Enumeration of the storage types supported by {@link jQuery.sap.storage.Storage}
-   */
-  export enum Type {
-    /**
-     * Indicates usage of the browser's localStorage feature
-     */
-    local = "undefined",
-    /**
-     * Indicates usage of the browser's sessionStorage feature
-     */
-    session = "undefined",
-  }
-}
-
-declare module "jquery.sap.storage/__$sap" {
-  export * as storage from "jquery.sap.storage/__$sap/__$storage";
-}
-
-declare module "jquery.sap.storage" {
-  import * as sap from "jquery.sap.storage/__$sap";
-
-  export * as sap from "jquery.sap.storage/__$sap";
-  /**
-   * @SINCE 0.11.0
-   *
-   * A Storage API for JavaScript.
-   *
-   * Provides methods to store data on the client using Web Storage API support by the browser. The data received
-   * by this API must be already serialized, in string format. Similarly, the API returns the retrieved data
-   * in serialized string format, so it is the responsibility of the caller to de-serialize it, if applicable.
-   *
-   * Attention: The Web Storage API stores the data on the client. Therefore do not use this API for confidential
-   * information.
-   *
-   * One can get access to the 'default' storage by using {@link jQuery.sap.storage} directly or alternatively
-   * via factory functionality available as `jQuery.sap.storage(jQuery.sap.storage.Type.session)` returning
-   * an object implementing this interface.
-   *
-   * A typical intended usage of this API is the storage of a string representing the state of a control.
-   * In such usage, the data is stored in the browser session, and the methods to be used are {@link #put}
-   * and {@link #get}. The method {@link #remove} can be used to delete the previously saved state.
-   *
-   * In sake of completeness, the method {@link #clear} is available. However, it should be called only in
-   * very particular situations, when a global erasing of data is required. If only keys with certain prefix
-   * should be deleted the method {@link #removeAll} should be used.
-   */
-  export interface Storage {
-    __implements__jQuery_sap_storage_Storage: boolean;
-
-    /**
-     * Deletes all the entries saved in the session (Independent of the current Storage instance!).
-     *
-     * CAUTION: This method should be called only in very particular situations, when a global erasing of data
-     * is required. Given that the method deletes the data saved under any ID, it should not be called when
-     * managing data for specific controls.
-     */
-    clear(): boolean;
-    /**
-     * Retrieves the state string stored in the session under the key sStorageKeyPrefix + sId.
-     *
-     * sStorageKeyPrefix is the id prefix defined for the storage instance (@see jQuery.sap#storage)
-     */
-    get(
-      /**
-       * Id for the state to retrieve
-       */
-      sId: string
-    ): string;
-    /**
-     * Returns the type of the storage.
-     */
-    getType(): sap.storage.Type | string;
-    /**
-     * Returns whether the given storage is suppported.
-     */
-    isSupported(): boolean;
-    /**
-     * Stores the passed state string in the session, under the key sStorageKeyPrefix + sId.
-     *
-     * sStorageKeyPrefix is the id prefix defined for the storage instance (@see jQuery.sap#storage)
-     */
-    put(
-      /**
-       * Id for the state to store
-       */
-      sId: string,
-      /**
-       * content to store
-       */
-      sStateToStore: string
-    ): boolean;
-    /**
-     * Deletes the state string stored in the session under the key sStorageKeyPrefix + sId.s
-     *
-     * sStorageKeyPrefix is the id prefix defined for the storage instance (@see jQuery.sap#storage)
-     */
-    remove(
-      /**
-       * Id for the state to delete
-       */
-      sId: string
-    ): boolean;
-    /**
-     * @SINCE 1.13.0
-     *
-     * Deletes all state strings stored in the session under the key prefix sStorageKeyPrefix + sIdPrefix.
-     *
-     * sStorageKeyPrefix is the id prefix defined for the storage instance (@see jQuery.sap#storage)
-     */
-    removeAll(
-      /**
-       * Id prefix for the states to delete
-       */
-      sIdPrefix: string
-    ): boolean;
-  }
-}
-
-declare module "jquery.sap.properties" {
-  /**
-   * @SINCE 0.9.0
-   * @deprecated (since 1.58) - use {@link module:sap/base/util/Properties} instead
-   *
-   * Represents a collection of string properties (key/value pairs).
-   *
-   * Each key and its corresponding value in the collection is a string, keys are case-sensitive.
-   *
-   * Use {@link jQuery.sap.properties} to create an instance of `jQuery.sap.util.Properties`.
-   *
-   * The {@link #getProperty} method can be used to retrieve a value from the collection, {@link #setProperty}
-   * to store or change a value for a key and {@link #getKeys} can be used to retrieve an array of all keys
-   * that are currently stored in the collection.
-   */
-  export interface Properties {
-    __implements__jQuery_sap_util_Properties: boolean;
-
-    /**
-     * Creates and returns a clone of the property collection.
-     */
-    clone(): Properties;
-    /**
-     * Returns an array of all keys in the property collection.
-     */
-    getKeys(): string[];
-    /**
-     * Returns the value for the given key or `null` if the collection has no value for the key.
-     *
-     * Optionally, a default value can be given which will be returned if the collection does not contain a
-     * value for the key; only non-empty default values are supported.
-     */
-    getProperty(
-      /**
-       * Key to return the value for
-       */
-      sKey: string,
-      /**
-       * Optional, a default value that will be returned if the requested key is not in the collection
-       */
-      sDefaultValue?: string
-    ): string;
-    /**
-     * Stores or changes the value for the given key in the collection.
-     *
-     * If the given value is not a string, the collection won't be modified. The key is always cast to a string.
-     */
-    setProperty(
-      /**
-       * Key of the property
-       */
-      sKey: string,
-      /**
-       * String value for the key
-       */
-      sValue: string
-    ): void;
-  }
-}
-
-declare module "jquery.sap.resources" {
-  /**
-   * @SINCE 0.9.0
-   * @deprecated (since 1.58) - use {@link module:sap/base/i18n/ResourceBundle} instead
-   *
-   * Contains locale-specific texts.
-   *
-   * If you need a locale-specific text within your application, you can use the resource bundle to load the
-   * locale-specific file from the server and access the texts of it.
-   *
-   * Use {@link jQuery.sap.resources} to create an instance of jQuery.sap.util.ResourceBundle. There you have
-   * to specify the URL to the base .properties file of a bundle (.properties without any locale information,
-   * e.g. "mybundle.properties"), and optionally a locale. The locale is defined as a string of the language
-   * and an optional country code separated by underscore (e.g. "en_GB" or "fr"). If no locale is passed,
-   * the default locale is "en" if the SAPUI5 framework is not available. Otherwise the default locale is
-   * taken from the SAPUI5 configuration.
-   *
-   * With the getText() method of the resource bundle, a locale-specific string value for a given key will
-   * be returned.
-   *
-   * With the given locale, the ResourceBundle requests the locale-specific properties file (e.g. "mybundle_fr_FR.properties").
-   * If no file is found for the requested locale or if the file does not contain a text for the given key,
-   * a sequence of fall back locales is tried one by one. First, if the locale contains a region information
-   * (fr_FR), then the locale without the region is tried (fr). If that also can't be found or doesn't contain
-   * the requested text, the English file is used (en - assuming that most development projects contain at
-   * least English texts). If that also fails, the file without locale (base URL of the bundle) is tried.
-   *
-   * If none of the requested files can be found or none of them contains a text for the given key, then the
-   * key itself is returned as text.
-   *
-   * Exception: Fallback for "zh_HK" is "zh_TW" before zh.
-   */
-  export interface ResourceBundle {
-    __implements__jQuery_sap_util_ResourceBundle: boolean;
-
-    /**
-     * Returns a locale-specific string value for the given key sKey.
-     *
-     * The text is searched in this resource bundle according to the fallback chain described in {@link jQuery.sap.util.ResourceBundle}.
-     * If no text could be found, the key itself is used as text.
-     *
-     * If the second parameter `aArgs` is given, then any placeholder of the form "{n}" (with n
-     * being an integer) is replaced by the corresponding value from `aArgs` with index n. Note: This
-     * replacement is applied to the key if no text could be found. For more details on the replacement mechanism
-     * refer to {@link jQuery.sap.formatMessage}.
-     */
-    getText(
-      /**
-       * Key to retrieve the text for
-       */
-      sKey: string,
-      /**
-       * List of parameter values which should replace the placeholders "{n}" (n is the index) in
-       * the found locale-specific string value. Note that the replacement is done whenever `aArgs` is given,
-       * no matter whether the text contains placeholders or not and no matter whether `aArgs` contains a value
-       * for n or not.
-       */
-      aArgs?: string[]
-    ): string;
-    /**
-     * Checks whether a text for the given key can be found in the first loaded resource bundle or not. Neither
-     * the custom resource bundles nor the fallback chain will be processed.
-     *
-     * This method allows to check for the existence of a text without triggering requests for the fallback
-     * locales.
-     *
-     * When requesting the resource bundle asynchronously this check must only be used after the resource bundle
-     * has been loaded.
-     */
-    hasText(
-      /**
-       * Key to check
-       */
-      sKey: string
-    ): boolean;
-  }
-}
-
-declare module "jquery.sap.script" {
-  /**
-   * @SINCE 0.9.0
-   *
-   * Encapsulates all URI parameters of the current windows location (URL).
-   *
-   * Use {@link jQuery.sap.getUriParameters} to create an instance of jQuery.sap.util.UriParameters.
-   */
-  export interface UriParameters {
-    __implements__jQuery_sap_util_UriParameters: boolean;
-
-    /**
-     * Returns the value(s) of the URI parameter with the given name sName.
-     *
-     * If the boolean parameter bAll is `true`, an array of string values of all occurrences of the URI parameter
-     * with the given name is returned. This array is empty if the URI parameter is not contained in the windows
-     * URL.
-     *
-     * If the boolean parameter bAll is `false` or is not specified, the value of the first occurrence of the
-     * URI parameter with the given name is returned. Might be `null` if the URI parameter is not contained
-     * in the windows URL.
-     */
-    get(
-      /**
-       * The name of the URI parameter.
-       */
-      sUri: string
-    ): string | Array<any>;
-  }
-}
+// For Library Version: 1.90.0
 
 declare module "sap/base/assert" {
   /**
@@ -3236,8 +1196,48 @@ declare module "sap/base/util/deepExtend" {
     /**
      * One or more objects which get merged into the target object
      */
-    source?: object
+    ...source: object[]
   ): object;
+}
+
+declare module "sap/base/util/Deferred" {
+  /**
+   * @SINCE 1.90
+   *
+   * Creates a `Deferred` instance which represents a future value.
+   *
+   * While a `Promise` can only be resolved or rejected by calling the respective methods in its constructor,
+   * a `Deferred` can be resolved or rejected via `resolve` or `reject` methods at any point. A `Deferred`
+   * object creates a `Promise` instance which functions as a proxy for the future result. This `Promise`
+   * object can be accessed via the `promise` property of the `Deferred` object.
+   */
+  export default class Deferred {
+    /**/
+    constructor();
+    /**
+     * Promise instance of the Deferred
+     */
+    promise: Promise<any>;
+
+    /**
+     * Proxy call to the `reject` method of the wrapped Promise
+     */
+    reject(
+      /**
+       * Failure reason
+       */
+      reason?: any
+    ): void;
+    /**
+     * Proxy call to the `resolve` method of the wrapped Promise
+     */
+    resolve(
+      /**
+       * Fulfillment value
+       */
+      value?: any
+    ): void;
+  }
 }
 
 declare module "sap/base/util/each" {
@@ -3286,7 +1286,7 @@ declare module "sap/base/util/extend" {
     /**
      * One or more objects which get merged into the target object
      */
-    source?: object
+    ...source: object[]
   ): object;
 }
 
@@ -3363,7 +1363,7 @@ declare module "sap/base/util/merge" {
     /**
      * One or more objects which get merged into the target object
      */
-    source?: object
+    ...source: object[]
   ): object;
 }
 
@@ -3774,7 +1774,6 @@ declare module "sap/base/util/Version" {
     /**
      * Returns a string representation of this version.
      */
-    // @ts-ignore
     toString(): string;
   }
 }
@@ -6127,12 +4126,41 @@ declare module "sap/ui/base/Event" {
      */
     getSource(): EventProvider;
     /**
+     * Init this event with its data.
+     *
+     * The `init` method is called by an object pool when the object is (re-)activated for a new caller.
+     *
+     * When no `oParameters` are given, an empty object is used instead.
+     * See:
+     * 	sap.ui.base.Poolable.prototype#init
+     */
+    init(
+      /**
+       * ID of the event
+       */
+      sId: string,
+      /**
+       * Source of the event
+       */
+      oSource: EventProvider,
+      /**
+       * The event parameters
+       */
+      oParameters?: object
+    ): void;
+    /**
      * Prevent the default action of this event.
      *
      * **Note:** This function only has an effect if preventing the default action of the event is supported
      * by the event source.
      */
     preventDefault(): void;
+    /**
+     * Reset event data, needed for pooling.
+     * See:
+     * 	sap.ui.base.Poolable.prototype#reset
+     */
+    reset(): void;
   }
 }
 
@@ -6302,7 +4330,6 @@ declare module "sap/ui/base/EventProvider" {
      * In case there is no class or id information, a simple static string is returned. Subclasses should override
      * this method.
      */
-    // @ts-ignore
     toString(): string;
     /**
      * Attaches an event handler to the event with the given identifier.
@@ -8505,7 +6532,6 @@ declare module "sap/ui/base/ManagedObject" {
      *
      * Mainly useful for tracing purposes.
      */
-    // @ts-ignore
     toString(): string;
     /**
      * Unbind the aggregation from the model.
@@ -8904,7 +6930,7 @@ declare module "sap/ui/base/ManagedObject" {
      *
      * **Note**: recursive composite bindings are currently not supported
      */
-    parts?: any[];
+    parts?: PropertyBindingInfo[];
   };
 
   export interface $ManagedObjectSettings {
@@ -9766,7 +7792,7 @@ declare module "sap/ui/base/ObjectPool" {
       /**
        * optional initialization parameters for the borrowed object
        */
-      arg?: any
+      ...args: any[]
     ): object;
     /**
      * Creates a new subclass of class sap.ui.base.ObjectPool with name `sClassName` and enriches it with the
@@ -9825,7 +7851,12 @@ declare module "sap/ui/base/ObjectPool" {
      * If the caller provided any arguments to {@link sap.ui.base.ObjectPool#borrowObject}, all arguments will
      * be propagated to this method.
      */
-    init(): void;
+    init(
+      /**
+       * the arguments which were given to {@link sap.ui.base.ObjectPool#borrowObject}
+       */
+      ...args: any[]
+    ): void;
     /**
      * Called by the object pool when an instance is returned to the pool.
      *
@@ -9837,160 +7868,55 @@ declare module "sap/ui/base/ObjectPool" {
   }
 }
 
-declare module "sap/ui/core/library/__$aria" {
-  /**
-   * @SINCE 1.84
-   *
-   * Types of popups to set as aria-haspopup attribute. Most of the values (except "None") of the enumeration
-   * are taken from the ARIA specification: https://www.w3.org/TR/wai-aria/#aria-haspopup
-   */
-  export enum HasPopup {
-    /**
-     * Dialog popup type.
-     */
-    Dialog = "Dialog",
-    /**
-     * Grid popup type.
-     */
-    Grid = "Grid",
-    /**
-     * ListBox popup type.
-     */
-    ListBox = "ListBox",
-    /**
-     * Menu popup type.
-     */
-    Menu = "Menu",
-    /**
-     * None - the aria-haspopup attribute will not be rendered.
-     */
-    None = "None",
-    /**
-     * Tree popup type.
-     */
-    Tree = "Tree",
-  }
-}
-
-declare module "sap/ui/core/library/__$dnd" {
-  /**
-   * @SINCE 1.52.0
-   *
-   * Configuration options for visual drop effects that are given during a drag and drop operation.
-   */
-  export enum DropEffect {
-    /**
-     * A copy of the source item is made at the new location.
-     */
-    Copy = "Copy",
-    /**
-     * A link is established to the source at the new location.
-     */
-    Link = "Link",
-    /**
-     * An item is moved to a new location.
-     */
-    Move = "Move",
-    /**
-     * The item cannot be dropped.
-     */
-    None = "None",
-  }
-  /**
-   * @SINCE 1.52.0
-   *
-   * Configuration options for the layout of the droppable controls.
-   */
-  export enum DropLayout {
-    /**
-     * Default {@link sap.ui.core.Element.extend layout} definition of the aggregations.
-     */
-    Default = "Default",
-    /**
-     * Droppable controls are arranged horizontally.
-     */
-    Horizontal = "Horizontal",
-    /**
-     * Droppable controls are arranged vertically.
-     */
-    Vertical = "Vertical",
-  }
-  /**
-   * @SINCE 1.52.0
-   *
-   * Configuration options for drop positions.
-   */
-  export enum DropPosition {
-    /**
-     * Drop between the controls.
-     */
-    Between = "Between",
-    /**
-     * Drop on the control.
-     */
-    On = "On",
-    /**
-     * Drop on the control or between the controls.
-     */
-    OnOrBetween = "OnOrBetween",
-  }
-  /**
-   * @SINCE 1.52.0
-   *
-   * Marker interface for drag configuration providing information about the source of the drag operation.
-   */
-  export interface IDragInfo {
-    __implements__sap_ui_core_dnd_IDragInfo: boolean;
-  }
-
-  /**
-   * @SINCE 1.52.0
-   *
-   * Marker interface for drop configuration providing information about the target of the drop operation.
-   */
-  export interface IDropInfo {
-    __implements__sap_ui_core_dnd_IDropInfo: boolean;
-  }
-}
-
-declare module "sap/ui/core/library/__$mvc" {
-  /**
-   * @SINCE 1.56.0
-   *
-   * Marker interface for a ControllerExtension.
-   */
-  export interface IControllerExtension {
-    __implements__sap_ui_core_mvc_IControllerExtension: boolean;
-  }
-}
-
-declare module "sap/ui/core/library/__$routing" {
-  /**
-   * Enumeration for different HistoryDirections.
-   */
-  export enum HistoryDirection {
-    /**
-     * The page has already been navigated to and it was the predecessor of the previous page.
-     */
-    Backwards = "Backwards",
-    /**
-     * The page has already been navigated to and it was the successor of the previous page.
-     */
-    Forwards = "Forwards",
-    /**
-     * A new entry is added to the history.
-     */
-    NewEntry = "NewEntry",
-    /**
-     * A navigation took place, but it could be any of the other three states.
-     */
-    Unknown = "Unknown",
-  }
-}
-
 declare module "sap/ui/core/library" {
   import UI5Element from "sap/ui/core/Element";
 
+  /**
+   * Applies the support for custom style classes on the prototype of a `sap.ui.core.Element`.
+   *
+   * All controls (subclasses of `sap.ui.core.Control`) provide the support custom style classes. The control
+   * API provides functions to the application which allow it to add, remove or change style classes for the
+   * control. In general, this option is not available for elements because elements do not necessarily have
+   * a representation in the DOM.
+   *
+   * This function can be used by a control developer to explicitly enrich the API of his/her element implementation
+   * with the API functions for the custom style class support. It must be called on the prototype of the
+   * element.
+   *
+   * **Usage Example:**
+   * ```javascript
+   *
+   * sap.ui.define(['sap/ui/core/Element', 'sap/ui/core/CustomStyleClassSupport'], function(Element, CustomStyleClassSupport) {
+   *    "use strict";
+   *    var MyElement = Element.extend("my.MyElement", {
+   *       metadata : {
+   *          //...
+   *       }
+   *       //...
+   *    });
+   *
+   *    CustomStyleClassSupport.apply(MyElement.prototype);
+   *
+   *    return MyElement;
+   * }, true);
+   * ```
+   *
+   *
+   * Furthermore, the function `oRenderManager.writeClasses(oElement);` ({@link sap.ui.core.RenderManager#writeClasses})
+   * must be called within the renderer of the control to which the element belongs, when writing the root
+   * tag of the element. This ensures the classes are written to the HTML.
+   *
+   * This function adds the following functions to the elements prototype:
+   * 	 - `addStyleClass`: {@link sap.ui.core.Control#addStyleClass}
+   * 	 - `removeStyleClass`: {@link sap.ui.core.Control#removeStyleClass}
+   * 	 - `toggleStyleClass`: {@link sap.ui.core.Control#toggleStyleClass}
+   * 	 - `hasStyleClass`: {@link sap.ui.core.Control#hasStyleClass}  In addition the clone function of
+   * 			the element is extended to ensure that the custom style classes are also available on the cloned element.
+   *
+   * **Note:** This function can only be used within control development. An application cannot add
+   * style class support on existing elements by calling this function.
+   */
+  export function CustomStyleClassSupport(): void;
   /**
    * A string type that represents non-relative CSS size values.
    *
@@ -10346,7 +8272,6 @@ declare module "sap/ui/core/library" {
      */
     TreeItem = "TreeItem",
   }
-  export * as aria from "sap/ui/core/library/__$aria";
   /**
    * Configuration options for the colors of a progress bar.
    */
@@ -10491,7 +8416,6 @@ declare module "sap/ui/core/library" {
      */
     Standard = "Standard",
   }
-  export * as dnd from "sap/ui/core/library/__$dnd";
   /**
    * Docking position: horizontal/vertical.
    *
@@ -10847,7 +8771,6 @@ declare module "sap/ui/core/library" {
      */
     Warning = "Warning",
   }
-  export * as mvc from "sap/ui/core/library/__$mvc";
   /**
    * Defines the different possible states of an element that can be open or closed and does not only toggle
    * between these states, but also spends some time in between (e.g. because of an animation).
@@ -10922,7 +8845,6 @@ declare module "sap/ui/core/library" {
      */
     None = "None",
   }
-  export * as routing from "sap/ui/core/library/__$routing";
   /**
    * Actions are: Click on track, button, drag of thumb, or mouse wheel click.
    */
@@ -11153,6 +9075,158 @@ declare module "sap/ui/core/library" {
      * The text is actually on the same line but displayed within several lines.
      */
     Soft = "Soft",
+  }
+
+  export namespace aria {
+    /**
+     * @SINCE 1.84
+     *
+     * Types of popups to set as aria-haspopup attribute. Most of the values (except "None") of the enumeration
+     * are taken from the ARIA specification: https://www.w3.org/TR/wai-aria/#aria-haspopup
+     */
+    enum HasPopup {
+      /**
+       * Dialog popup type.
+       */
+      Dialog = "Dialog",
+      /**
+       * Grid popup type.
+       */
+      Grid = "Grid",
+      /**
+       * ListBox popup type.
+       */
+      ListBox = "ListBox",
+      /**
+       * Menu popup type.
+       */
+      Menu = "Menu",
+      /**
+       * None - the aria-haspopup attribute will not be rendered.
+       */
+      None = "None",
+      /**
+       * Tree popup type.
+       */
+      Tree = "Tree",
+    }
+  }
+
+  export namespace dnd {
+    /**
+     * @SINCE 1.52.0
+     *
+     * Marker interface for drag configuration providing information about the source of the drag operation.
+     */
+    interface IDragInfo {
+      __implements__sap_ui_core_dnd_IDragInfo: boolean;
+    }
+
+    /**
+     * @SINCE 1.52.0
+     *
+     * Marker interface for drop configuration providing information about the target of the drop operation.
+     */
+    interface IDropInfo {
+      __implements__sap_ui_core_dnd_IDropInfo: boolean;
+    }
+
+    /**
+     * @SINCE 1.52.0
+     *
+     * Configuration options for visual drop effects that are given during a drag and drop operation.
+     */
+    enum DropEffect {
+      /**
+       * A copy of the source item is made at the new location.
+       */
+      Copy = "Copy",
+      /**
+       * A link is established to the source at the new location.
+       */
+      Link = "Link",
+      /**
+       * An item is moved to a new location.
+       */
+      Move = "Move",
+      /**
+       * The item cannot be dropped.
+       */
+      None = "None",
+    }
+    /**
+     * @SINCE 1.52.0
+     *
+     * Configuration options for the layout of the droppable controls.
+     */
+    enum DropLayout {
+      /**
+       * Default {@link sap.ui.core.Element.extend layout} definition of the aggregations.
+       */
+      Default = "Default",
+      /**
+       * Droppable controls are arranged horizontally.
+       */
+      Horizontal = "Horizontal",
+      /**
+       * Droppable controls are arranged vertically.
+       */
+      Vertical = "Vertical",
+    }
+    /**
+     * @SINCE 1.52.0
+     *
+     * Configuration options for drop positions.
+     */
+    enum DropPosition {
+      /**
+       * Drop between the controls.
+       */
+      Between = "Between",
+      /**
+       * Drop on the control.
+       */
+      On = "On",
+      /**
+       * Drop on the control or between the controls.
+       */
+      OnOrBetween = "OnOrBetween",
+    }
+  }
+
+  export namespace mvc {
+    /**
+     * @SINCE 1.56.0
+     *
+     * Marker interface for a ControllerExtension.
+     */
+    interface IControllerExtension {
+      __implements__sap_ui_core_mvc_IControllerExtension: boolean;
+    }
+  }
+
+  export namespace routing {
+    /**
+     * Enumeration for different HistoryDirections.
+     */
+    enum HistoryDirection {
+      /**
+       * The page has already been navigated to and it was the predecessor of the previous page.
+       */
+      Backwards = "Backwards",
+      /**
+       * The page has already been navigated to and it was the successor of the previous page.
+       */
+      Forwards = "Forwards",
+      /**
+       * A new entry is added to the history.
+       */
+      NewEntry = "NewEntry",
+      /**
+       * A navigation took place, but it could be any of the other three states.
+       */
+      Unknown = "Unknown",
+    }
   }
 }
 
@@ -16700,6 +14774,26 @@ declare module "sap/ui/core/delegate/ScrollEnablement" {
      */
     refresh(): void;
     /**
+     * Scrolls to a specific position in scroll container.
+     */
+    scrollTo(
+      /**
+       * Horizontal position of the scrollbar
+       */
+      iHorizontalPosition: int,
+      /**
+       * Vertical position of the scrollbar
+       */
+      iVerticalPosition: int,
+      /**
+       * The duration of animated scrolling in milliseconds. To scroll immediately without animation, give 0 as
+       * value.
+       */
+      iTime: int,
+
+      fnCallback: Function
+    ): this;
+    /**
      * Scrolls to an element within a container.
      */
     scrollToElement(
@@ -16743,7 +14837,7 @@ declare module "sap/ui/core/delegate/ScrollEnablement" {
       /**
        * Scrolling direction
        */
-      sScrollLoadDirection: any,
+      sScrollLoadDirection: /* was: sap.m.ListGrowingDirection */ any,
       /**
        * listener for the `overflowChange` event
        */
@@ -16767,7 +14861,7 @@ declare module "sap/ui/core/delegate/ScrollEnablement" {
       /**
        * instance
        */
-      oIconTabBar: any,
+      oIconTabBar: /* was: sap.m.IconTabBar */ any,
       /**
        * callback function for the scroll end event
        */
@@ -16797,6 +14891,21 @@ declare module "sap/ui/core/delegate/ScrollEnablement" {
        */
       bVertical: boolean
     ): void;
+    /**
+     * Scrolls to a specific position in scroll container.
+     */
+    scrollTo(
+      /**
+       * Horizontal position of the scrollbar
+       */
+      iHorizontalPosition: int,
+      /**
+       * Vertical position of the scrollbar
+       */
+      iVerticalPosition: int,
+
+      fnCallback: Function
+    ): this;
   }
 }
 
@@ -16816,13 +14925,10 @@ declare module "sap/ui/core/dnd/DragDropBase" {
    * 	 - There is no accessible alternative for drag and drop. Applications which use the drag-and-drop functionality
    * 			must provide an accessible alternative UI (for example, action buttons or menus) to perform the same
    * 			operations.
-   * 	 - A custom dragging ghost element is not possible in Internet Explorer.
    * 	 - Transparency of the drag ghost element and the cursor during drag-and-drop operations depends on
    * 			the browser implementation.
-   * 	 - Internet Explorer does only support plain text MIME type for the DataTransfer Object.
-   * 	 - In Internet Explorer, default visual drop effect is `copy` and `dropEffect` property of the `DropInfo`
-   * 			has no effect. Constraining a drag position is not possible, therefore there is no snap-to-grid or
-   * 			snap-to-element feature possible.
+   * 	 - Constraining a drag position is not possible, therefore there is no snap-to-grid or snap-to-element
+   * 			feature possible.
    * 	 - Texts in draggable controls cannot be selected.
    * 	 - The text of input fields in draggable controls can be selected, but not dragged.
    */
@@ -17572,9 +15678,8 @@ declare module "sap/ui/core/dnd/DragAndDrop" {
      */
     getTextData(): string;
     /**
-     * Sets any type of data (even functions, pointers, anything non-serializable) with any MIME type. This
-     * works in all browsers, including Internet Explorer and Microsoft Edge, but only within a UI5 application
-     * within the same window/frame.
+     * Sets any type of data (even functions, pointers, anything non-serializable) with any MIME type. **Note:**
+     * This works only within a UI5 application within the same window/frame.
      */
     setComplexData(
       /**
@@ -17587,8 +15692,7 @@ declare module "sap/ui/core/dnd/DragAndDrop" {
       vData: any
     ): void;
     /**
-     * Sets string data with any MIME type. **Note:** This works in all browsers, apart from Internet Explorer
-     * and Microsoft Edge. It also works if you navigate between different windows.
+     * Sets string data with any MIME type. **Note:** This works if you navigate between different windows.
      */
     setData(
       /**
@@ -17614,8 +15718,7 @@ declare module "sap/ui/core/dnd/DragAndDrop" {
       mConfig: object
     ): void;
     /**
-     * Sets string data with plain text MIME type. **Note:** This works in all browsers, including Internet
-     * Explorer and Microsoft Edge. It also works if you navigate between different windows.
+     * Sets string data with plain text MIME type. **Note:** This works if you navigate between different windows.
      */
     setTextData(
       /**
@@ -17854,8 +15957,6 @@ declare module "sap/ui/core/dnd/DropInfo" {
      *
      * Defines the visual drop effect.
      *
-     * In Internet Explorer, default visual drop effect is `Copy` and this property has no effect.
-     *
      * Default value is `"Move"`.
      */
     getDropEffect(): dnd.DropEffect | keyof typeof dnd.DropEffect;
@@ -17891,8 +15992,6 @@ declare module "sap/ui/core/dnd/DropInfo" {
      * Sets a new value for property {@link #getDropEffect dropEffect}.
      *
      * Defines the visual drop effect.
-     *
-     * In Internet Explorer, default visual drop effect is `Copy` and this property has no effect.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -18018,8 +16117,6 @@ declare module "sap/ui/core/dnd/DropInfo" {
 
     /**
      * Defines the visual drop effect.
-     *
-     * In Internet Explorer, default visual drop effect is `Copy` and this property has no effect.
      */
     dropEffect?:
       | (dnd.DropEffect | keyof typeof dnd.DropEffect)
@@ -18984,7 +17081,6 @@ declare module "sap/ui/core/Element" {
      *
      * Mainly useful for tracing purposes.
      */
-    // @ts-ignore
     toString(): string;
     /**
      * Removes the defined binding context of this object, all bindings will now resolve relative to the parent
@@ -20114,8 +18210,9 @@ declare module "sap/ui/core/format/NumberFormat" {
          */
         parseAsString?: boolean;
         /**
-         * Whether {@link #format} preserves decimal digits in case there are more than the `maxFractionDigits`
-         * format option allows; if decimals are not preserved, the formatted number is rounded to `maxFractionDigits`.
+         * Whether {@link #format} preserves decimal digits except trailing zeros in case there are more decimals
+         * than the `maxFractionDigits` format option allows. If decimals are not preserved, the formatted number
+         * is rounded to `maxFractionDigits`.
          */
         preserveDecimals?: boolean;
         /**
@@ -20283,8 +18380,9 @@ declare module "sap/ui/core/format/NumberFormat" {
          */
         parseAsString?: boolean;
         /**
-         * Whether {@link #format} preserves decimal digits in case there are more than the `maxFractionDigits`
-         * format option allows; if decimals are not preserved, the formatted number is rounded to `maxFractionDigits`.
+         * Whether {@link #format} preserves decimal digits except trailing zeros in case there are more decimals
+         * than the `maxFractionDigits` format option allows. If decimals are not preserved, the formatted number
+         * is rounded to `maxFractionDigits`.
          */
         preserveDecimals?: boolean;
         /**
@@ -20418,8 +18516,9 @@ declare module "sap/ui/core/format/NumberFormat" {
          */
         parseAsString?: boolean;
         /**
-         * Whether {@link #format} preserves decimal digits in case there are more than the `maxFractionDigits`
-         * format option allows; if decimals are not preserved, the formatted number is rounded to `maxFractionDigits`.
+         * Whether {@link #format} preserves decimal digits except trailing zeros in case there are more decimals
+         * than the `maxFractionDigits` format option allows. If decimals are not preserved, the formatted number
+         * is rounded to `maxFractionDigits`.
          */
         preserveDecimals?: boolean;
         /**
@@ -20560,8 +18659,9 @@ declare module "sap/ui/core/format/NumberFormat" {
          */
         parseAsString?: boolean;
         /**
-         * Whether {@link #format} preserves decimal digits in case there are more than the `maxFractionDigits`
-         * format option allows; if decimals are not preserved, the formatted number is rounded to `maxFractionDigits`.
+         * Whether {@link #format} preserves decimal digits except trailing zeros in case there are more decimals
+         * than the `maxFractionDigits` format option allows. If decimals are not preserved, the formatted number
+         * is rounded to `maxFractionDigits`.
          */
         preserveDecimals?: boolean;
         /**
@@ -20705,8 +18805,9 @@ declare module "sap/ui/core/format/NumberFormat" {
          */
         parseAsString?: boolean;
         /**
-         * Whether {@link #format} preserves decimal digits in case there are more than the `maxFractionDigits`
-         * format option allows; if decimals are not preserved, the formatted number is rounded to `maxFractionDigits`.
+         * Whether {@link #format} preserves decimal digits except trailing zeros in case there are more decimals
+         * than the `maxFractionDigits` format option allows. If decimals are not preserved, the formatted number
+         * is rounded to `maxFractionDigits`.
          */
         preserveDecimals?: boolean;
         /**
@@ -25600,13 +23701,15 @@ declare module "sap/ui/core/mvc/Controller" {
   /**
    * A generic controller implementation for the UI5 Model-View-Controller concept.
    *
-   * Can either be used as a generic controller which is enriched on the fly with methods and properties (see
-   * {@link sap.ui.controller}) or as a base class for typed controllers.
+   * Can be used as a base class for typed controllers.
+   *
+   * **Typed Controller Scenario**:
+   * 	 - use {@link sap.ui.core.mvc.Controller.extend Controller.extend} to define the controller class
+   * 	 - use {@link sap.ui.core.mvc.Controller.create Controller.create} to create an instance
    */
   export default class Controller extends EventProvider {
     /**
-     * Instantiates a (MVC-style) controller. Consumers should call the constructor only in the typed controller
-     * scenario. In the generic controller use case, they should use {@link sap.ui.controller} instead.
+     * Instantiates a (MVC-style) controller.
      */
     constructor(
       /**
@@ -25743,7 +23846,8 @@ declare module "sap/ui/core/mvc/Controller" {
      *
      * The extension provider module provides the `getControllerExtensions` function which returns either directly
      * an array of objects or a Promise that returns an array of objects when it resolves. These objects are
-     * object literals defining the methods and properties of the controller in a similar way as {@link sap.ui.controller}.
+     * object literals defining the methods and properties of the controller in a similar way as for {@link
+     * sap.ui.core.mvc.Controller Controller} subclasses.
      *
      * **Example for a callback module definition (sync):**
      * ```javascript
@@ -25814,7 +23918,7 @@ declare module "sap/ui/core/mvc/Controller" {
       /**
        * the module name of the extension provider
        *
-       * See {@link sap.ui.controller} for an overview of the available functions for controllers.
+       * See {@link sap.ui.core.mvc.Controller} for an overview of the available functions for controllers.
        */
       sExtensionProvider: string
     ): void;
@@ -26148,16 +24252,15 @@ declare module "sap/ui/core/mvc/JSView" {
   import ElementMetadata from "sap/ui/core/ElementMetadata";
 
   /**
+   * @deprecated (since 1.90) - Instead use {@link topic:e6bb33d076dc4f23be50c082c271b9f0 Typed Views} by
+   * defining the view class with {@link sap.ui.core.mvc.View.extend View.extend} and creating the view instances
+   * with {@link sap.ui.core.mvc.View.create View.create}.
+   *
    * A View defined/constructed by JavaScript code.
    */
   export default class JSView extends View {
     /**
      * Constructor for a new `JSView`.
-     *
-     * **Note:** Application code shouldn't call the constructor directly, but rather use the factory {@link
-     * sap.ui.core.mvc.JSView.create JSView.create} or {@link sap.ui.core.mvc.View.create View.create} with
-     * type {@link sap.ui.core.mvc.ViewType.JS JS}. The factory simplifies asynchronous loading of a view and
-     * future features might be added to the factory only.
      */
     constructor(
       /**
@@ -26167,11 +24270,6 @@ declare module "sap/ui/core/mvc/JSView" {
     );
     /**
      * Constructor for a new `JSView`.
-     *
-     * **Note:** Application code shouldn't call the constructor directly, but rather use the factory {@link
-     * sap.ui.core.mvc.JSView.create JSView.create} or {@link sap.ui.core.mvc.View.create View.create} with
-     * type {@link sap.ui.core.mvc.ViewType.JS JS}. The factory simplifies asynchronous loading of a view and
-     * future features might be added to the factory only.
      */
     constructor(
       /**
@@ -26192,6 +24290,7 @@ declare module "sap/ui/core/mvc/JSView" {
 
     /**
      * @SINCE 1.56.0
+     * @deprecated (since 1.90) - Use {@link sap.ui.core.mvc.View.create View.create} to create view instances
      *
      * Creates an instance of the view with the given name (and id).
      */
@@ -26386,7 +24485,7 @@ declare module "sap/ui/core/mvc/View" {
    * will be rendered as content of the view.
    *
    * Views that are defined that way are referred to as **typed views**, as each view definition is represented
-   * by its own class (type).
+   * by its own class (type). See {@link topic:e6bb33d076dc4f23be50c082c271b9f0 Typed Views} for further information.
    *
    * **Example:** Defining a typed view (module 'myapp/views/MainView.js')
    * ```javascript
@@ -26423,7 +24522,7 @@ declare module "sap/ui/core/mvc/View" {
    * ```
    *
    *
-   * View Instantiation: The preferred way of instantiating a typed View is via the generic factory {@link
+   * View Instantiation: The preferred way of instantiating a typed view is via the generic factory {@link
    * sap.ui.core.mvc.View.create View.create}.
    *
    * When the `viewName` starts with prefix `"module:"`, the remainder of the name is assumed to be the name
@@ -27212,7 +25311,7 @@ declare module "sap/ui/core/mvc/View" {
      * needs to be passed which resolves with the according cache key increment.
      *
      * **Note:** Caching is only available for XMLViews! Some parts of the feature are still experimental, For
-     * further information see {@link sap.ui.xmlview}
+     * further information see {@link sap.ui.core.mvc.XMLView.create XMLView.create}
      */
     getCacheKey(
       /**
@@ -27330,6 +25429,8 @@ declare module "sap/ui/core/mvc/ViewType" {
      */
     HTML = "HTML",
     /**
+     * @deprecated (since 1.90)
+     *
      * JS View
      */
     JS = "JS",
@@ -27338,6 +25439,8 @@ declare module "sap/ui/core/mvc/ViewType" {
      */
     JSON = "JSON",
     /**
+     * @deprecated (since 1.56)
+     *
      * Template View
      */
     Template = "Template",
@@ -30175,11 +28278,11 @@ declare module "sap/ui/core/routing/Router" {
        */
       oConfig?: {
         /**
-         * @since 1.28. Settings which are used when no route of the router is matched after a hash change.
+         * Since 1.28. Settings which are used when no route of the router is matched after a hash change.
          */
         bypassed?: {
           /**
-           * @since 1.28. One or multiple names of targets that will be displayed, if no route of the router is matched.
+           * Since 1.28. One or multiple names of targets that will be displayed, if no route of the router is matched.
            *  A typical use case is a not found page.
            *  The current hash will be passed to the display event of the target.
            *  **Example:**
@@ -30212,7 +28315,7 @@ declare module "sap/ui/core/routing/Router" {
           target?: string | string[];
         };
         /**
-         * @since 1.34. Whether the views which are loaded within this router instance asyncly
+         * Since 1.34. Whether the views which are loaded within this router instance asyncly
          */
         async?: boolean;
       },
@@ -30223,7 +28326,7 @@ declare module "sap/ui/core/routing/Router" {
        */
       oOwner?: UIComponent,
       /**
-       * available @since 1.28 the target configuration, see {@link sap.ui.core.routing.Targets#constructor} documentation
+       * Since 1.28 the target configuration, see {@link sap.ui.core.routing.Targets#constructor} documentation
        * (the options object).
        *  You should use Targets to create and display views. Since 1.28 the route should only contain routing
        * relevant properties.
@@ -30716,7 +28819,7 @@ declare module "sap/ui/core/routing/Router" {
      */
     initialize(
       /**
-       * @since 1.48.0 Whether the current URL hash shouldn't be parsed after the router is initialized
+       * Since 1.48.0. Whether the current URL hash shouldn't be parsed after the router is initialized
        */
       bIgnoreInitialHash?: boolean
     ): this;
@@ -31124,7 +29227,7 @@ declare module "sap/ui/core/routing/Target" {
       /**
        * All views required by this target will get created by the views instance using {@link sap.ui.core.routing.Views#getView}
        */
-      oCache: any,
+      oCache: /* was: sap.ui.core.routing.TargetCache */ any,
       /**
        * the parent of this target. Will also get displayed, if you display this target. In the config you have
        * the fill the children property {@link sap.m.routing.Targets#constructor}
@@ -32629,7 +30732,7 @@ declare module "sap/ui/core/support/RuleEngineOpaExtension" {
         /**
          * The format into which the history object will be converted.
          */
-        historyFormat?: any;
+        historyFormat?: /* was: sap.ui.support.HistoryFormats */ any;
         /**
          * The name of the file. It should have extension .support-assistant.json". Example: myfile.support-assistant.json
          * **Note:** Extension ".support-assistant.json" will be appended automatically, if it is not already given.
@@ -37711,196 +35814,6 @@ declare module "sap/ui/core/XMLComposite" {
   }
 }
 
-declare module "sap/ui/Device/__$browser" {
-  /**
-   * Enumeration containing the names of known browsers.
-   */
-  export interface BROWSER {
-    /**
-     * Android stock browser name.
-     * See:
-     * 	sap.ui.Device.browser.name
-     */
-    ANDROID: undefined;
-
-    /**
-     * Chrome browser name, used for Google Chrome browser and Microsoft Edge (Chromium) browser.
-     * See:
-     * 	sap.ui.Device.browser.name
-     */
-    CHROME: undefined;
-
-    /**
-     * Firefox browser name.
-     * See:
-     * 	sap.ui.Device.browser.name
-     */
-    FIREFOX: undefined;
-
-    /**
-     * Safari browser name.
-     * See:
-     * 	sap.ui.Device.browser.name
-     */
-    SAFARI: undefined;
-  }
-  export const BROWSER: BROWSER;
-}
-
-declare module "sap/ui/Device/__$media" {
-  /**
-   * Enumeration containing the names and settings of predefined screen width media query range sets.
-   */
-  export interface RANGESETS {
-    /**
-     * A 3-step range set (S-L).
-     *
-     * The ranges of this set are:
-     * 	 - `"S"`: For screens smaller than 520 pixels.
-     * 	 - `"M"`: For screens greater than or equal to 520 pixels and smaller than 960 pixels.
-     * 	 - `"L"`: For screens greater than or equal to 960 pixels.
-     *
-     * To use this range set, you must initialize it explicitly ({@link sap.ui.Device.media.initRangeSet}).
-     *
-     * If this range set is initialized, a CSS class is added to the page root (`html` tag) which indicates
-     * the current screen width range: `sapUiMedia-3Step-NAME_OF_THE_INTERVAL`.
-     */
-    SAP_3STEPS: undefined;
-
-    /**
-     * A 4-step range set (S-XL).
-     *
-     * The ranges of this set are:
-     * 	 - `"S"`: For screens smaller than 520 pixels.
-     * 	 - `"M"`: For screens greater than or equal to 520 pixels and smaller than 760 pixels.
-     * 	 - `"L"`: For screens greater than or equal to 760 pixels and smaller than 960 pixels.
-     * 	 - `"XL"`: For screens greater than or equal to 960 pixels.
-     *
-     * To use this range set, you must initialize it explicitly ({@link sap.ui.Device.media.initRangeSet}).
-     *
-     * If this range set is initialized, a CSS class is added to the page root (`html` tag) which indicates
-     * the current screen width range: `sapUiMedia-4Step-NAME_OF_THE_INTERVAL`.
-     */
-    SAP_4STEPS: undefined;
-
-    /**
-     * A 6-step range set (XS-XXL).
-     *
-     * The ranges of this set are:
-     * 	 - `"XS"`: For screens smaller than 241 pixels.
-     * 	 - `"S"`: For screens greater than or equal to 241 pixels and smaller than 400 pixels.
-     * 	 - `"M"`: For screens greater than or equal to 400 pixels and smaller than 541 pixels.
-     * 	 - `"L"`: For screens greater than or equal to 541 pixels and smaller than 768 pixels.
-     * 	 - `"XL"`: For screens greater than or equal to 768 pixels and smaller than 960 pixels.
-     * 	 - `"XXL"`: For screens greater than or equal to 960 pixels.
-     *
-     * To use this range set, you must initialize it explicitly ({@link sap.ui.Device.media.initRangeSet}).
-     *
-     * If this range set is initialized, a CSS class is added to the page root (`html` tag) which indicates
-     * the current screen width range: `sapUiMedia-6Step-NAME_OF_THE_INTERVAL`.
-     */
-    SAP_6STEPS: undefined;
-
-    /**
-     * A 3-step range set (Phone, Tablet, Desktop).
-     *
-     * The ranges of this set are:
-     * 	 - `"Phone"`: For screens smaller than 600 pixels.
-     * 	 - `"Tablet"`: For screens greater than or equal to 600 pixels and smaller than 1024 pixels.
-     * 	 - `"Desktop"`: For screens greater than or equal to 1024 pixels.
-     *
-     * This range set is initialized by default. An initialization via {@link sap.ui.Device.media.initRangeSet}
-     * is not needed.
-     *
-     * A CSS class is added to the page root (`html` tag) which indicates the current screen width range: `sapUiMedia-Std-NAME_OF_THE_INTERVAL`.
-     * Furthermore there are 5 additional CSS classes to hide elements based on the width of the screen:
-     *
-     * 	 - `sapUiHideOnPhone`: Will be hidden if the screen has 600px or less
-     * 	 - `sapUiHideOnTablet`: Will be hidden if the screen has more than 600px and less than 1023px
-     * 	 - `sapUiHideOnDesktop`: Will be hidden if the screen is larger than 1024px
-     * 	 - `sapUiVisibleOnlyOnPhone`: Will be visible only if the screen has less than 600px
-     * 	 - `sapUiVisibleOnlyOnTablet`: Will be visible only if the screen has 600px or more but less than 1024px
-     *
-     * 	 - `sapUiVisibleOnlyOnDesktop`: Will be visible only if the screen has 1024px or more
-     */
-    SAP_STANDARD: undefined;
-
-    /**
-     * A 4-step range set (Phone, Tablet, Desktop, LargeDesktop).
-     *
-     * The ranges of this set are:
-     * 	 - `"Phone"`: For screens smaller than 600 pixels.
-     * 	 - `"Tablet"`: For screens greater than or equal to 600 pixels and smaller than 1024 pixels.
-     * 	 - `"Desktop"`: For screens greater than or equal to 1024 pixels and smaller than 1440 pixels.
-     * 	 - `"LargeDesktop"`: For screens greater than or equal to 1440 pixels.
-     *
-     * This range set is initialized by default. An initialization via {@link sap.ui.Device.media.initRangeSet}
-     * is not needed.
-     *
-     * A CSS class is added to the page root (`html` tag) which indicates the current screen width range: `sapUiMedia-StdExt-NAME_OF_THE_INTERVAL`.
-     */
-    SAP_STANDARD_EXTENDED: undefined;
-  }
-  export const RANGESETS: RANGESETS;
-}
-
-declare module "sap/ui/Device/__$os" {
-  /**
-   * Enumeration containing the names of known operating systems.
-   */
-  export interface OS {
-    /**
-     * Android operating system name.
-     * See:
-     * 	sap.ui.Device.os.name
-     */
-    ANDROID: undefined;
-
-    /**
-     * Blackberry operating system name.
-     * See:
-     * 	sap.ui.Device.os.name
-     */
-    BLACKBERRY: undefined;
-
-    /**
-     * iOS operating system name.
-     * See:
-     * 	sap.ui.Device.os.name
-     */
-    IOS: undefined;
-
-    /**
-     * Linux operating system name.
-     * See:
-     * 	sap.ui.Device.os.name
-     */
-    LINUX: undefined;
-
-    /**
-     * MAC operating system name.
-     * See:
-     * 	sap.ui.Device.os.name
-     */
-    MACINTOSH: undefined;
-
-    /**
-     * Windows operating system name.
-     * See:
-     * 	sap.ui.Device.os.name
-     */
-    WINDOWS: undefined;
-
-    /**
-     * Windows Phone operating system name.
-     * See:
-     * 	sap.ui.Device.os.name
-     */
-    WINDOWS_PHONE: undefined;
-  }
-  export const OS: OS;
-}
-
 declare module "sap/ui/Device" {
   /**
    * Device and Feature Detection API: Provides information about the used browser / device and cross platform
@@ -37914,26 +35827,385 @@ declare module "sap/ui/Device" {
   const Device: Device;
   export default Device;
 
-  export * as browser from "sap/ui/Device/__$browser";
-  export * as media from "sap/ui/Device/__$media";
-  /**
-   * Common API for orientation change notifications across all platforms.
-   *
-   * For browsers or devices that do not provide native support for orientation change events the API simulates
-   * them based on the ratio of the document's width and height.
-   */
-  export interface orientation {
+  export namespace browser {
+    /**
+     * @SINCE 1.56.0
+     *
+     * If this flag is set to `true`, a browser featuring a Blink rendering engine is used.
+     */
+    export const blink: boolean;
+
+    /**
+     * If this flag is set to `true`, a browser that is based on the Chromium browser project is used, such
+     * as the Google Chrome browser or the Microsoft Edge (Chromium) browser.
+     */
+    export const chrome: boolean;
+
+    /**
+     * If this flag is set to `true`, the Mozilla Firefox browser is used.
+     */
+    export const firefox: boolean;
+
+    /**
+     * @SINCE 1.31.0
+     *
+     * If this flag is set to `true`, the Safari browser runs in standalone fullscreen mode on iOS.
+     *
+     * **Note:** This flag is only available if the Safari browser was detected. Furthermore, if this mode is
+     * detected, technically not a standard Safari is used. There might be slight differences in behavior and
+     * detection, e.g. the availability of {@link sap.ui.Device.browser.version}.
+     */
+    export const fullscreen: boolean;
+
+    /**
+     * If this flag is set to `true`, the mobile variant of the browser is used or a tablet or phone device
+     * is detected.
+     *
+     * **Note:** This information might not be available for all browsers.
+     */
+    export const mobile: boolean;
+
+    /**
+     * @SINCE 1.20.0
+     *
+     * If this flag is set to `true`, a browser featuring a Mozilla engine is used.
+     */
+    export const mozilla: boolean;
+
+    /**
+     * The name of the browser.
+     * See:
+     * 	sap.ui.Device.browser.BROWSER
+     */
+    export const name: String;
+
+    /**
+     * If this flag is set to `true`, the Apple Safari browser is used.
+     *
+     * **Note:** This flag is also `true` when the standalone (fullscreen) mode or webview is used on iOS devices.
+     * Please also note the flags {@link sap.ui.Device.browser.fullscreen} and {@link sap.ui.Device.browser.webview}.
+     */
+    export const safari: boolean;
+
+    /**
+     * The version of the browser as `float`.
+     *
+     * Might be `-1` if no version can be determined.
+     */
+    export const version: float;
+
+    /**
+     * The version of the browser as `string`.
+     *
+     * Might be empty if no version can be determined.
+     */
+    export const versionStr: String;
+
+    /**
+     * @SINCE 1.20.0
+     *
+     * If this flag is set to `true`, a browser featuring a Webkit engine is used.
+     *
+     * **Note:** This flag is also `true` when the used browser was based on the Webkit engine, but uses another
+     * rendering engine in the meantime. For example the Chrome browser started from version 28 and above uses
+     * the Blink rendering engine.
+     */
+    export const webkit: boolean;
+
+    /**
+     * @SINCE 1.31.0
+     *
+     * If this flag is set to `true`, the Safari browser runs in webview mode on iOS.
+     *
+     * **Note:** This flag is only available if the Safari browser was detected. Furthermore, if this mode is
+     * detected, technically not a standard Safari is used. There might be slight differences in behavior and
+     * detection, e.g. the availability of {@link sap.ui.Device.browser.version}.
+     */
+    export const webview: boolean;
+
+    namespace BROWSER {
+      /**
+       * Android stock browser name.
+       * See:
+       * 	sap.ui.Device.browser.name
+       */
+      export const ANDROID: undefined;
+
+      /**
+       * Chrome browser name, used for Google Chrome browser and Microsoft Edge (Chromium) browser.
+       * See:
+       * 	sap.ui.Device.browser.name
+       */
+      export const CHROME: undefined;
+
+      /**
+       * Firefox browser name.
+       * See:
+       * 	sap.ui.Device.browser.name
+       */
+      export const FIREFOX: undefined;
+
+      /**
+       * Safari browser name.
+       * See:
+       * 	sap.ui.Device.browser.name
+       */
+      export const SAFARI: undefined;
+    }
+  }
+
+  export namespace media {
+    /**
+     * Registers the given event handler to change events of the screen width based on the range set with the
+     * specified name.
+     *
+     * The event is fired whenever the screen width changes and the current screen width is in a different interval
+     * of the given range set than before the width change.
+     *
+     * The event handler is called with a single argument: a map `mParams` which provides the following information
+     * about the entered interval:
+     * 	 - `mParams.from`: The start value (inclusive) of the entered interval as a number
+     * 	 - `mParams.to`: The end value (exclusive) range of the entered interval as a number or undefined for
+     * 			the last interval (infinity)
+     * 	 - `mParams.unit`: The unit used for the values above, e.g. `"px"`
+     * 	 - `mParams.name`: The name of the entered interval, if available
+     */
+    function attachHandler(
+      /**
+       * The handler function to call when the event occurs. This function will be called in the context of the
+       * `oListener` instance (if present) or on the `window` instance. A map with information about the entered
+       * range set is provided as a single argument to the handler (see details above).
+       */
+      fnFunction: Function,
+      /**
+       * The object that wants to be notified when the event occurs (`this` context within the handler function).
+       * If it is not specified, the handler function is called in the context of the `window`.
+       */
+      oListener?: object,
+      /**
+       * The name of the range set to listen to. The range set must be initialized beforehand ({@link sap.ui.Device.media.initRangeSet}).
+       * If no name is provided, the {@link sap.ui.Device.media.RANGESETS.SAP_STANDARD default range set} is used.
+       */
+      sName?: string
+    ): void;
+    /**
+     * Removes a previously attached event handler from the change events of the screen width.
+     *
+     * The passed parameters must match those used for registration with {@link #.attachHandler} beforehand.
+     */
+    function detachHandler(
+      /**
+       * The handler function to detach from the event
+       */
+      fnFunction: Function,
+      /**
+       * The object that wanted to be notified when the event occurred
+       */
+      oListener?: object,
+      /**
+       * The name of the range set to listen to. If no name is provided, the {@link sap.ui.Device.media.RANGESETS.SAP_STANDARD
+       * default range set} is used.
+       */
+      sName?: string
+    ): void;
+    /**
+     * Returns information about the current active range of the range set with the given name.
+     *
+     * If the optional parameter `iWidth` is given, the active range will be determined for that width, otherwise
+     * it is determined for the current window size.
+     */
+    function getCurrentRange(
+      /**
+       * The name of the range set. The range set must be initialized beforehand ({@link sap.ui.Device.media.initRangeSet})
+       */
+      sName: string,
+      /**
+       * An optional width, based on which the range should be determined; If `iWidth` is not a number, the window
+       * size will be used.
+       */
+      iWidth?: int
+    ): object;
+    /**
+     * Returns `true` if a range set with the given name is already initialized.
+     */
+    function hasRangeSet(
+      /**
+       * The name of the range set.
+       */
+      sName: string
+    ): boolean;
+    /**
+     * Initializes a screen width media query range set.
+     *
+     * This initialization step makes the range set ready to be used for one of the other functions in namespace
+     * `sap.ui.Device.media`. The most important {@link sap.ui.Device.media.RANGESETS predefined range sets}
+     * are initialized automatically.
+     *
+     * To make a not yet initialized {@link sap.ui.Device.media.RANGESETS predefined range set} ready to be
+     * used, call this function with the name of the range set to be initialized:
+     * ```javascript
+     *
+     * sap.ui.Device.media.initRangeSet(sap.ui.Device.media.RANGESETS.SAP_3STEPS);
+     * ```
+     *
+     *
+     * Alternatively it is possible to define custom range sets as shown in the following example:
+     * ```javascript
+     *
+     * sap.ui.Device.media.initRangeSet("MyRangeSet", [200, 400], "px", ["Small", "Medium", "Large"]);
+     * ```
+     *  This example defines the following named ranges:
+     * 	 - `"Small"`: For screens smaller than 200 pixels.
+     * 	 - `"Medium"`: For screens greater than or equal to 200 pixels and smaller than 400 pixels.
+     * 	 - `"Large"`: For screens greater than or equal to 400 pixels.  The range names are optional. If
+     * 			they are specified a CSS class (e.g. `sapUiMedia-MyRangeSet-Small`) is also added to the document root
+     * 			depending on the current active range. This can be suppressed via parameter `bSuppressClasses`.
+     */
+    function initRangeSet(
+      /**
+       * The name of the range set to be initialized - either a {@link sap.ui.Device.media.RANGESETS predefined}
+       * or custom one. The name must be a valid id and consist only of letters and numeric digits.
+       */
+      sName: string,
+      /**
+       * The range borders
+       */
+      aRangeBorders?: int[],
+      /**
+       * The unit which should be used for the values given in `aRangeBorders`. The allowed values are `"px"`
+       * (default), `"em"` or `"rem"`
+       */
+      sUnit?: string,
+      /**
+       * The names of the ranges. The names must be a valid id and consist only of letters and digits. If names
+       * are specified, CSS classes are also added to the document root as described above. This behavior can
+       * be switched off explicitly by using `bSuppressClasses`. **Note:** `aRangeBorders` with `n` entries define
+       * `n+1` ranges. Therefore `n+1` names must be provided.
+       */
+      aRangeNames?: string[],
+      /**
+       * Whether or not writing of CSS classes to the document root should be suppressed when `aRangeNames` are
+       * provided
+       */
+      bSuppressClasses?: boolean
+    ): void;
+    /**
+     * Removes a previously initialized range set and detaches all registered handlers.
+     *
+     * Only custom range sets can be removed via this function. Initialized predefined range sets ({@link sap.ui.Device.media.RANGESETS})
+     * cannot be removed.
+     */
+    function removeRangeSet(
+      /**
+       * The name of the range set which should be removed.
+       */
+      sName: string
+    ): void;
+
+    namespace RANGESETS {
+      /**
+       * A 3-step range set (S-L).
+       *
+       * The ranges of this set are:
+       * 	 - `"S"`: For screens smaller than 520 pixels.
+       * 	 - `"M"`: For screens greater than or equal to 520 pixels and smaller than 960 pixels.
+       * 	 - `"L"`: For screens greater than or equal to 960 pixels.
+       *
+       * To use this range set, you must initialize it explicitly ({@link sap.ui.Device.media.initRangeSet}).
+       *
+       * If this range set is initialized, a CSS class is added to the page root (`html` tag) which indicates
+       * the current screen width range: `sapUiMedia-3Step-NAME_OF_THE_INTERVAL`.
+       */
+      export const SAP_3STEPS: undefined;
+
+      /**
+       * A 4-step range set (S-XL).
+       *
+       * The ranges of this set are:
+       * 	 - `"S"`: For screens smaller than 520 pixels.
+       * 	 - `"M"`: For screens greater than or equal to 520 pixels and smaller than 760 pixels.
+       * 	 - `"L"`: For screens greater than or equal to 760 pixels and smaller than 960 pixels.
+       * 	 - `"XL"`: For screens greater than or equal to 960 pixels.
+       *
+       * To use this range set, you must initialize it explicitly ({@link sap.ui.Device.media.initRangeSet}).
+       *
+       * If this range set is initialized, a CSS class is added to the page root (`html` tag) which indicates
+       * the current screen width range: `sapUiMedia-4Step-NAME_OF_THE_INTERVAL`.
+       */
+      export const SAP_4STEPS: undefined;
+
+      /**
+       * A 6-step range set (XS-XXL).
+       *
+       * The ranges of this set are:
+       * 	 - `"XS"`: For screens smaller than 241 pixels.
+       * 	 - `"S"`: For screens greater than or equal to 241 pixels and smaller than 400 pixels.
+       * 	 - `"M"`: For screens greater than or equal to 400 pixels and smaller than 541 pixels.
+       * 	 - `"L"`: For screens greater than or equal to 541 pixels and smaller than 768 pixels.
+       * 	 - `"XL"`: For screens greater than or equal to 768 pixels and smaller than 960 pixels.
+       * 	 - `"XXL"`: For screens greater than or equal to 960 pixels.
+       *
+       * To use this range set, you must initialize it explicitly ({@link sap.ui.Device.media.initRangeSet}).
+       *
+       * If this range set is initialized, a CSS class is added to the page root (`html` tag) which indicates
+       * the current screen width range: `sapUiMedia-6Step-NAME_OF_THE_INTERVAL`.
+       */
+      export const SAP_6STEPS: undefined;
+
+      /**
+       * A 3-step range set (Phone, Tablet, Desktop).
+       *
+       * The ranges of this set are:
+       * 	 - `"Phone"`: For screens smaller than 600 pixels.
+       * 	 - `"Tablet"`: For screens greater than or equal to 600 pixels and smaller than 1024 pixels.
+       * 	 - `"Desktop"`: For screens greater than or equal to 1024 pixels.
+       *
+       * This range set is initialized by default. An initialization via {@link sap.ui.Device.media.initRangeSet}
+       * is not needed.
+       *
+       * A CSS class is added to the page root (`html` tag) which indicates the current screen width range: `sapUiMedia-Std-NAME_OF_THE_INTERVAL`.
+       * Furthermore there are 5 additional CSS classes to hide elements based on the width of the screen:
+       *
+       * 	 - `sapUiHideOnPhone`: Will be hidden if the screen has 600px or less
+       * 	 - `sapUiHideOnTablet`: Will be hidden if the screen has more than 600px and less than 1023px
+       * 	 - `sapUiHideOnDesktop`: Will be hidden if the screen is larger than 1024px
+       * 	 - `sapUiVisibleOnlyOnPhone`: Will be visible only if the screen has less than 600px
+       * 	 - `sapUiVisibleOnlyOnTablet`: Will be visible only if the screen has 600px or more but less than 1024px
+       *
+       * 	 - `sapUiVisibleOnlyOnDesktop`: Will be visible only if the screen has 1024px or more
+       */
+      export const SAP_STANDARD: undefined;
+
+      /**
+       * A 4-step range set (Phone, Tablet, Desktop, LargeDesktop).
+       *
+       * The ranges of this set are:
+       * 	 - `"Phone"`: For screens smaller than 600 pixels.
+       * 	 - `"Tablet"`: For screens greater than or equal to 600 pixels and smaller than 1024 pixels.
+       * 	 - `"Desktop"`: For screens greater than or equal to 1024 pixels and smaller than 1440 pixels.
+       * 	 - `"LargeDesktop"`: For screens greater than or equal to 1440 pixels.
+       *
+       * This range set is initialized by default. An initialization via {@link sap.ui.Device.media.initRangeSet}
+       * is not needed.
+       *
+       * A CSS class is added to the page root (`html` tag) which indicates the current screen width range: `sapUiMedia-StdExt-NAME_OF_THE_INTERVAL`.
+       */
+      export const SAP_STANDARD_EXTENDED: undefined;
+    }
+  }
+
+  export namespace orientation {
     /**
      * If this flag is set to `true`, the screen is currently in landscape mode (the width is greater than the
      * height).
      */
-    landscape: boolean;
+    export const landscape: boolean;
 
     /**
      * If this flag is set to `true`, the screen is currently in portrait mode (the height is greater than the
      * width).
      */
-    portrait: boolean;
+    export const portrait: boolean;
 
     /**
      * Registers the given event handler to orientation change events of the document's window.
@@ -37946,7 +36218,7 @@ declare module "sap/ui/Device" {
      * 	 - `mParams.landscape`: If this flag is set to `true`, the screen is currently in landscape mode, otherwise
      * 			in portrait mode.
      */
-    attachHandler(
+    function attachHandler(
       /**
        * The handler function to call when the event occurs. This function will be called in the context of the
        * `oListener` instance (if present) or on the `window` instance. A map with information about the orientation
@@ -37964,7 +36236,7 @@ declare module "sap/ui/Device" {
      *
      * The passed parameters must match those used for registration with {@link #.attachHandler} beforehand.
      */
-    detachHandler(
+    function detachHandler(
       /**
        * The handler function to detach from the event
        */
@@ -37975,22 +36247,128 @@ declare module "sap/ui/Device" {
       oListener?: object
     ): void;
   }
-  export const orientation: orientation;
 
-  export * as os from "sap/ui/Device/__$os";
-  /**
-   * Common API for document window size change notifications across all platforms.
-   */
-  export interface resize {
+  export namespace os {
+    /**
+     * If this flag is set to `true`, an Android operating system is used.
+     */
+    export const android: boolean;
+
+    /**
+     * If this flag is set to `true`, a Blackberry operating system is used.
+     */
+    export const blackberry: boolean;
+
+    /**
+     * If this flag is set to `true`, an iOS operating system is used.
+     */
+    export const ios: boolean;
+
+    /**
+     * If this flag is set to `true`, a Linux operating system is used.
+     */
+    export const linux: boolean;
+
+    /**
+     * If this flag is set to `true`, a Mac operating system is used.
+     *
+     * **Note:** An iPad using Safari browser, which is requesting desktop sites, is also recognized as Macintosh.
+     */
+    export const macintosh: boolean;
+
+    /**
+     * The name of the operating system.
+     * See:
+     * 	sap.ui.Device.os.OS
+     */
+    export const name: String;
+
+    /**
+     * The version of the operating system as `float`.
+     *
+     * Might be `-1` if no version can be determined.
+     */
+    export const version: float;
+
+    /**
+     * The version of the operating system as `string`.
+     *
+     * Might be empty if no version can be determined.
+     */
+    export const versionStr: String;
+
+    /**
+     * If this flag is set to `true`, a Windows operating system is used.
+     */
+    export const windows: boolean;
+
+    /**
+     * If this flag is set to `true`, a Windows Phone operating system is used.
+     */
+    export const windows_phone: boolean;
+
+    namespace OS {
+      /**
+       * Android operating system name.
+       * See:
+       * 	sap.ui.Device.os.name
+       */
+      export const ANDROID: undefined;
+
+      /**
+       * Blackberry operating system name.
+       * See:
+       * 	sap.ui.Device.os.name
+       */
+      export const BLACKBERRY: undefined;
+
+      /**
+       * iOS operating system name.
+       * See:
+       * 	sap.ui.Device.os.name
+       */
+      export const IOS: undefined;
+
+      /**
+       * Linux operating system name.
+       * See:
+       * 	sap.ui.Device.os.name
+       */
+      export const LINUX: undefined;
+
+      /**
+       * MAC operating system name.
+       * See:
+       * 	sap.ui.Device.os.name
+       */
+      export const MACINTOSH: undefined;
+
+      /**
+       * Windows operating system name.
+       * See:
+       * 	sap.ui.Device.os.name
+       */
+      export const WINDOWS: undefined;
+
+      /**
+       * Windows Phone operating system name.
+       * See:
+       * 	sap.ui.Device.os.name
+       */
+      export const WINDOWS_PHONE: undefined;
+    }
+  }
+
+  export namespace resize {
     /**
      * The current height of the document's window in pixels.
      */
-    height: int;
+    export const height: int;
 
     /**
      * The current width of the document's window in pixels.
      */
-    width: int;
+    export const width: int;
 
     /**
      * Registers the given event handler to resize change events of the document's window.
@@ -38002,7 +36380,7 @@ declare module "sap/ui/Device" {
      * 	 - `mParams.height`: The height of the document's window in pixels.
      * 	 - `mParams.width`: The width of the document's window in pixels.
      */
-    attachHandler(
+    function attachHandler(
       /**
        * The handler function to call when the event occurs. This function will be called in the context of the
        * `oListener` instance (if present) or on the `window` instance. A map with information about the size
@@ -38020,7 +36398,7 @@ declare module "sap/ui/Device" {
      *
      * The passed parameters must match those used for registration with {@link #.attachHandler} beforehand.
      */
-    detachHandler(
+    function detachHandler(
       /**
        * The handler function to detach from the event
        */
@@ -38031,19 +36409,15 @@ declare module "sap/ui/Device" {
       oListener?: object
     ): void;
   }
-  export const resize: resize;
 
-  /**
-   * Contains information about detected capabilities of the used browser or Device.
-   */
-  export interface support {
+  export namespace support {
     /**
      * If this flag is set to `true`, the used browser natively supports media queries via JavaScript.
      *
      * **Note:** The {@link sap.ui.Device.media media queries API} of the device API can also be used when there
      * is no native support.
      */
-    matchmedia: boolean;
+    export const matchmedia: boolean;
 
     /**
      * If this flag is set to `true`, the used browser natively supports events of media queries via JavaScript.
@@ -38051,7 +36425,7 @@ declare module "sap/ui/Device" {
      * **Note:** The {@link sap.ui.Device.media media queries API} of the device API can also be used when there
      * is no native support.
      */
-    matchmedialistener: boolean;
+    export const matchmedialistener: boolean;
 
     /**
      * If this flag is set to `true`, the used browser natively supports the `orientationchange` event.
@@ -38059,17 +36433,17 @@ declare module "sap/ui/Device" {
      * **Note:** The {@link sap.ui.Device.orientation orientation event} of the device API can also be used
      * when there is no native support.
      */
-    orientation: boolean;
+    export const orientation: boolean;
 
     /**
      * If this flag is set to `true`, the used browser supports pointer events.
      */
-    pointer: boolean;
+    export const pointer: boolean;
 
     /**
      * If this flag is set to `true`, the device has a display with a high resolution.
      */
-    retina: boolean;
+    export const retina: boolean;
 
     /**
      * If this flag is set to `true`, the used browser supports touch events.
@@ -38077,25 +36451,15 @@ declare module "sap/ui/Device" {
      * **Note:** This flag indicates whether the used browser supports touch events or not. This does not necessarily
      * mean that the used device has a touchable screen.
      */
-    touch: boolean;
+    export const touch: boolean;
 
     /**
      * If this flag is set to `true`, the used browser supports web sockets.
      */
-    websocket: boolean;
+    export const websocket: boolean;
   }
-  export const support: support;
 
-  /**
-   * Provides a basic categorization of the used device based on various indicators.
-   *
-   * These indicators are for example the support of touch events, the screen size, the used operation system
-   * or the user agent of the browser.
-   *
-   * **Note:** Depending on the capabilities of the device it is also possible that multiple flags are set
-   * to `true`.
-   */
-  export interface system {
+  export namespace system {
     /**
      * If this flag is set to `true`, the device is recognized as a combination of a desktop system and tablet.
      *
@@ -38105,21 +36469,21 @@ declare module "sap/ui/Device" {
      * touch event may be supported natively by the browser being used. This property is set to `true` only
      * when both mouse and touch event are natively supported.
      */
-    combi: boolean;
+    export const combi: boolean;
 
     /**
      * If this flag is set to `true`, the device is recognized as a desktop system.
      *
      * Furthermore, a CSS class `sap-desktop` is added to the document root element.
      */
-    desktop: boolean;
+    export const desktop: boolean;
 
     /**
      * If this flag is set to `true`, the device is recognized as a phone.
      *
      * Furthermore, a CSS class `sap-phone` is added to the document root element.
      */
-    phone: boolean;
+    export const phone: boolean;
 
     /**
      * If this flag is set to `true`, the device is recognized as a tablet.
@@ -38138,9 +36502,8 @@ declare module "sap/ui/Device" {
      * }
      * ```
      */
-    tablet: boolean;
+    export const tablet: boolean;
   }
-  export const system: system;
 }
 
 declare module "sap/ui/model/analytics/AnalyticalBinding" {
@@ -38727,67 +37090,6 @@ declare module "sap/ui/model/analytics/BatchResponseCollector" {
        */
       oResponse: object
     ): void;
-  }
-}
-
-declare module "sap/ui/model/analytics/odata4analytics/__$Model" {
-  /**
-   * Handle to an already instantiated SAPUI5 OData model.
-   */
-  export class ReferenceByModel {
-    /**
-     * Create a reference to an OData model already loaded elsewhere with the help of SAPUI5.
-     */
-    constructor(
-      /**
-       * holding the OData model.
-       */
-      oModel: object
-    );
-  }
-  /**
-   * Handle to an OData model by the URI pointing to it.
-   */
-  export class ReferenceByURI {
-    /**
-     * Create a reference to an OData model by the URI of the related OData service.
-     */
-    constructor(
-      /**
-       * holding the URI.
-       */
-      sURI: string
-    );
-  }
-  /**
-   * Handle to an already instantiated SAPUI5 OData model.
-   */
-  export class ReferenceWithWorkaround {
-    /**
-     * Create a reference to an OData model having certain workarounds activated. A workaround is an implementation
-     * that changes the standard behavior of the API to overcome some gap or restriction in the OData provider.
-     * The workaround implementation can be conditionally activated by passing the identifier in the constructor.
-     *
-     * Known workaround identifiers are:
-     *
-     *
-     * 	 - "CreateLabelsFromTechnicalNames" - If a property has no label text, it gets generated from the property
-     * 			name.
-     *
-     *
-     * 	 - "IdentifyTextPropertiesByName" -If a dimension property has no text and another property with the
-     * 			same name and an appended "Name", "Text" etc. exists, they are linked via annotation.
-     */
-    constructor(
-      /**
-       * holding a reference to the OData model, obtained by odata4analytics.Model.ReferenceByModel or by sap.odata4analytics.Model.ReferenceByURI.
-       */
-      oModel: object,
-      /**
-       * listing all workarounds to be applied.
-       */
-      aWorkaroundID: string[]
-    );
   }
 }
 
@@ -39401,7 +37703,50 @@ declare module "sap/ui/model/analytics/odata4analytics" {
      */
     isUpdatable(): boolean;
   }
-  export * as Model from "sap/ui/model/analytics/odata4analytics/__$Model";
+  /**
+   * Representation of an OData model with analytical annotations defined by OData4SAP.
+   */
+  export class Model {
+    /**
+     * Create a representation of the analytical semantics of OData service metadata
+     */
+    constructor(
+      /**
+       * An instance of ReferenceByURI, ReferenceByModel or ReferenceWithWorkaround for locating the OData service.
+       */
+      oModelReference: object,
+      /**
+       * Additional parameters for controlling the model construction. Currently supported are:
+       * 	 -  sAnnotationJSONDoc - A JSON document providing extra annotations to the elements of the structure
+       * 			of the given service
+       * 	 -  modelVersion - Parameter to define which ODataModel version should be used, in you use 'odata4analytics.Model.ReferenceByURI':
+       * 			1 (default), 2 see also: AnalyticalVersionInfo constants
+       */
+      mParameter?: object
+    );
+
+    /**
+     * Find analytic query result by name
+     */
+    findQueryResultByName(
+      /**
+       * Fully qualified name of query result entity set
+       */
+      sName: string
+    ): QueryResult;
+    /**
+     * Get the names of all query results (entity sets) offered by the model
+     */
+    getAllQueryResultNames(): string[];
+    /**
+     * Get all query results offered by the model
+     */
+    getAllQueryResults(): object;
+    /**
+     * Get underlying OData model provided by SAPUI5
+     */
+    getODataModel(): object;
+  }
   /**
    * Representation of a property annotated with sap:parameter.
    */
@@ -40210,6 +38555,67 @@ declare module "sap/ui/model/analytics/odata4analytics" {
      * Sort Order: descending.
      */
     Descending = "desc",
+  }
+
+  export namespace Model {
+    /**
+     * Handle to an already instantiated SAPUI5 OData model.
+     */
+    class ReferenceByModel {
+      /**
+       * Create a reference to an OData model already loaded elsewhere with the help of SAPUI5.
+       */
+      constructor(
+        /**
+         * holding the OData model.
+         */
+        oModel: object
+      );
+    }
+    /**
+     * Handle to an OData model by the URI pointing to it.
+     */
+    class ReferenceByURI {
+      /**
+       * Create a reference to an OData model by the URI of the related OData service.
+       */
+      constructor(
+        /**
+         * holding the URI.
+         */
+        sURI: string
+      );
+    }
+    /**
+     * Handle to an already instantiated SAPUI5 OData model.
+     */
+    class ReferenceWithWorkaround {
+      /**
+       * Create a reference to an OData model having certain workarounds activated. A workaround is an implementation
+       * that changes the standard behavior of the API to overcome some gap or restriction in the OData provider.
+       * The workaround implementation can be conditionally activated by passing the identifier in the constructor.
+       *
+       * Known workaround identifiers are:
+       *
+       *
+       * 	 - "CreateLabelsFromTechnicalNames" - If a property has no label text, it gets generated from the property
+       * 			name.
+       *
+       *
+       * 	 - "IdentifyTextPropertiesByName" -If a dimension property has no text and another property with the
+       * 			same name and an appended "Name", "Text" etc. exists, they are linked via annotation.
+       */
+      constructor(
+        /**
+         * holding a reference to the OData model, obtained by odata4analytics.Model.ReferenceByModel or by sap.odata4analytics.Model.ReferenceByURI.
+         */
+        oModel: object,
+        /**
+         * listing all workarounds to be applied.
+         */
+        aWorkaroundID: string[]
+      );
+    }
   }
 }
 
@@ -47265,10 +45671,11 @@ declare module "sap/ui/model/odata/type/Currency" {
    * @SINCE 1.63.0
    *
    * This class represents the `Currency` composite type with the parts amount, currency, and currency customizing.
-   * The amount part is formatted according to the customizing for the currency. Use the result of the promise
-   * returned by {@link sap.ui.model.odata.v4.ODataMetaModel#requestCurrencyCodes} as currency customizing
-   * part. If no currency customizing is available, UI5's default formatting applies. The type may only be
-   * used for amount and currency parts from a {@link sap.ui.model.odata.v4.ODataModel}.
+   * The type may only be used for amount and currency parts from a {@link sap.ui.model.odata.v4.ODataModel}
+   * or a {@link sap.ui.model.odata.v2.ODataModel}. The amount part is formatted according to the customizing
+   * for the currency. Use the result of the promise returned by {@link sap.ui.model.odata.v4.ODataMetaModel#requestCurrencyCodes}
+   * for OData V4 or by {@link sap.ui.model.odata.ODataMetaModel#requestCurrencyCodes} for OData V2 as currency
+   * customizing part. If no currency customizing is available, UI5's default formatting applies.
    */
   export default class Currency extends Currency1 {
     /**
@@ -47294,7 +45701,8 @@ declare module "sap/ui/model/odata/type/Currency" {
          */
         parseAsString?: boolean;
         /**
-         * Whether the amount is parsed if no currency is entered.
+         * Whether the amount is parsed if no currency is entered; defaults to `true` if neither `showMeasure` nor
+         * `showNumber` is set to a falsy value, otherwise defaults to `false`
          */
         unitOptional?: boolean;
         /**
@@ -47303,7 +45711,8 @@ declare module "sap/ui/model/odata/type/Currency" {
          */
         emptyString?: any;
         /**
-         * By default decimals are preserved; since 1.89.0
+         * By default decimals are preserved, unless `oFormatOptions.style` is given as "short" or "long"; since
+         * 1.89.0
          */
         preserveDecimals?: boolean;
       },
@@ -47382,20 +45791,21 @@ declare module "sap/ui/model/odata/type/Currency" {
        */
       sSourceType: string,
       /**
-       * The current values of all binding parts
+       * Not used
        */
-      aCurrentValues: any[]
+      aCurrentValues?: any[]
     ): any[];
     /**
      * @SINCE 1.63.0
      *
-     * Does nothing as the type does not support constraints.
+     * Validates whether the given value in model representation as returned by {@link #parseValue} is valid
+     * and meets the conditions of this type's currency customizing.
      */
     validateValue(
       /**
-       * The value to be validated
+       * An array containing amount and currency in this order, see return value of {@link #parseValue}
        */
-      vValue: string | any[]
+      aValues: any[]
     ): void;
   }
 }
@@ -47893,7 +46303,8 @@ declare module "sap/ui/model/odata/type/Decimal" {
        */
       oFormatOptions?: {
         /**
-         * by default decimals are preserved; since 1.89.0
+         * by default decimals are preserved, unless `oFormatOptions.style` is given as "short" or "long"; since
+         * 1.89.0
          */
         preserveDecimals?: boolean;
       },
@@ -48041,7 +46452,8 @@ declare module "sap/ui/model/odata/type/Double" {
        */
       oFormatOptions?: {
         /**
-         * by default decimals are preserved; since 1.89.0
+         * by default decimals are preserved, unless `oFormatOptions.style` is given as "short" or "long"; since
+         * 1.89.0
          */
         preserveDecimals?: boolean;
       },
@@ -48887,7 +47299,8 @@ declare module "sap/ui/model/odata/type/Single" {
        */
       oFormatOptions?: {
         /**
-         * by default decimals are preserved; since 1.89.0
+         * by default decimals are preserved, unless `oFormatOptions.style` is given as "short" or "long"; since
+         * 1.89.0
          */
         preserveDecimals?: boolean;
       },
@@ -49488,10 +47901,11 @@ declare module "sap/ui/model/odata/type/Unit" {
    * @SINCE 1.63.0
    *
    * This class represents the `Unit` composite type with the parts measure, unit, and unit customizing. The
-   * measure part is formatted according to the customizing for the unit. Use the result of the promise returned
-   * by {@link sap.ui.model.odata.v4.ODataMetaModel#requestUnitsOfMeasure} as unit customizing part. If no
-   * unit customizing is available, UI5's default formatting applies. The type may only be used for measure
-   * and unit parts from a {@link sap.ui.model.odata.v4.ODataModel}.
+   * type may only be used for measure and unit parts from a {@link sap.ui.model.odata.v4.ODataModel} or a
+   * {@link sap.ui.model.odata.v2.ODataModel}. The measure part is formatted according to the customizing
+   * for the unit. Use the result of the promise returned by {@link sap.ui.model.odata.v4.ODataMetaModel#requestUnitsOfMeasure}
+   * for OData V4 or by {@link sap.ui.model.odata.ODataMetaModel#requestUnitsOfMeasure} for OData V2 as unit
+   * customizing part. If no unit customizing is available, UI5's default formatting applies.
    */
   export default class Unit extends Unit1 {
     /**
@@ -49517,11 +47931,13 @@ declare module "sap/ui/model/odata/type/Unit" {
          */
         parseAsString?: boolean;
         /**
-         * By default decimals are preserved; since 1.89.0
+         * By default decimals are preserved, unless `oFormatOptions.style` is given as "short" or "long"; since
+         * 1.89.0
          */
         preserveDecimals?: boolean;
         /**
-         * Whether the quantity is parsed if no unit is entered.
+         * Whether the measure is parsed if no unit is entered; defaults to `true` if neither `showMeasure` nor
+         * `showNumber` is set to a falsy value, otherwise defaults to `false`
          */
         unitOptional?: boolean;
         /**
@@ -49609,20 +48025,21 @@ declare module "sap/ui/model/odata/type/Unit" {
        */
       sSourceType: string,
       /**
-       * The current values of all binding parts
+       * Not used
        */
-      aCurrentValues: any[]
+      aCurrentValues?: any[]
     ): any[];
     /**
      * @SINCE 1.63.0
      *
-     * Does nothing as the type does not support constraints.
+     * Validates whether the given value in model representation as returned by {@link #parseValue} is valid
+     * and meets the conditions of this type's unit customizing.
      */
     validateValue(
       /**
-       * The value to be validated
+       * An array containing measure and unit in this order, see return value of {@link #parseValue}
        */
-      vValue: string | any[]
+      aValues: any[]
     ): void;
   }
 }
@@ -50256,11 +48673,13 @@ declare module "sap/ui/model/odata/v2/ODataContextBinding" {
          */
         custom?: Record<string, string>;
         /**
-         * Whether a preliminary Context will be created
+         * Whether a preliminary context will be created
          */
         createPreliminaryContext?: boolean;
         /**
-         * Whether a preliminary Context will be used
+         * Whether a preliminary context will be used. When set to `true`, the model can bundle the OData calls
+         * for dependent bindings into fewer $batch requests. For more information, see {@link topic:62149734b5c24507868e722fe87a75db
+         * Optimizing Dependent Bindings}
          */
         usePreliminaryContext?: boolean;
       }
@@ -50398,7 +48817,9 @@ declare module "sap/ui/model/odata/v2/ODataListBinding" {
          */
         transitionMessagesOnly?: boolean;
         /**
-         * Whether a preliminary Context will be used
+         * Whether a preliminary context will be used. When set to `true`, the model can bundle the OData calls
+         * for dependent bindings into fewer $batch requests. For more information, see {@link topic:62149734b5c24507868e722fe87a75db
+         * Optimizing Dependent Bindings}
          */
         usePreliminaryContext?: boolean;
       }
@@ -50702,7 +49123,9 @@ declare module "sap/ui/model/odata/v2/ODataModel" {
          */
         persistTechnicalMessages?: boolean;
         /**
-         * Whether a preliminary context will be created/used by a binding
+         * Whether a preliminary context will be created/used by a binding. When set to `true`, the model can bundle
+         * the OData calls for dependent bindings into fewer $batch requests. For more information, see {@link topic:62149734b5c24507868e722fe87a75db
+         * Optimizing Dependent Bindings}
          */
         preliminaryContext?: boolean;
         /**
@@ -51400,7 +49823,9 @@ declare module "sap/ui/model/odata/v2/ODataModel" {
          */
         select?: string;
         /**
-         * Whether a preliminary Context will be created
+         * Whether a preliminary context will be created. When set to `true`, the model can bundle the OData calls
+         * for dependent bindings into fewer $batch requests. For more information, see {@link topic:62149734b5c24507868e722fe87a75db
+         * Optimizing Dependent Bindings}
          */
         preliminaryContext?: boolean;
         /**
@@ -52133,7 +50558,7 @@ declare module "sap/ui/model/odata/v2/ODataModel" {
      * Mark all entries in the model cache as invalid. Next time a context or list is bound (binding), the respective
      * entries will be detected as invalid and will be refreshed from the server.
      *
-     * To refresh all model data use @link sap.ui.model.odata.v2.ODatamModel#refresh
+     * To refresh all model data use {@link sap.ui.model.odata.v2.ODataModel#refresh}
      */
     invalidate(
       /**
@@ -52152,7 +50577,11 @@ declare module "sap/ui/model/odata/v2/ODataModel" {
      */
     invalidateEntityType(
       /**
-       * the qualified name of the entity type
+       * The qualified name of the entity type. A qualified name consists of two parts separated by a dot. The
+       * first part is the namespace of the schema in which the entity type is defined, such as "NorthwindModel".
+       * The second part is the entity type name such as "Customer". This results in a qualified name such as
+       * "NorthwindModel.Customer". The qualified name can be found in the data sent from the server in JSON format
+       * under `__metadata.type` or in XML format in the `term` attribute of the entity's `category` tag.
        */
       sEntityType: string
     ): void;
@@ -54040,7 +52469,6 @@ declare module "sap/ui/model/odata/v4/Context" {
      *
      * Returns a string representation of this object including the binding path.
      */
-    // @ts-ignore
     toString(): string;
   }
 }
@@ -54215,7 +52643,12 @@ declare module "sap/ui/model/odata/v4/ODataContextBinding" {
        * group ID, see {@link #getUpdateGroupId}, it needs to be specified explicitly. Valid values are `undefined`,
        * '$auto', '$auto.*', '$direct' or application group IDs as specified in {@link sap.ui.model.odata.v4.ODataModel}.
        */
-      sGroupId?: string
+      sGroupId?: string,
+      /**
+       * Whether the entity's ETag should be actively ignored (If-Match:*); supported for bound actions only,
+       * since 1.90.0
+       */
+      bIgnoreETag?: boolean
     ): Promise<any>;
     /**
      * Creates a new subclass of class sap.ui.model.odata.v4.ODataContextBinding with name `sClassName` and
@@ -54703,6 +53136,7 @@ declare module "sap/ui/model/odata/v4/ODataListBinding" {
      * be set on each filter, it is not inherited from a multi-filter.
      * See:
      * 	sap.ui.model.ListBinding#filter
+     * 	#setAggregation
      */
     filter(
       /**
@@ -55013,20 +53447,25 @@ declare module "sap/ui/model/odata/v4/ODataListBinding" {
        * An object holding the information needed for data aggregation; see also OData
        * Extension for Data Aggregation Version 4.0. Since 1.76.0, `undefined` can be used to remove the data
        * aggregation object, which allows to set `$apply` explicitly afterwards. `null` is not supported.
+       *  Since 1.89.0, the deprecated property `"grandTotal like 1.84" : true` can be used to turn on the handling
+       * of grand totals like in 1.84.0, using aggregates of aggregates and thus allowing to filter by aggregated
+       * properties while grand totals are needed. Beware that methods like "average" or "countdistinct" are not
+       * compatible with this approach, and it cannot be combined with group levels.
        */
       oAggregation?: {
         /**
          * A map from aggregatable property names or aliases to objects containing the following details:
          * 	 `grandTotal`: An optional boolean that tells whether a grand total for this aggregatable property is
-         * needed (since 1.59.0)  `subtotals`: An optional boolean that tells whether subtotals for this aggregatable
-         * property are needed  `with`: An optional string that provides the name of the method (for example
-         * "sum") used for aggregation of this aggregatable property; see "3.1.2 Keyword with".  `name`: An
-         * optional string that provides the original aggregatable property name in case a different alias is chosen
-         * as the name of the dynamic property used for aggregation of this aggregatable property; see "3.1.1 Keyword
-         * as"  `unit`: An optional string that provides the name of the custom aggregate for a currency or
-         * unit of measure corresponding to this aggregatable property (since 1.86.0). The custom aggregate must
-         * return the single value of that unit in case there is only one, or `null` otherwise ("multi-unit situation").
-         * (SQL suggestion: `CASE WHEN min(Unit) = max(Unit) THEN min(Unit) END`)
+         * needed (since 1.59.0); filtering by any aggregatable property is not supported in this case (since 1.89.0)
+         *  `subtotals`: An optional boolean that tells whether subtotals for this aggregatable property are
+         * needed  `with`: An optional string that provides the name of the method (for example "sum") used
+         * for aggregation of this aggregatable property; see "3.1.2 Keyword with".  `name`: An optional string
+         * that provides the original aggregatable property name in case a different alias is chosen as the name
+         * of the dynamic property used for aggregation of this aggregatable property; see "3.1.1 Keyword as"
+         * `unit`: An optional string that provides the name of the custom aggregate for a currency or unit of measure
+         * corresponding to this aggregatable property (since 1.86.0). The custom aggregate must return the single
+         * value of that unit in case there is only one, or `null` otherwise ("multi-unit situation"). (SQL suggestion:
+         * `CASE WHEN MIN(Unit) = MAX(Unit) THEN MIN(Unit) END`)
          */
         aggregate?: object;
         /**
@@ -55794,7 +54233,6 @@ declare module "sap/ui/model/odata/v4/ODataMetaModel" {
      *
      * Returns a string representation of this object including the URL to the $metadata document of the service.
      */
-    // @ts-ignore
     toString(): string;
   }
 }
@@ -56542,7 +54980,6 @@ declare module "sap/ui/model/odata/v4/ODataModel" {
      *
      * Returns a string representation of this object including the service URL.
      */
-    // @ts-ignore
     toString(): string;
   }
 }
@@ -56860,7 +55297,7 @@ declare module "sap/ui/model/odata/v4/ODataUtils" {
        */
       vValue: any,
       /**
-       * The OData primitive type, e.g. "Edm.String"
+       * The OData primitive type, for example "Edm.String"
        */
       sType: string
     ): string;
@@ -58370,7 +56807,6 @@ declare module "sap/ui/model/Type" {
     /**
      * Returns a simple string representation of this type. Mainly useful for tracing purposes.
      */
-    // @ts-ignore
     toString(): string;
   }
 }
@@ -58457,7 +56893,8 @@ declare module "sap/ui/model/type/Currency" {
        */
       oFormatOptions?: {
         /**
-         * By default decimals are preserved; since 1.89.0
+         * By default decimals are preserved, unless `oFormatOptions.style` is given as "short" or "long"; since
+         * 1.89.0
          */
         preserveDecimals?: boolean;
         /**
@@ -58551,9 +56988,9 @@ declare module "sap/ui/model/type/Currency" {
        */
       sSourceType: string,
       /**
-       * The current values of all binding parts
+       * Not used
        */
-      aCurrentValues: Array<any>
+      aCurrentValues?: Array<any>
     ): any[] | string;
   }
 }
@@ -58972,7 +57409,8 @@ declare module "sap/ui/model/type/Float" {
        */
       oFormatOptions?: {
         /**
-         * By default decimals are preserved; since 1.89.0
+         * By default decimals are preserved, unless `oFormatOptions.style` is given as "short" or "long"; since
+         * 1.89.0
          */
         preserveDecimals?: boolean;
         /**
@@ -59386,7 +57824,8 @@ declare module "sap/ui/model/type/Unit" {
        */
       oFormatOptions?: {
         /**
-         * By default decimals are preserved; since 1.89.0
+         * By default decimals are preserved, unless `oFormatOptions.style` is given as "short" or "long"; since
+         * 1.89.0
          */
         preserveDecimals?: boolean;
         /**
@@ -59490,9 +57929,9 @@ declare module "sap/ui/model/type/Unit" {
        */
       sInternalType: string,
       /**
-       * the current values of all binding parts
+       * Not used
        */
-      aCurrentValues: Array<any>
+      aCurrentValues?: Array<any>
     ): any[] | string;
   }
 }
@@ -62470,7 +60909,7 @@ declare module "sap/ui/test/Opa5" {
      * Returns the QUnit utils object in the current context. If an iframe is launched, it will return the iframe's
      * QUnit utils.
      */
-    static getUtils(): any;
+    static getUtils(): /* was: sap.ui.test.qunit */ any;
     /**
      * Returns the window object in the current context. If an iframe is launched, it will return the iframe's
      * window.
@@ -64154,7 +62593,7 @@ declare module "sap/ui/test/OpaPlugin" {
       sControlType?: string
     ): Array<any>;
     /**
-     * Find a control by its global ID
+     * Find a control by its global ID.
      */
     getControlByGlobalId(
       /**
@@ -64657,8 +63096,9 @@ declare namespace sap {
           }
     ): import("sap/ui/core/Component").default | Promise<any>;
     /**
-     * @deprecated (since 1.56) - use {@link sap.ui.core.mvc.Controller.create Controller.create} or {@link
-     * sap.ui.core.mvc.Controller.extend Controller.extend} instead.
+     * @deprecated (since 1.56) - use {@link sap.ui.core.mvc.Controller.extend Controller.extend} to define
+     * the controller class and {@link sap.ui.core.mvc.Controller.create Controller.create} to create controller
+     * instances. For further information, see {@link sap.ui.core.mvc.Controller}.
      *
      * Defines a controller class or creates an instance of an already defined controller class.
      *
@@ -65119,7 +63559,8 @@ declare namespace sap {
       | import("sap/ui/core/Control").default
       | import("sap/ui/core/Control").default[];
     /**
-     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.HTMLView.create HTMLView.create} instead
+     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.HTMLView.create HTMLView.create} to create view
+     * instances
      *
      * Defines or creates an instance of a declarative HTML view.
      *
@@ -65147,7 +63588,7 @@ declare namespace sap {
         | string
         | {
             /**
-             * defines how the view source is loaded and rendered later on
+             * whether the view source is loaded asynchronously
              */
             async?: boolean;
           }
@@ -65222,7 +63663,8 @@ declare namespace sap {
       | import("sap/ui/core/Control").default
       | import("sap/ui/core/Control").default[];
     /**
-     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.JSONView.create JSONView.create} instead.
+     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.JSONView.create JSONView.create} to create view
+     * instances
      *
      * Creates a JSON view of the given name and id.
      *
@@ -65274,8 +63716,8 @@ declare namespace sap {
           }
     ): import("sap/ui/core/mvc/JSONView").default;
     /**
-     * @deprecated (since 1.56) - use {@link sap.ui.core.mvc.JSView.create JSView.create} to create view instances;
-     * for defining JavaScript views, there's no substitute yet and ***sap.ui.jsview*** still has to be used
+     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.View.extend View.extend} to define the view class
+     * and {@link sap.ui.core.mvc.View.create View.create} to create view instances
      *
      * Defines or creates an instance of a JavaScript view.
      *
@@ -65307,10 +63749,6 @@ declare namespace sap {
      * When `bAsync` has a truthy value, the view definition will be read asynchronously, if needed, but the
      * (incomplete) view instance will be returned immediately.
      *
-     * **Note:** Using `sap.ui.jsview` for creating view instances has been deprecated, use {@link sap.ui.core.mvc.JSView.create
-     * JSView.create} instead. `JSView.create` enforces asynchronous loading and can be used via an AMD reference,
-     * it doesn't rely on a global name.
-     *
      * **Note:** Any other call signature will lead to a runtime error.
      */
     function jsview(
@@ -65323,8 +63761,7 @@ declare namespace sap {
        */
       vView: string | object,
       /**
-       * Defines how the view source is loaded and rendered later on (only relevant for instantiation, ignored
-       * for everything else)
+       * whether the view source is loaded asynchronously
        */
       bAsync?: boolean
     ): import("sap/ui/core/mvc/JSView").default | undefined;
@@ -65664,7 +64101,8 @@ declare namespace sap {
       vView: string | object
     ): import("sap/ui/core/mvc/TemplateView").default | undefined;
     /**
-     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.View.create View.create} instead
+     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.View.extend View.extend} to define the view class
+     * and {@link sap.ui.core.mvc.View.create View.create} to create view instances
      *
      * Creates a view of the given type, name and with the given ID.
      *
@@ -65711,7 +64149,7 @@ declare namespace sap {
         | string
         | {
             /**
-             * defines how the view source is loaded and rendered later on
+             * whether the view source is loaded asynchronously
              */
             async?: boolean;
           },
@@ -65786,7 +64224,7 @@ declare namespace sap {
       | import("sap/ui/core/Control").default
       | import("sap/ui/core/Control").default[];
     /**
-     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.XMLView.create XMLView.create} instead
+     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.XMLView.create XMLView.create} to create view instances
      *
      * Instantiates an XMLView of the given name and with the given ID.
      *
@@ -65840,7 +64278,7 @@ declare namespace sap {
              */
             viewContent?: string | Document;
             /**
-             * Defines how the view source is loaded and rendered later on
+             * whether the view source is loaded asynchronously
              */
             async?: boolean;
             /**
@@ -66649,7 +65087,8 @@ declare namespace sap {
       | import("sap/ui/core/Control").default
       | import("sap/ui/core/Control").default[];
     /**
-     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.HTMLView.create HTMLView.create} instead
+     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.HTMLView.create HTMLView.create} to create view
+     * instances
      *
      * Defines or creates an instance of a declarative HTML view.
      *
@@ -66673,13 +65112,14 @@ declare namespace sap {
         | string
         | {
             /**
-             * defines how the view source is loaded and rendered later on
+             * whether the view source is loaded asynchronously
              */
             async?: boolean;
           }
     ): import("sap/ui/core/mvc/HTMLView").default | undefined;
     /**
-     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.JSONView.create JSONView.create} instead.
+     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.JSONView.create JSONView.create} to create view
+     * instances
      *
      * Creates a JSON view of the given name and id.
      *
@@ -66727,8 +65167,8 @@ declare namespace sap {
           }
     ): import("sap/ui/core/mvc/JSONView").default;
     /**
-     * @deprecated (since 1.56) - use {@link sap.ui.core.mvc.JSView.create JSView.create} to create view instances;
-     * for defining JavaScript views, there's no substitute yet and ***sap.ui.jsview*** still has to be used
+     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.View.extend View.extend} to define the view class
+     * and {@link sap.ui.core.mvc.View.create View.create} to create view instances
      *
      * Defines or creates an instance of a JavaScript view.
      *
@@ -66760,10 +65200,6 @@ declare namespace sap {
      * When `bAsync` has a truthy value, the view definition will be read asynchronously, if needed, but the
      * (incomplete) view instance will be returned immediately.
      *
-     * **Note:** Using `sap.ui.jsview` for creating view instances has been deprecated, use {@link sap.ui.core.mvc.JSView.create
-     * JSView.create} instead. `JSView.create` enforces asynchronous loading and can be used via an AMD reference,
-     * it doesn't rely on a global name.
-     *
      * **Note:** Any other call signature will lead to a runtime error.
      */
     function jsview(
@@ -66772,8 +65208,7 @@ declare namespace sap {
        */
       vView: string | object,
       /**
-       * Defines how the view source is loaded and rendered later on (only relevant for instantiation, ignored
-       * for everything else)
+       * whether the view source is loaded asynchronously
        */
       bAsync?: boolean
     ): import("sap/ui/core/mvc/JSView").default | undefined;
@@ -66802,7 +65237,8 @@ declare namespace sap {
       vView: string | object
     ): import("sap/ui/core/mvc/TemplateView").default | undefined;
     /**
-     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.View.create View.create} instead
+     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.View.extend View.extend} to define the view class
+     * and {@link sap.ui.core.mvc.View.create View.create} to create view instances
      *
      * Creates a view of the given type, name and with the given ID.
      *
@@ -66909,7 +65345,7 @@ declare namespace sap {
       | import("sap/ui/core/Control").default
       | import("sap/ui/core/Control").default[];
     /**
-     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.XMLView.create XMLView.create} instead
+     * @deprecated (since 1.56) - Use {@link sap.ui.core.mvc.XMLView.create XMLView.create} to create view instances
      *
      * Instantiates an XMLView of the given name and with the given ID.
      *
@@ -66959,7 +65395,7 @@ declare namespace sap {
              */
             viewContent?: string | Document;
             /**
-             * Defines how the view source is loaded and rendered later on
+             * whether the view source is loaded asynchronously
              */
             async?: boolean;
             /**
@@ -66982,6 +65418,60 @@ declare namespace sap {
             controller?: import("sap/ui/core/mvc/Controller").default;
           }
     ): import("sap/ui/core/mvc/XMLView").default;
+    /**
+     * The SAPUI5 Core Runtime.
+     *
+     * Contains the UI5 jQuery plugins (jQuery.sap.*), the Core and all its components, base classes for Controls,
+     * Components and the Model View Controller classes.
+     */
+    namespace core {
+      /**
+       * Applies the support for custom style classes on the prototype of a `sap.ui.core.Element`.
+       *
+       * All controls (subclasses of `sap.ui.core.Control`) provide the support custom style classes. The control
+       * API provides functions to the application which allow it to add, remove or change style classes for the
+       * control. In general, this option is not available for elements because elements do not necessarily have
+       * a representation in the DOM.
+       *
+       * This function can be used by a control developer to explicitly enrich the API of his/her element implementation
+       * with the API functions for the custom style class support. It must be called on the prototype of the
+       * element.
+       *
+       * **Usage Example:**
+       * ```javascript
+       *
+       * sap.ui.define(['sap/ui/core/Element', 'sap/ui/core/CustomStyleClassSupport'], function(Element, CustomStyleClassSupport) {
+       *    "use strict";
+       *    var MyElement = Element.extend("my.MyElement", {
+       *       metadata : {
+       *          //...
+       *       }
+       *       //...
+       *    });
+       *
+       *    CustomStyleClassSupport.apply(MyElement.prototype);
+       *
+       *    return MyElement;
+       * }, true);
+       * ```
+       *
+       *
+       * Furthermore, the function `oRenderManager.writeClasses(oElement);` ({@link sap.ui.core.RenderManager#writeClasses})
+       * must be called within the renderer of the control to which the element belongs, when writing the root
+       * tag of the element. This ensures the classes are written to the HTML.
+       *
+       * This function adds the following functions to the elements prototype:
+       * 	 - `addStyleClass`: {@link sap.ui.core.Control#addStyleClass}
+       * 	 - `removeStyleClass`: {@link sap.ui.core.Control#removeStyleClass}
+       * 	 - `toggleStyleClass`: {@link sap.ui.core.Control#toggleStyleClass}
+       * 	 - `hasStyleClass`: {@link sap.ui.core.Control#hasStyleClass}  In addition the clone function of
+       * 			the element is extended to ensure that the custom style classes are also available on the cloned element.
+       *
+       * **Note:** This function can only be used within control development. An application cannot add
+       * style class support on existing elements by calling this function.
+       */
+      function CustomStyleClassSupport(): void;
+    }
     /**
      * Provides access to UI5 loader configuration.
      *
@@ -67312,6 +65802,750 @@ declare namespace sap {
         sName: string
       ): string;
     }
+
+    namespace Device {
+      /**
+       * Contains information about the used browser.
+       */
+      namespace browser {
+        /**
+         * @SINCE 1.56.0
+         *
+         * If this flag is set to `true`, a browser featuring a Blink rendering engine is used.
+         */
+        export const blink: boolean;
+
+        /**
+         * If this flag is set to `true`, a browser that is based on the Chromium browser project is used, such
+         * as the Google Chrome browser or the Microsoft Edge (Chromium) browser.
+         */
+        export const chrome: boolean;
+
+        /**
+         * If this flag is set to `true`, the Mozilla Firefox browser is used.
+         */
+        export const firefox: boolean;
+
+        /**
+         * @SINCE 1.31.0
+         *
+         * If this flag is set to `true`, the Safari browser runs in standalone fullscreen mode on iOS.
+         *
+         * **Note:** This flag is only available if the Safari browser was detected. Furthermore, if this mode is
+         * detected, technically not a standard Safari is used. There might be slight differences in behavior and
+         * detection, e.g. the availability of {@link sap.ui.Device.browser.version}.
+         */
+        export const fullscreen: boolean;
+
+        /**
+         * If this flag is set to `true`, the mobile variant of the browser is used or a tablet or phone device
+         * is detected.
+         *
+         * **Note:** This information might not be available for all browsers.
+         */
+        export const mobile: boolean;
+
+        /**
+         * @SINCE 1.20.0
+         *
+         * If this flag is set to `true`, a browser featuring a Mozilla engine is used.
+         */
+        export const mozilla: boolean;
+
+        /**
+         * The name of the browser.
+         * See:
+         * 	sap.ui.Device.browser.BROWSER
+         */
+        export const name: String;
+
+        /**
+         * If this flag is set to `true`, the Apple Safari browser is used.
+         *
+         * **Note:** This flag is also `true` when the standalone (fullscreen) mode or webview is used on iOS devices.
+         * Please also note the flags {@link sap.ui.Device.browser.fullscreen} and {@link sap.ui.Device.browser.webview}.
+         */
+        export const safari: boolean;
+
+        /**
+         * The version of the browser as `float`.
+         *
+         * Might be `-1` if no version can be determined.
+         */
+        export const version: float;
+
+        /**
+         * The version of the browser as `string`.
+         *
+         * Might be empty if no version can be determined.
+         */
+        export const versionStr: String;
+
+        /**
+         * @SINCE 1.20.0
+         *
+         * If this flag is set to `true`, a browser featuring a Webkit engine is used.
+         *
+         * **Note:** This flag is also `true` when the used browser was based on the Webkit engine, but uses another
+         * rendering engine in the meantime. For example the Chrome browser started from version 28 and above uses
+         * the Blink rendering engine.
+         */
+        export const webkit: boolean;
+
+        /**
+         * @SINCE 1.31.0
+         *
+         * If this flag is set to `true`, the Safari browser runs in webview mode on iOS.
+         *
+         * **Note:** This flag is only available if the Safari browser was detected. Furthermore, if this mode is
+         * detected, technically not a standard Safari is used. There might be slight differences in behavior and
+         * detection, e.g. the availability of {@link sap.ui.Device.browser.version}.
+         */
+        export const webview: boolean;
+
+        /**
+         * Enumeration containing the names of known browsers.
+         */
+        namespace BROWSER {
+          /**
+           * Android stock browser name.
+           * See:
+           * 	sap.ui.Device.browser.name
+           */
+          export const ANDROID: undefined;
+
+          /**
+           * Chrome browser name, used for Google Chrome browser and Microsoft Edge (Chromium) browser.
+           * See:
+           * 	sap.ui.Device.browser.name
+           */
+          export const CHROME: undefined;
+
+          /**
+           * Firefox browser name.
+           * See:
+           * 	sap.ui.Device.browser.name
+           */
+          export const FIREFOX: undefined;
+
+          /**
+           * Safari browser name.
+           * See:
+           * 	sap.ui.Device.browser.name
+           */
+          export const SAFARI: undefined;
+        }
+      }
+      /**
+       * Event API for screen width changes.
+       *
+       * This API is based on media queries but can also be used if media queries are not natively supported by
+       * the used browser. In this case, the behavior of media queries is simulated by this API.
+       *
+       * There are several predefined {@link sap.ui.Device.media.RANGESETS range sets} available. Each of them
+       * defines a set of intervals for the screen width (from small to large). Whenever the screen width changes
+       * and the current screen width is in a different interval to the one before the change, the registered
+       * event handlers for the range set are called.
+       *
+       * If needed, it is also possible to define a custom set of intervals.
+       *
+       * The following example shows a typical use case:
+       * ```javascript
+       *
+       * function sizeChanged(mParams) {
+       *     switch(mParams.name) {
+       *         case "Phone":
+       *             // Do what is needed for a little screen
+       *             break;
+       *         case "Tablet":
+       *             // Do what is needed for a medium sized screen
+       *             break;
+       *         case "Desktop":
+       *             // Do what is needed for a large screen
+       *     }
+       * }
+       *
+       * // Register an event handler to changes of the screen size
+       * sap.ui.Device.media.attachHandler(sizeChanged, null, sap.ui.Device.media.RANGESETS.SAP_STANDARD);
+       * // Do some initialization work based on the current size
+       * sizeChanged(sap.ui.Device.media.getCurrentRange(sap.ui.Device.media.RANGESETS.SAP_STANDARD));
+       * ```
+       */
+      namespace media {
+        /**
+         * Registers the given event handler to change events of the screen width based on the range set with the
+         * specified name.
+         *
+         * The event is fired whenever the screen width changes and the current screen width is in a different interval
+         * of the given range set than before the width change.
+         *
+         * The event handler is called with a single argument: a map `mParams` which provides the following information
+         * about the entered interval:
+         * 	 - `mParams.from`: The start value (inclusive) of the entered interval as a number
+         * 	 - `mParams.to`: The end value (exclusive) range of the entered interval as a number or undefined for
+         * 			the last interval (infinity)
+         * 	 - `mParams.unit`: The unit used for the values above, e.g. `"px"`
+         * 	 - `mParams.name`: The name of the entered interval, if available
+         */
+        function attachHandler(
+          /**
+           * The handler function to call when the event occurs. This function will be called in the context of the
+           * `oListener` instance (if present) or on the `window` instance. A map with information about the entered
+           * range set is provided as a single argument to the handler (see details above).
+           */
+          fnFunction: Function,
+          /**
+           * The object that wants to be notified when the event occurs (`this` context within the handler function).
+           * If it is not specified, the handler function is called in the context of the `window`.
+           */
+          oListener?: object,
+          /**
+           * The name of the range set to listen to. The range set must be initialized beforehand ({@link sap.ui.Device.media.initRangeSet}).
+           * If no name is provided, the {@link sap.ui.Device.media.RANGESETS.SAP_STANDARD default range set} is used.
+           */
+          sName?: string
+        ): void;
+        /**
+         * Removes a previously attached event handler from the change events of the screen width.
+         *
+         * The passed parameters must match those used for registration with {@link #.attachHandler} beforehand.
+         */
+        function detachHandler(
+          /**
+           * The handler function to detach from the event
+           */
+          fnFunction: Function,
+          /**
+           * The object that wanted to be notified when the event occurred
+           */
+          oListener?: object,
+          /**
+           * The name of the range set to listen to. If no name is provided, the {@link sap.ui.Device.media.RANGESETS.SAP_STANDARD
+           * default range set} is used.
+           */
+          sName?: string
+        ): void;
+        /**
+         * Returns information about the current active range of the range set with the given name.
+         *
+         * If the optional parameter `iWidth` is given, the active range will be determined for that width, otherwise
+         * it is determined for the current window size.
+         */
+        function getCurrentRange(
+          /**
+           * The name of the range set. The range set must be initialized beforehand ({@link sap.ui.Device.media.initRangeSet})
+           */
+          sName: string,
+          /**
+           * An optional width, based on which the range should be determined; If `iWidth` is not a number, the window
+           * size will be used.
+           */
+          iWidth?: int
+        ): object;
+        /**
+         * Returns `true` if a range set with the given name is already initialized.
+         */
+        function hasRangeSet(
+          /**
+           * The name of the range set.
+           */
+          sName: string
+        ): boolean;
+        /**
+         * Initializes a screen width media query range set.
+         *
+         * This initialization step makes the range set ready to be used for one of the other functions in namespace
+         * `sap.ui.Device.media`. The most important {@link sap.ui.Device.media.RANGESETS predefined range sets}
+         * are initialized automatically.
+         *
+         * To make a not yet initialized {@link sap.ui.Device.media.RANGESETS predefined range set} ready to be
+         * used, call this function with the name of the range set to be initialized:
+         * ```javascript
+         *
+         * sap.ui.Device.media.initRangeSet(sap.ui.Device.media.RANGESETS.SAP_3STEPS);
+         * ```
+         *
+         *
+         * Alternatively it is possible to define custom range sets as shown in the following example:
+         * ```javascript
+         *
+         * sap.ui.Device.media.initRangeSet("MyRangeSet", [200, 400], "px", ["Small", "Medium", "Large"]);
+         * ```
+         *  This example defines the following named ranges:
+         * 	 - `"Small"`: For screens smaller than 200 pixels.
+         * 	 - `"Medium"`: For screens greater than or equal to 200 pixels and smaller than 400 pixels.
+         * 	 - `"Large"`: For screens greater than or equal to 400 pixels.  The range names are optional. If
+         * 			they are specified a CSS class (e.g. `sapUiMedia-MyRangeSet-Small`) is also added to the document root
+         * 			depending on the current active range. This can be suppressed via parameter `bSuppressClasses`.
+         */
+        function initRangeSet(
+          /**
+           * The name of the range set to be initialized - either a {@link sap.ui.Device.media.RANGESETS predefined}
+           * or custom one. The name must be a valid id and consist only of letters and numeric digits.
+           */
+          sName: string,
+          /**
+           * The range borders
+           */
+          aRangeBorders?: int[],
+          /**
+           * The unit which should be used for the values given in `aRangeBorders`. The allowed values are `"px"`
+           * (default), `"em"` or `"rem"`
+           */
+          sUnit?: string,
+          /**
+           * The names of the ranges. The names must be a valid id and consist only of letters and digits. If names
+           * are specified, CSS classes are also added to the document root as described above. This behavior can
+           * be switched off explicitly by using `bSuppressClasses`. **Note:** `aRangeBorders` with `n` entries define
+           * `n+1` ranges. Therefore `n+1` names must be provided.
+           */
+          aRangeNames?: string[],
+          /**
+           * Whether or not writing of CSS classes to the document root should be suppressed when `aRangeNames` are
+           * provided
+           */
+          bSuppressClasses?: boolean
+        ): void;
+        /**
+         * Removes a previously initialized range set and detaches all registered handlers.
+         *
+         * Only custom range sets can be removed via this function. Initialized predefined range sets ({@link sap.ui.Device.media.RANGESETS})
+         * cannot be removed.
+         */
+        function removeRangeSet(
+          /**
+           * The name of the range set which should be removed.
+           */
+          sName: string
+        ): void;
+        /**
+         * Enumeration containing the names and settings of predefined screen width media query range sets.
+         */
+        namespace RANGESETS {
+          /**
+           * A 3-step range set (S-L).
+           *
+           * The ranges of this set are:
+           * 	 - `"S"`: For screens smaller than 520 pixels.
+           * 	 - `"M"`: For screens greater than or equal to 520 pixels and smaller than 960 pixels.
+           * 	 - `"L"`: For screens greater than or equal to 960 pixels.
+           *
+           * To use this range set, you must initialize it explicitly ({@link sap.ui.Device.media.initRangeSet}).
+           *
+           * If this range set is initialized, a CSS class is added to the page root (`html` tag) which indicates
+           * the current screen width range: `sapUiMedia-3Step-NAME_OF_THE_INTERVAL`.
+           */
+          export const SAP_3STEPS: undefined;
+
+          /**
+           * A 4-step range set (S-XL).
+           *
+           * The ranges of this set are:
+           * 	 - `"S"`: For screens smaller than 520 pixels.
+           * 	 - `"M"`: For screens greater than or equal to 520 pixels and smaller than 760 pixels.
+           * 	 - `"L"`: For screens greater than or equal to 760 pixels and smaller than 960 pixels.
+           * 	 - `"XL"`: For screens greater than or equal to 960 pixels.
+           *
+           * To use this range set, you must initialize it explicitly ({@link sap.ui.Device.media.initRangeSet}).
+           *
+           * If this range set is initialized, a CSS class is added to the page root (`html` tag) which indicates
+           * the current screen width range: `sapUiMedia-4Step-NAME_OF_THE_INTERVAL`.
+           */
+          export const SAP_4STEPS: undefined;
+
+          /**
+           * A 6-step range set (XS-XXL).
+           *
+           * The ranges of this set are:
+           * 	 - `"XS"`: For screens smaller than 241 pixels.
+           * 	 - `"S"`: For screens greater than or equal to 241 pixels and smaller than 400 pixels.
+           * 	 - `"M"`: For screens greater than or equal to 400 pixels and smaller than 541 pixels.
+           * 	 - `"L"`: For screens greater than or equal to 541 pixels and smaller than 768 pixels.
+           * 	 - `"XL"`: For screens greater than or equal to 768 pixels and smaller than 960 pixels.
+           * 	 - `"XXL"`: For screens greater than or equal to 960 pixels.
+           *
+           * To use this range set, you must initialize it explicitly ({@link sap.ui.Device.media.initRangeSet}).
+           *
+           * If this range set is initialized, a CSS class is added to the page root (`html` tag) which indicates
+           * the current screen width range: `sapUiMedia-6Step-NAME_OF_THE_INTERVAL`.
+           */
+          export const SAP_6STEPS: undefined;
+
+          /**
+           * A 3-step range set (Phone, Tablet, Desktop).
+           *
+           * The ranges of this set are:
+           * 	 - `"Phone"`: For screens smaller than 600 pixels.
+           * 	 - `"Tablet"`: For screens greater than or equal to 600 pixels and smaller than 1024 pixels.
+           * 	 - `"Desktop"`: For screens greater than or equal to 1024 pixels.
+           *
+           * This range set is initialized by default. An initialization via {@link sap.ui.Device.media.initRangeSet}
+           * is not needed.
+           *
+           * A CSS class is added to the page root (`html` tag) which indicates the current screen width range: `sapUiMedia-Std-NAME_OF_THE_INTERVAL`.
+           * Furthermore there are 5 additional CSS classes to hide elements based on the width of the screen:
+           *
+           * 	 - `sapUiHideOnPhone`: Will be hidden if the screen has 600px or less
+           * 	 - `sapUiHideOnTablet`: Will be hidden if the screen has more than 600px and less than 1023px
+           * 	 - `sapUiHideOnDesktop`: Will be hidden if the screen is larger than 1024px
+           * 	 - `sapUiVisibleOnlyOnPhone`: Will be visible only if the screen has less than 600px
+           * 	 - `sapUiVisibleOnlyOnTablet`: Will be visible only if the screen has 600px or more but less than 1024px
+           *
+           * 	 - `sapUiVisibleOnlyOnDesktop`: Will be visible only if the screen has 1024px or more
+           */
+          export const SAP_STANDARD: undefined;
+
+          /**
+           * A 4-step range set (Phone, Tablet, Desktop, LargeDesktop).
+           *
+           * The ranges of this set are:
+           * 	 - `"Phone"`: For screens smaller than 600 pixels.
+           * 	 - `"Tablet"`: For screens greater than or equal to 600 pixels and smaller than 1024 pixels.
+           * 	 - `"Desktop"`: For screens greater than or equal to 1024 pixels and smaller than 1440 pixels.
+           * 	 - `"LargeDesktop"`: For screens greater than or equal to 1440 pixels.
+           *
+           * This range set is initialized by default. An initialization via {@link sap.ui.Device.media.initRangeSet}
+           * is not needed.
+           *
+           * A CSS class is added to the page root (`html` tag) which indicates the current screen width range: `sapUiMedia-StdExt-NAME_OF_THE_INTERVAL`.
+           */
+          export const SAP_STANDARD_EXTENDED: undefined;
+        }
+      }
+      /**
+       * Common API for orientation change notifications across all platforms.
+       *
+       * For browsers or devices that do not provide native support for orientation change events the API simulates
+       * them based on the ratio of the document's width and height.
+       */
+      namespace orientation {
+        /**
+         * If this flag is set to `true`, the screen is currently in landscape mode (the width is greater than the
+         * height).
+         */
+        export const landscape: boolean;
+
+        /**
+         * If this flag is set to `true`, the screen is currently in portrait mode (the height is greater than the
+         * width).
+         */
+        export const portrait: boolean;
+
+        /**
+         * Registers the given event handler to orientation change events of the document's window.
+         *
+         * The event is fired whenever the screen orientation changes and the width of the document's window becomes
+         * greater than its height or the other way round.
+         *
+         * The event handler is called with a single argument: a map `mParams` which provides the following information:
+         *
+         * 	 - `mParams.landscape`: If this flag is set to `true`, the screen is currently in landscape mode, otherwise
+         * 			in portrait mode.
+         */
+        function attachHandler(
+          /**
+           * The handler function to call when the event occurs. This function will be called in the context of the
+           * `oListener` instance (if present) or on the `window` instance. A map with information about the orientation
+           * is provided as a single argument to the handler (see details above).
+           */
+          fnFunction: Function,
+          /**
+           * The object that wants to be notified when the event occurs (`this` context within the handler function).
+           * If it is not specified, the handler function is called in the context of the `window`.
+           */
+          oListener?: object
+        ): void;
+        /**
+         * Removes a previously attached event handler from the orientation change events.
+         *
+         * The passed parameters must match those used for registration with {@link #.attachHandler} beforehand.
+         */
+        function detachHandler(
+          /**
+           * The handler function to detach from the event
+           */
+          fnFunction: Function,
+          /**
+           * The object that wanted to be notified when the event occurred
+           */
+          oListener?: object
+        ): void;
+      }
+      /**
+       * Contains information about the operating system of the Device.
+       */
+      namespace os {
+        /**
+         * If this flag is set to `true`, an Android operating system is used.
+         */
+        export const android: boolean;
+
+        /**
+         * If this flag is set to `true`, a Blackberry operating system is used.
+         */
+        export const blackberry: boolean;
+
+        /**
+         * If this flag is set to `true`, an iOS operating system is used.
+         */
+        export const ios: boolean;
+
+        /**
+         * If this flag is set to `true`, a Linux operating system is used.
+         */
+        export const linux: boolean;
+
+        /**
+         * If this flag is set to `true`, a Mac operating system is used.
+         *
+         * **Note:** An iPad using Safari browser, which is requesting desktop sites, is also recognized as Macintosh.
+         */
+        export const macintosh: boolean;
+
+        /**
+         * The name of the operating system.
+         * See:
+         * 	sap.ui.Device.os.OS
+         */
+        export const name: String;
+
+        /**
+         * The version of the operating system as `float`.
+         *
+         * Might be `-1` if no version can be determined.
+         */
+        export const version: float;
+
+        /**
+         * The version of the operating system as `string`.
+         *
+         * Might be empty if no version can be determined.
+         */
+        export const versionStr: String;
+
+        /**
+         * If this flag is set to `true`, a Windows operating system is used.
+         */
+        export const windows: boolean;
+
+        /**
+         * If this flag is set to `true`, a Windows Phone operating system is used.
+         */
+        export const windows_phone: boolean;
+
+        /**
+         * Enumeration containing the names of known operating systems.
+         */
+        namespace OS {
+          /**
+           * Android operating system name.
+           * See:
+           * 	sap.ui.Device.os.name
+           */
+          export const ANDROID: undefined;
+
+          /**
+           * Blackberry operating system name.
+           * See:
+           * 	sap.ui.Device.os.name
+           */
+          export const BLACKBERRY: undefined;
+
+          /**
+           * iOS operating system name.
+           * See:
+           * 	sap.ui.Device.os.name
+           */
+          export const IOS: undefined;
+
+          /**
+           * Linux operating system name.
+           * See:
+           * 	sap.ui.Device.os.name
+           */
+          export const LINUX: undefined;
+
+          /**
+           * MAC operating system name.
+           * See:
+           * 	sap.ui.Device.os.name
+           */
+          export const MACINTOSH: undefined;
+
+          /**
+           * Windows operating system name.
+           * See:
+           * 	sap.ui.Device.os.name
+           */
+          export const WINDOWS: undefined;
+
+          /**
+           * Windows Phone operating system name.
+           * See:
+           * 	sap.ui.Device.os.name
+           */
+          export const WINDOWS_PHONE: undefined;
+        }
+      }
+      /**
+       * Common API for document window size change notifications across all platforms.
+       */
+      namespace resize {
+        /**
+         * The current height of the document's window in pixels.
+         */
+        export const height: int;
+
+        /**
+         * The current width of the document's window in pixels.
+         */
+        export const width: int;
+
+        /**
+         * Registers the given event handler to resize change events of the document's window.
+         *
+         * The event is fired whenever the document's window size changes.
+         *
+         * The event handler is called with a single argument: a map `mParams` which provides the following information:
+         *
+         * 	 - `mParams.height`: The height of the document's window in pixels.
+         * 	 - `mParams.width`: The width of the document's window in pixels.
+         */
+        function attachHandler(
+          /**
+           * The handler function to call when the event occurs. This function will be called in the context of the
+           * `oListener` instance (if present) or on the `window` instance. A map with information about the size
+           * is provided as a single argument to the handler (see details above).
+           */
+          fnFunction: Function,
+          /**
+           * The object that wants to be notified when the event occurs (`this` context within the handler function).
+           * If it is not specified, the handler function is called in the context of the `window`.
+           */
+          oListener?: object
+        ): void;
+        /**
+         * Removes a previously attached event handler from the resize events.
+         *
+         * The passed parameters must match those used for registration with {@link #.attachHandler} beforehand.
+         */
+        function detachHandler(
+          /**
+           * The handler function to detach from the event
+           */
+          fnFunction: Function,
+          /**
+           * The object that wanted to be notified when the event occurred
+           */
+          oListener?: object
+        ): void;
+      }
+      /**
+       * Contains information about detected capabilities of the used browser or Device.
+       */
+      namespace support {
+        /**
+         * If this flag is set to `true`, the used browser natively supports media queries via JavaScript.
+         *
+         * **Note:** The {@link sap.ui.Device.media media queries API} of the device API can also be used when there
+         * is no native support.
+         */
+        export const matchmedia: boolean;
+
+        /**
+         * If this flag is set to `true`, the used browser natively supports events of media queries via JavaScript.
+         *
+         * **Note:** The {@link sap.ui.Device.media media queries API} of the device API can also be used when there
+         * is no native support.
+         */
+        export const matchmedialistener: boolean;
+
+        /**
+         * If this flag is set to `true`, the used browser natively supports the `orientationchange` event.
+         *
+         * **Note:** The {@link sap.ui.Device.orientation orientation event} of the device API can also be used
+         * when there is no native support.
+         */
+        export const orientation: boolean;
+
+        /**
+         * If this flag is set to `true`, the used browser supports pointer events.
+         */
+        export const pointer: boolean;
+
+        /**
+         * If this flag is set to `true`, the device has a display with a high resolution.
+         */
+        export const retina: boolean;
+
+        /**
+         * If this flag is set to `true`, the used browser supports touch events.
+         *
+         * **Note:** This flag indicates whether the used browser supports touch events or not. This does not necessarily
+         * mean that the used device has a touchable screen.
+         */
+        export const touch: boolean;
+
+        /**
+         * If this flag is set to `true`, the used browser supports web sockets.
+         */
+        export const websocket: boolean;
+      }
+      /**
+       * Provides a basic categorization of the used device based on various indicators.
+       *
+       * These indicators are for example the support of touch events, the screen size, the used operation system
+       * or the user agent of the browser.
+       *
+       * **Note:** Depending on the capabilities of the device it is also possible that multiple flags are set
+       * to `true`.
+       */
+      namespace system {
+        /**
+         * If this flag is set to `true`, the device is recognized as a combination of a desktop system and tablet.
+         *
+         * Furthermore, a CSS class `sap-combi` is added to the document root element.
+         *
+         * **Note:** This property is mainly for Microsoft Windows 8 (and following) devices where the mouse and
+         * touch event may be supported natively by the browser being used. This property is set to `true` only
+         * when both mouse and touch event are natively supported.
+         */
+        export const combi: boolean;
+
+        /**
+         * If this flag is set to `true`, the device is recognized as a desktop system.
+         *
+         * Furthermore, a CSS class `sap-desktop` is added to the document root element.
+         */
+        export const desktop: boolean;
+
+        /**
+         * If this flag is set to `true`, the device is recognized as a phone.
+         *
+         * Furthermore, a CSS class `sap-phone` is added to the document root element.
+         */
+        export const phone: boolean;
+
+        /**
+         * If this flag is set to `true`, the device is recognized as a tablet.
+         *
+         * Furthermore, a CSS class `sap-tablet` is added to the document root element.
+         *
+         * **Note:** This flag is also true for some browsers on desktop devices running on Windows 8 or higher.
+         * Also see the documentation for {@link sap.ui.Device.system.combi} devices. You can use the following
+         * logic to ensure that the current device is a tablet device:
+         *
+         *
+         * ```javascript
+         *
+         * if(sap.ui.Device.system.tablet && !sap.ui.Device.system.desktop){
+         * 	...tablet related commands...
+         * }
+         * ```
+         */
+        export const tablet: boolean;
+      }
+    }
   }
 
   interface IUI5DefineDependencyNames {
@@ -67376,6 +66610,8 @@ declare namespace sap {
     "sap/base/util/deepEqual": undefined;
 
     "sap/base/util/deepExtend": undefined;
+
+    "sap/base/util/Deferred": undefined;
 
     "sap/base/util/defineCoupledProperty": undefined;
 

@@ -1,4 +1,4 @@
-// For Library Version: 1.89.0
+// For Library Version: 1.90.0
 
 declare module "sap/ui/table/library" {
   import TreeAutoExpandMode1 from "sap/ui/model/TreeAutoExpandMode";
@@ -162,9 +162,7 @@ declare module "sap/ui/table/library" {
    *
    * This is an alias for {@link sap.ui.model.TreeAutoExpandMode} and kept for compatibility reasons.
    */
-  export type TreeAutoExpandMode =
-    | TreeAutoExpandMode1
-    | keyof typeof TreeAutoExpandMode1;
+  export type TreeAutoExpandMode = TreeAutoExpandMode1;
 
   /**
    * VisibleRowCountMode of the table
@@ -3612,6 +3610,8 @@ declare module "sap/ui/table/RowSettings" {
      */
     static getMetadata(): ElementMetadata;
     /**
+     * @SINCE 1.72
+     *
      * Gets current value of property {@link #getNavigated navigated}.
      *
      * The navigated state of a row.
@@ -3668,6 +3668,8 @@ declare module "sap/ui/table/RowSettings" {
       sHighlightText?: string
     ): this;
     /**
+     * @SINCE 1.72
+     *
      * Sets a new value for property {@link #getNavigated navigated}.
      *
      * The navigated state of a row.
@@ -3714,6 +3716,8 @@ declare module "sap/ui/table/RowSettings" {
     highlightText?: string | PropertyBindingInfo;
 
     /**
+     * @SINCE 1.72
+     *
      * The navigated state of a row.
      *
      * If set to `true`, a navigation indicator is displayed at the end of the row. **Note:** This property

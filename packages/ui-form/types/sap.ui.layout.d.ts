@@ -1,199 +1,10 @@
-// For Library Version: 1.89.0
+// For Library Version: 1.90.0
 
-declare module "sap/ui/layout/library/__$cssgrid" {
+declare module "sap/ui/layout/library" {
   import Control from "sap/ui/core/Control";
 
   import GridLayoutBase from "sap/ui/layout/cssgrid/GridLayoutBase";
 
-  /**
-   * @SINCE 1.60.0
-   *
-   * A string type that is used for CSS grid to control how the auto-placement algorithm works, specifying
-   * exactly how auto-placed items get flowed into the grid.
-   * See:
-   * 	{@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow}
-   */
-  export enum CSSGridAutoFlow {
-    /**
-     * Insert auto-placed items by filling each column.
-     */
-    Column = "Column",
-    /**
-     * Insert auto-placed items by filling each column, and fill any holes in the grid.
-     */
-    ColumnDense = "ColumnDense",
-    /**
-     * Insert auto-placed items by filling each row.
-     */
-    Row = "Row",
-    /**
-     * Insert auto-placed items by filling each row, and fill any holes in the grid.
-     */
-    RowDense = "RowDense",
-  }
-  /**
-   * @SINCE 1.60.0
-   *
-   * A string type that represents a short hand CSS grid gap.
-   * See:
-   * 	{@link https://developer.mozilla.org/en-US/docs/Web/CSS/gap}
-   */
-  export type CSSGridGapShortHand = string;
-
-  /**
-   * @SINCE 1.60.0
-   *
-   * A string type that represents one or two grid lines. Used to define the position and size of a single
-   * grid item.
-   *
-   * Valid values:
-   * 	 - auto
-   * 	 - inherit
-   * 	 - 1
-   * 	 - span 2
-   * 	 - span 2 / 5
-   * 	 - span 2 / -5
-   * 	 - 5 / 7
-   * 	 - 7 / span 5
-   * 	 - span 7 / span 5
-   * See:
-   * 	{@link https://developer.mozilla.org/en-US/docs/Glossary/Grid_lines MDN web docs: grid lines}
-   */
-  export type CSSGridLine = string;
-
-  /**
-   * @SINCE 1.60.0
-   *
-   * A string type that represents a grid track (the space between two grid lines)
-   * See:
-   * 	{@link https://developer.mozilla.org/en-US/docs/Glossary/Grid_tracks}
-   */
-  export type CSSGridTrack = string;
-
-  /**
-   * @SINCE 1.60.0
-   *
-   * Defines the functions that need to be implemented by a Control which wants to have display:grid behavior
-   * via sap.ui.layout.cssgrid.GridLayoutDelegate
-   */
-  export interface IGridConfigurable {
-    __implements__sap_ui_layout_cssgrid_IGridConfigurable: boolean;
-
-    /**
-     * @SINCE 1.60.0
-     *
-     * The function is used by GridLayoutDelegate to determine on which HTML Elements the display:grid styles
-     * should be applied
-     */
-    getGridDomRefs(): Control[] | HTMLElement[];
-    /**
-     * @SINCE 1.60.0
-     *
-     * The function is used by GridLayoutDelegate to get the grid layout (display:grid styles) to apply
-     */
-    getGridLayoutConfiguration(): GridLayoutBase;
-  }
-
-  /**
-   * @SINCE 1.88.0
-   *
-   * LayoutData for grid items
-   */
-  export interface IGridItemLayoutData {
-    __implements__sap_ui_layout_cssgrid_IGridItemLayoutData: boolean;
-  }
-}
-
-declare module "sap/ui/layout/library/__$form" {
-  /**
-   * @SINCE 1.56.0
-   *
-   * An `int` type that defines how many cells a control inside of a column of a `Form` control using the
-   * `ColumnLayout` control as layout can use.
-   *
-   * Allowed values are numbers from 1 to 12 and -1. -1 means the value is calculated.
-   */
-  export type ColumnCells = int;
-
-  /**
-   * @SINCE 1.56.0
-   *
-   * An `int` type that defines how many columns a `Form` control using the `ColumnLayout` as layout can have
-   * if it has large size
-   *
-   * Allowed values are numbers from 1 to 3.
-   */
-  export type ColumnsL = int;
-
-  /**
-   * @SINCE 1.56.0
-   *
-   * An `int` type that defines how many columns a `Form` control using the `ColumnLayout` as layout can have
-   * if it has medium size
-   *
-   * Allowed values are numbers from 1 to 2.
-   */
-  export type ColumnsM = int;
-
-  /**
-   * @SINCE 1.56.0
-   *
-   * An `int` type that defines how many columns a `Form` control using the `ColumnLayout` as layout can have
-   * if it has extra-large size
-   *
-   * Allowed values are numbers from 1 to 6. **Note:** In versions lower than 1.89 only 4 columns are allowed.
-   */
-  export type ColumnsXL = int;
-
-  /**
-   * @SINCE 1.56.0
-   *
-   * An `int` type that defines how many cells beside the controls inside of a column of a `Form` control
-   * using the `ColumnLayout` control as layout are empty.
-   *
-   * Allowed values are numbers from 0 to 11.
-   */
-  export type EmptyCells = int;
-
-  /**
-   * A string that defines the number of used cells in a `GridLayout`. This can be a number from 1 to 16,
-   * "auto" or "full". If set to "auto" the size is determined by the number of fields and the available cells.
-   * For labels the auto size is 3 cells. If set to "full" only one field is allowed within the `FormElement`.
-   * It gets the full width of the row and the label is displayed above. **Note:** For labels full size has
-   * no effect.
-   */
-  export type GridElementCells = string;
-
-  /**
-   * @SINCE 1.16.0
-   *
-   * Available `FormLayouts` used to render a `SimpleForm`.
-   */
-  export enum SimpleFormLayout {
-    /**
-     * @SINCE 1.56.0
-     *
-     * Uses the `ColumnLayout` layout to render the `SimpleForm` control
-     */
-    ColumnLayout = "ColumnLayout",
-    /**
-     * Uses the `GridLayout` layout to render the `SimpleForm` control
-     */
-    GridLayout = "GridLayout",
-    /**
-     * @SINCE 1.16.0
-     *
-     * Uses the `ResponsiveGridLayout` layout to render the `SimpleForm` control
-     */
-    ResponsiveGridLayout = "ResponsiveGridLayout",
-    /**
-     * Uses the `ResponsiveLayout` layout to render the `SimpleForm` control
-     */
-    ResponsiveLayout = "ResponsiveLayout",
-  }
-}
-
-declare module "sap/ui/layout/library" {
   /**
    * @SINCE 1.36.0
    *
@@ -366,8 +177,6 @@ declare module "sap/ui/layout/library" {
    */
   export type BoxesPerRowConfig = string;
 
-  export * as cssgrid from "sap/ui/layout/library/__$cssgrid";
-  export * as form from "sap/ui/layout/library/__$form";
   /**
    * A string type that represents the indent values of the `Grid` for large, medium and small screens.
    *
@@ -469,6 +278,194 @@ declare module "sap/ui/layout/library" {
      * Show the side content on M, L and XL breakpoints
      */
     ShowAboveS = "ShowAboveS",
+  }
+
+  export namespace cssgrid {
+    /**
+     * @SINCE 1.60.0
+     *
+     * Defines the functions that need to be implemented by a Control which wants to have display:grid behavior
+     * via sap.ui.layout.cssgrid.GridLayoutDelegate
+     */
+    interface IGridConfigurable {
+      __implements__sap_ui_layout_cssgrid_IGridConfigurable: boolean;
+
+      /**
+       * @SINCE 1.60.0
+       *
+       * The function is used by GridLayoutDelegate to determine on which HTML Elements the display:grid styles
+       * should be applied
+       */
+      getGridDomRefs(): Control[] | HTMLElement[];
+      /**
+       * @SINCE 1.60.0
+       *
+       * The function is used by GridLayoutDelegate to get the grid layout (display:grid styles) to apply
+       */
+      getGridLayoutConfiguration(): GridLayoutBase;
+    }
+
+    /**
+     * @SINCE 1.88.0
+     *
+     * LayoutData for grid items
+     */
+    interface IGridItemLayoutData {
+      __implements__sap_ui_layout_cssgrid_IGridItemLayoutData: boolean;
+    }
+
+    /**
+     * @SINCE 1.60.0
+     *
+     * A string type that is used for CSS grid to control how the auto-placement algorithm works, specifying
+     * exactly how auto-placed items get flowed into the grid.
+     * See:
+     * 	{@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow}
+     */
+    enum CSSGridAutoFlow {
+      /**
+       * Insert auto-placed items by filling each column.
+       */
+      Column = "Column",
+      /**
+       * Insert auto-placed items by filling each column, and fill any holes in the grid.
+       */
+      ColumnDense = "ColumnDense",
+      /**
+       * Insert auto-placed items by filling each row.
+       */
+      Row = "Row",
+      /**
+       * Insert auto-placed items by filling each row, and fill any holes in the grid.
+       */
+      RowDense = "RowDense",
+    }
+    /**
+     * @SINCE 1.60.0
+     *
+     * A string type that represents a short hand CSS grid gap.
+     * See:
+     * 	{@link https://developer.mozilla.org/en-US/docs/Web/CSS/gap}
+     */
+    type CSSGridGapShortHand = string;
+
+    /**
+     * @SINCE 1.60.0
+     *
+     * A string type that represents one or two grid lines. Used to define the position and size of a single
+     * grid item.
+     *
+     * Valid values:
+     * 	 - auto
+     * 	 - inherit
+     * 	 - 1
+     * 	 - span 2
+     * 	 - span 2 / 5
+     * 	 - span 2 / -5
+     * 	 - 5 / 7
+     * 	 - 7 / span 5
+     * 	 - span 7 / span 5
+     * See:
+     * 	{@link https://developer.mozilla.org/en-US/docs/Glossary/Grid_lines MDN web docs: grid lines}
+     */
+    type CSSGridLine = string;
+
+    /**
+     * @SINCE 1.60.0
+     *
+     * A string type that represents a grid track (the space between two grid lines)
+     * See:
+     * 	{@link https://developer.mozilla.org/en-US/docs/Glossary/Grid_tracks}
+     */
+    type CSSGridTrack = string;
+  }
+
+  export namespace form {
+    /**
+     * @SINCE 1.16.0
+     *
+     * Available `FormLayouts` used to render a `SimpleForm`.
+     */
+    enum SimpleFormLayout {
+      /**
+       * @SINCE 1.56.0
+       *
+       * Uses the `ColumnLayout` layout to render the `SimpleForm` control
+       */
+      ColumnLayout = "ColumnLayout",
+      /**
+       * Uses the `GridLayout` layout to render the `SimpleForm` control
+       */
+      GridLayout = "GridLayout",
+      /**
+       * @SINCE 1.16.0
+       *
+       * Uses the `ResponsiveGridLayout` layout to render the `SimpleForm` control
+       */
+      ResponsiveGridLayout = "ResponsiveGridLayout",
+      /**
+       * Uses the `ResponsiveLayout` layout to render the `SimpleForm` control
+       */
+      ResponsiveLayout = "ResponsiveLayout",
+    }
+    /**
+     * @SINCE 1.56.0
+     *
+     * An `int` type that defines how many cells a control inside of a column of a `Form` control using the
+     * `ColumnLayout` control as layout can use.
+     *
+     * Allowed values are numbers from 1 to 12 and -1. -1 means the value is calculated.
+     */
+    type ColumnCells = int;
+
+    /**
+     * @SINCE 1.56.0
+     *
+     * An `int` type that defines how many columns a `Form` control using the `ColumnLayout` as layout can have
+     * if it has large size
+     *
+     * Allowed values are numbers from 1 to 3.
+     */
+    type ColumnsL = int;
+
+    /**
+     * @SINCE 1.56.0
+     *
+     * An `int` type that defines how many columns a `Form` control using the `ColumnLayout` as layout can have
+     * if it has medium size
+     *
+     * Allowed values are numbers from 1 to 2.
+     */
+    type ColumnsM = int;
+
+    /**
+     * @SINCE 1.56.0
+     *
+     * An `int` type that defines how many columns a `Form` control using the `ColumnLayout` as layout can have
+     * if it has extra-large size
+     *
+     * Allowed values are numbers from 1 to 6. **Note:** In versions lower than 1.89 only 4 columns are allowed.
+     */
+    type ColumnsXL = int;
+
+    /**
+     * @SINCE 1.56.0
+     *
+     * An `int` type that defines how many cells beside the controls inside of a column of a `Form` control
+     * using the `ColumnLayout` control as layout are empty.
+     *
+     * Allowed values are numbers from 0 to 11.
+     */
+    type EmptyCells = int;
+
+    /**
+     * A string that defines the number of used cells in a `GridLayout`. This can be a number from 1 to 16,
+     * "auto" or "full". If set to "auto" the size is determined by the number of fields and the available cells.
+     * For labels the auto size is 3 cells. If set to "full" only one field is allowed within the `FormElement`.
+     * It gets the full width of the row and the label is displayed above. **Note:** For labels full size has
+     * no effect.
+     */
+    type GridElementCells = string;
   }
 }
 
@@ -1573,6 +1570,8 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
 
   import { CSSSize } from "sap/ui/core/library";
 
+  import GridBasicLayout from "sap/ui/layout/cssgrid/GridBasicLayout";
+
   import ElementMetadata from "sap/ui/core/ElementMetadata";
 
   import {
@@ -1642,7 +1641,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
    * 			(S, M, L, XL).
    *
    * Current Limitations:
-   * 	 - No support for IE11.
    * 	 - No alignment and ordering
    * 	 - No Named grid areas and lines
    */
@@ -1737,8 +1735,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-columns
      * MDN web docs: grid-auto-columns}
      *
-     * **Note:** Not supported in IE11.
-     *
      * Default value is `empty string`.
      */
     getGridAutoColumns(): cssgrid.CSSGridTrack;
@@ -1747,8 +1743,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow
      * MDN web docs: grid-auto-flow}
-     *
-     * **Note:** Not supported in IE11.
      *
      * Default value is `"Row"`.
      */
@@ -1761,8 +1755,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-rows
      * MDN web docs: grid-auto-rows}
      *
-     * **Note:** Not supported in IE11.
-     *
      * Default value is `empty string`.
      */
     getGridAutoRows(): cssgrid.CSSGridTrack;
@@ -1772,11 +1764,13 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-column-gap
      * MDN web docs: grid-column-gap}
      *
-     * **Note:** Not supported in IE11.
-     *
      * Default value is `empty string`.
      */
     getGridColumnGap(): CSSSize;
+    /**
+     * Implements IGridConfigurable interface
+     */
+    getGridDomRefs(): HTMLElement[];
     /**
      * Gets current value of property {@link #getGridGap gridGap}.
      *
@@ -1784,18 +1778,18 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      * MDN web docs: grid-gap} It is a shorthand for gridRowGap and gridColumnGap. If some of them is set, the
      * gridGap value will have less priority and will be overwritten.
      *
-     * **Note:** Not supported in IE11.
-     *
      * Default value is `empty string`.
      */
     getGridGap(): cssgrid.CSSGridGapShortHand;
+    /**
+     * Returns the layout configuration of the `CSSGrid`.
+     */
+    getGridLayoutConfiguration(): GridBasicLayout;
     /**
      * Gets current value of property {@link #getGridRowGap gridRowGap}.
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-row-gap
      * MDN web docs: grid-row-gap}
-     *
-     * **Note:** Not supported in IE11.
      *
      * Default value is `empty string`.
      */
@@ -1806,8 +1800,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
      * MDN web docs: grid-template-columns}
      *
-     * **Note:** Not supported in IE11.
-     *
      * Default value is `empty string`.
      */
     getGridTemplateColumns(): cssgrid.CSSGridTrack;
@@ -1816,8 +1808,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows
      * MDN web docs: grid-template-rows}
-     *
-     * **Note:** Not supported in IE11.
      *
      * Default value is `empty string`.
      */
@@ -1895,8 +1885,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-columns
      * MDN web docs: grid-auto-columns}
      *
-     * **Note:** Not supported in IE11.
-     *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
      * Default value is `empty string`.
@@ -1912,8 +1900,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow
      * MDN web docs: grid-auto-flow}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -1933,8 +1919,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-rows
      * MDN web docs: grid-auto-rows}
      *
-     * **Note:** Not supported in IE11.
-     *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
      * Default value is `empty string`.
@@ -1950,8 +1934,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-column-gap
      * MDN web docs: grid-column-gap}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -1970,8 +1952,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      * MDN web docs: grid-gap} It is a shorthand for gridRowGap and gridColumnGap. If some of them is set, the
      * gridGap value will have less priority and will be overwritten.
      *
-     * **Note:** Not supported in IE11.
-     *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
      * Default value is `empty string`.
@@ -1987,8 +1967,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-row-gap
      * MDN web docs: grid-row-gap}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -2006,8 +1984,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
      * MDN web docs: grid-template-columns}
      *
-     * **Note:** Not supported in IE11.
-     *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
      * Default value is `empty string`.
@@ -2023,8 +1999,6 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows
      * MDN web docs: grid-template-rows}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -2062,32 +2036,24 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
      * MDN web docs: grid-template-columns}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridTemplateColumns?: cssgrid.CSSGridTrack | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows
      * MDN web docs: grid-template-rows}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridTemplateRows?: cssgrid.CSSGridTrack | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-row-gap
      * MDN web docs: grid-row-gap}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridRowGap?: CSSSize | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-column-gap
      * MDN web docs: grid-column-gap}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridColumnGap?: CSSSize | PropertyBindingInfo;
 
@@ -2095,32 +2061,24 @@ declare module "sap/ui/layout/cssgrid/CSSGrid" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-gap
      * MDN web docs: grid-gap} It is a shorthand for gridRowGap and gridColumnGap. If some of them is set, the
      * gridGap value will have less priority and will be overwritten.
-     *
-     * **Note:** Not supported in IE11.
      */
     gridGap?: cssgrid.CSSGridGapShortHand | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-rows
      * MDN web docs: grid-auto-rows}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridAutoRows?: cssgrid.CSSGridTrack | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-columns
      * MDN web docs: grid-auto-columns}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridAutoColumns?: cssgrid.CSSGridTrack | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow
      * MDN web docs: grid-auto-flow}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridAutoFlow?:
       | (cssgrid.CSSGridAutoFlow | keyof typeof cssgrid.CSSGridAutoFlow)
@@ -2216,8 +2174,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-columns
      * MDN web docs: grid-auto-columns}
      *
-     * **Note:** Not supported in IE11.
-     *
      * Default value is `empty string`.
      */
     getGridAutoColumns(): cssgrid.CSSGridTrack;
@@ -2226,8 +2182,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow
      * MDN web docs: grid-auto-flow}
-     *
-     * **Note:** Not supported in IE11.
      *
      * Default value is `"Row"`.
      */
@@ -2240,8 +2194,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-rows
      * MDN web docs: grid-auto-rows}
      *
-     * **Note:** Not supported in IE11.
-     *
      * Default value is `empty string`.
      */
     getGridAutoRows(): cssgrid.CSSGridTrack;
@@ -2250,8 +2202,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-column-gap
      * MDN web docs: grid-column-gap}
-     *
-     * **Note:** Not supported in IE11.
      *
      * Default value is `empty string`.
      */
@@ -2262,8 +2212,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-gap
      * MDN web docs: grid-gap}
      *
-     * **Note:** Not supported in IE11.
-     *
      * Default value is `empty string`.
      */
     getGridGap(): cssgrid.CSSGridGapShortHand;
@@ -2272,8 +2220,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-row-gap
      * MDN web docs: grid-row-gap}
-     *
-     * **Note:** Not supported in IE11.
      *
      * Default value is `empty string`.
      */
@@ -2284,8 +2230,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
      * MDN web docs: grid-template-columns}
      *
-     * **Note:** Not supported in IE11.
-     *
      * Default value is `empty string`.
      */
     getGridTemplateColumns(): cssgrid.CSSGridTrack;
@@ -2294,8 +2238,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows
      * MDN web docs: grid-template-rows}
-     *
-     * **Note:** Not supported in IE11.
      *
      * Default value is `empty string`.
      */
@@ -2309,8 +2251,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-columns
      * MDN web docs: grid-auto-columns}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -2327,8 +2267,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow
      * MDN web docs: grid-auto-flow}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -2348,8 +2286,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-rows
      * MDN web docs: grid-auto-rows}
      *
-     * **Note:** Not supported in IE11.
-     *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
      * Default value is `empty string`.
@@ -2365,8 +2301,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-column-gap
      * MDN web docs: grid-column-gap}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -2384,8 +2318,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-gap
      * MDN web docs: grid-gap}
      *
-     * **Note:** Not supported in IE11.
-     *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
      * Default value is `empty string`.
@@ -2401,8 +2333,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-row-gap
      * MDN web docs: grid-row-gap}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -2420,8 +2350,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
      * MDN web docs: grid-template-columns}
      *
-     * **Note:** Not supported in IE11.
-     *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
      * Default value is `empty string`.
@@ -2437,8 +2365,6 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows
      * MDN web docs: grid-template-rows}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -2456,64 +2382,48 @@ declare module "sap/ui/layout/cssgrid/GridBasicLayout" {
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
      * MDN web docs: grid-template-columns}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridTemplateColumns?: cssgrid.CSSGridTrack | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows
      * MDN web docs: grid-template-rows}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridTemplateRows?: cssgrid.CSSGridTrack | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-row-gap
      * MDN web docs: grid-row-gap}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridRowGap?: CSSSize | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-column-gap
      * MDN web docs: grid-column-gap}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridColumnGap?: CSSSize | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-gap
      * MDN web docs: grid-gap}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridGap?: cssgrid.CSSGridGapShortHand | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-rows
      * MDN web docs: grid-auto-rows}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridAutoRows?: cssgrid.CSSGridTrack | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-columns
      * MDN web docs: grid-auto-columns}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridAutoColumns?: cssgrid.CSSGridTrack | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow
      * MDN web docs: grid-auto-flow}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridAutoFlow?:
       | (cssgrid.CSSGridAutoFlow | keyof typeof cssgrid.CSSGridAutoFlow)
@@ -2577,24 +2487,6 @@ declare module "sap/ui/layout/cssgrid/GridBoxLayout" {
      */
     _getTemplateColumns(): string;
     /**
-     * Implements polyfill for IE after drag end.
-     */
-    _polyfillAfterDragEnd(
-      /**
-       * After drag end event
-       */
-      oEvent: Object
-    ): void;
-    /**
-     * Implements polyfill for IE after drag over.
-     */
-    _polyfillAfterDragOver(
-      /**
-       * After drag over event
-       */
-      oEvent: Object
-    ): void;
-    /**
      * Creates a new subclass of class sap.ui.layout.cssgrid.GridBoxLayout with name `sClassName` and enriches
      * it with the information contained in `oClassInfo`.
      *
@@ -2619,6 +2511,8 @@ declare module "sap/ui/layout/cssgrid/GridBoxLayout" {
      * Gets current value of property {@link #getBoxesPerRowConfig boxesPerRowConfig}.
      *
      * A string type that defines number of Boxes per row for extra large, large, medium and small screens
+     *
+     * **Note:** When the property `boxMinWidth` or `boxWidth` is set this property has no effect.
      *
      * Default value is `"XL7 L6 M4 S2"`.
      */
@@ -2649,6 +2543,8 @@ declare module "sap/ui/layout/cssgrid/GridBoxLayout" {
      * Sets a new value for property {@link #getBoxesPerRowConfig boxesPerRowConfig}.
      *
      * A string type that defines number of Boxes per row for extra large, large, medium and small screens
+     *
+     * **Note:** When the property `boxMinWidth` or `boxWidth` is set this property has no effect.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -2705,6 +2601,8 @@ declare module "sap/ui/layout/cssgrid/GridBoxLayout" {
 
     /**
      * A string type that defines number of Boxes per row for extra large, large, medium and small screens
+     *
+     * **Note:** When the property `boxMinWidth` or `boxWidth` is set this property has no effect.
      */
     boxesPerRowConfig?: BoxesPerRowConfig | PropertyBindingInfo;
   }
@@ -3088,8 +2986,6 @@ declare module "sap/ui/layout/cssgrid/GridLayoutBase" {
      * Returns a metadata object for class sap.ui.layout.cssgrid.GridLayoutBase.
      */
     static getMetadata(): ManagedObjectMetadata;
-    /**/
-    isGridSupportedByBrowser(): boolean;
     /**/
     isResponsive(): boolean;
   }
@@ -3496,8 +3392,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-columns
      * MDN web docs: grid-auto-columns}
      *
-     * **Note:** Not supported in IE11.
-     *
      * Default value is `empty string`.
      */
     getGridAutoColumns(): cssgrid.CSSGridTrack;
@@ -3506,8 +3400,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow
      * MDN web docs: grid-auto-flow}
-     *
-     * **Note:** Not supported in IE11.
      *
      * Default value is `"Row"`.
      */
@@ -3520,8 +3412,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-rows
      * MDN web docs: grid-auto-rows}
      *
-     * **Note:** Not supported in IE11.
-     *
      * Default value is `empty string`.
      */
     getGridAutoRows(): cssgrid.CSSGridTrack;
@@ -3530,8 +3420,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-column-gap
      * MDN web docs: grid-column-gap}
-     *
-     * **Note:** Not supported in IE11.
      *
      * Default value is `empty string`.
      */
@@ -3542,8 +3430,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-gap
      * MDN web docs: grid-gap}
      *
-     * **Note:** Not supported in IE11.
-     *
      * Default value is `empty string`.
      */
     getGridGap(): cssgrid.CSSGridGapShortHand;
@@ -3552,8 +3438,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-row-gap
      * MDN web docs: grid-row-gap}
-     *
-     * **Note:** Not supported in IE11.
      *
      * Default value is `empty string`.
      */
@@ -3564,8 +3448,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
      * MDN web docs: grid-template-columns}
      *
-     * **Note:** Not supported in IE11.
-     *
      * Default value is `empty string`.
      */
     getGridTemplateColumns(): cssgrid.CSSGridTrack;
@@ -3574,8 +3456,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows
      * MDN web docs: grid-template-rows}
-     *
-     * **Note:** Not supported in IE11.
      *
      * Default value is `empty string`.
      */
@@ -3589,8 +3469,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-columns
      * MDN web docs: grid-auto-columns}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -3607,8 +3485,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow
      * MDN web docs: grid-auto-flow}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -3628,8 +3504,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-rows
      * MDN web docs: grid-auto-rows}
      *
-     * **Note:** Not supported in IE11.
-     *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
      * Default value is `empty string`.
@@ -3645,8 +3519,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-column-gap
      * MDN web docs: grid-column-gap}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -3664,8 +3536,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-gap
      * MDN web docs: grid-gap}
      *
-     * **Note:** Not supported in IE11.
-     *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
      * Default value is `empty string`.
@@ -3681,8 +3551,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-row-gap
      * MDN web docs: grid-row-gap}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -3700,8 +3568,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
      * MDN web docs: grid-template-columns}
      *
-     * **Note:** Not supported in IE11.
-     *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
      * Default value is `empty string`.
@@ -3717,8 +3583,6 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
      *
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows
      * MDN web docs: grid-template-rows}
-     *
-     * **Note:** Not supported in IE11.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -3736,64 +3600,48 @@ declare module "sap/ui/layout/cssgrid/GridSettings" {
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-columns
      * MDN web docs: grid-template-columns}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridTemplateColumns?: cssgrid.CSSGridTrack | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows
      * MDN web docs: grid-template-rows}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridTemplateRows?: cssgrid.CSSGridTrack | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-row-gap
      * MDN web docs: grid-row-gap}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridRowGap?: CSSSize | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-column-gap
      * MDN web docs: grid-column-gap}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridColumnGap?: CSSSize | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-gap
      * MDN web docs: grid-gap}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridGap?: cssgrid.CSSGridGapShortHand | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-rows
      * MDN web docs: grid-auto-rows}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridAutoRows?: cssgrid.CSSGridTrack | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-columns
      * MDN web docs: grid-auto-columns}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridAutoColumns?: cssgrid.CSSGridTrack | PropertyBindingInfo;
 
     /**
      * Sets the value for the CSS display:grid property {@link https://developer.mozilla.org/en-US/docs/Web/CSS/grid-auto-flow
      * MDN web docs: grid-auto-flow}
-     *
-     * **Note:** Not supported in IE11.
      */
     gridAutoFlow?:
       | (cssgrid.CSSGridAutoFlow | keyof typeof cssgrid.CSSGridAutoFlow)

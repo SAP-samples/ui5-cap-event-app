@@ -1,4 +1,4 @@
-// For Library Version: 1.89.0
+// For Library Version: 1.90.0
 
 declare module "sap/ui/integration/library" {
   import { URI } from "sap/ui/core/library";
@@ -2502,6 +2502,39 @@ declare module "sap/ui/integration/widgets/Card" {
 }
 
 declare namespace sap {
+  namespace ui {
+    /**
+     * SAPUI5 library with controls specialized for SAP Fiori apps.
+     */
+    namespace integration {
+      namespace designtime {
+        namespace baseEditor {
+          namespace propertyEditor {
+            namespace iconEditor {
+              /**
+               * @SINCE 1.81
+               * @EXPERIMENTAL
+               *
+               * Validates if the provided value belongs to the icon pool.
+               */
+              namespace IsInIconPool {
+                /**
+                 * Validator function
+                 */
+                function validate(
+                  /**
+                   * Value to validate
+                   */
+                  vValue: boolean | string
+                ): boolean;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
   interface IUI5DefineDependencyNames {
     "sap/ui/integration/ActionDefinition": undefined;
 

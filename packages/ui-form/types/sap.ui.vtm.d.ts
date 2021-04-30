@@ -1,157 +1,25 @@
-// For Library Version: 1.89.0
-
-declare module "sap/ui/vtm/library/__$interfaces" {
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which manage the display state (visibility, opacity, highlight color) of the
-   * scene nodes in the VTM viewports.
-   */
-  export interface IDisplayStateCalculationExtension {
-    __implements__sap_ui_vtm_interfaces_IDisplayStateCalculationExtension: boolean;
-  }
-
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which indicate progress while viewables are being downloaded.
-   */
-  export interface IDownloadProgressExtension {
-    __implements__sap_ui_vtm_interfaces_IDownloadProgressExtension: boolean;
-  }
-
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which manage the initial view in the VTM viewports after loading an initial
-   * set of viewables.
-   */
-  export interface IInitialViewExtension {
-    __implements__sap_ui_vtm_interfaces_IInitialViewExtension: boolean;
-  }
-
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which indicate progress while viewables are being loaded.
-   */
-  export interface ILoadProgressExtension {
-    __implements__sap_ui_vtm_interfaces_ILoadProgressExtension: boolean;
-  }
-
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which calculate the icon to show for each tree item in the {@link sap.ui.vtm.InternalColumnDescriptor.MessageStatus}
-   * column.
-   */
-  export interface IMessageStatusCalculationExtension {
-    __implements__sap_ui_vtm_interfaces_IMessageStatusCalculationExtension: boolean;
-  }
-
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which provide a behaviour when the icon in the column header for the {@link
-   * sap.ui.vtm.InternalColumnDescriptor.MessageStatus} column is clicked.
-   */
-  export interface IMessageStatusHeaderIconClickExtension {
-    __implements__sap_ui_vtm_interfaces_IMessageStatusHeaderIconClickExtension: boolean;
-  }
-
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which provide a behaviour when an icon in the {@link sap.ui.vtm.InternalColumnDescriptor.MessageStatus}
-   * column is clicked.
-   */
-  export interface IMessageStatusIconClickExtension {
-    __implements__sap_ui_vtm_interfaces_IMessageStatusIconClickExtension: boolean;
-  }
-
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which highlight the scene node that is being hovered over in a viewport.
-   */
-  export interface ISceneNodeHoverHighlightExtension {
-    __implements__sap_ui_vtm_interfaces_ISceneNodeHoverHighlightExtension: boolean;
-  }
-
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which show a tooltip for the scene node that is being hovered over in a viewport.
-   */
-  export interface ISceneNodeHoverTooltipExtension {
-    __implements__sap_ui_vtm_interfaces_ISceneNodeHoverTooltipExtension: boolean;
-  }
-
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which link the selections in trees across panels.
-   */
-  export interface ISelectionLinkingExtension {
-    __implements__sap_ui_vtm_interfaces_ISelectionLinkingExtension: boolean;
-  }
-
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which link the views (camera positions) across VTM viewports.
-   */
-  export interface IViewLinkingExtension {
-    __implements__sap_ui_vtm_interfaces_IViewLinkingExtension: boolean;
-  }
-
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which link the selection state between the tree and the viewport in each VTM
-   * panel.
-   */
-  export interface IViewportSelectionLinkingExtension {
-    __implements__sap_ui_vtm_interfaces_IViewportSelectionLinkingExtension: boolean;
-  }
-
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which provide a behaviour when the icon in the column header for the {@link
-   * sap.ui.vtm.InternalColumnDescriptor.Visibility} column is clicked.
-   */
-  export interface IVisibilityHeaderIconClickExtension {
-    __implements__sap_ui_vtm_interfaces_IVisibilityHeaderIconClickExtension: boolean;
-  }
-
-  /**
-   * @SINCE 1.50
-   * @EXPERIMENTAL (since 1.50.0)
-   *
-   * Interface for extensions which provide a behaviour when an icon in the {@link sap.ui.vtm.InternalColumnDescriptor.Visibility}
-   * column is clicked.
-   */
-  export interface IVisibilityIconClickExtension {
-    __implements__sap_ui_vtm_interfaces_IVisibilityIconClickExtension: boolean;
-  }
-}
+// For Library Version: 1.90.0
 
 declare module "sap/ui/vtm/library" {
-  export * as interfaces from "sap/ui/vtm/library/__$interfaces";
+  import Vtm from "sap/ui/vtm/Vtm";
+
+  /**
+   * Creates an instance of {@link sap.ui.vtm.Vtm} with a default set of extensions.
+   *
+   * The {@link sap.ui.vtm.Vtm} constructor can be used to create an instance of {@link sap.ui.vtm.Vtm} with
+   * a specific set of extensions.
+   */
+  export function createVtm(
+    /**
+     * The id to pass to the {@link sap.ui.vtm.Vtm} constructor.
+     */
+    sId: string,
+    /**
+     * The settings to pass to the {@link sap.ui.vtm.Vtm} constructor. Any extensions specified in the settings
+     * will be replaced with a default set.
+     */
+    mSettings: object
+  ): Vtm;
   /**
    * @EXPERIMENTAL (since 1.0.0)
    *
@@ -162,6 +30,156 @@ declare module "sap/ui/vtm/library" {
    * for this type
    */
   export type Matrix = float[];
+
+  export namespace interfaces {
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which manage the display state (visibility, opacity, highlight color) of the
+     * scene nodes in the VTM viewports.
+     */
+    interface IDisplayStateCalculationExtension {
+      __implements__sap_ui_vtm_interfaces_IDisplayStateCalculationExtension: boolean;
+    }
+
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which indicate progress while viewables are being downloaded.
+     */
+    interface IDownloadProgressExtension {
+      __implements__sap_ui_vtm_interfaces_IDownloadProgressExtension: boolean;
+    }
+
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which manage the initial view in the VTM viewports after loading an initial
+     * set of viewables.
+     */
+    interface IInitialViewExtension {
+      __implements__sap_ui_vtm_interfaces_IInitialViewExtension: boolean;
+    }
+
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which indicate progress while viewables are being loaded.
+     */
+    interface ILoadProgressExtension {
+      __implements__sap_ui_vtm_interfaces_ILoadProgressExtension: boolean;
+    }
+
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which calculate the icon to show for each tree item in the {@link sap.ui.vtm.InternalColumnDescriptor.MessageStatus}
+     * column.
+     */
+    interface IMessageStatusCalculationExtension {
+      __implements__sap_ui_vtm_interfaces_IMessageStatusCalculationExtension: boolean;
+    }
+
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which provide a behaviour when the icon in the column header for the {@link
+     * sap.ui.vtm.InternalColumnDescriptor.MessageStatus} column is clicked.
+     */
+    interface IMessageStatusHeaderIconClickExtension {
+      __implements__sap_ui_vtm_interfaces_IMessageStatusHeaderIconClickExtension: boolean;
+    }
+
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which provide a behaviour when an icon in the {@link sap.ui.vtm.InternalColumnDescriptor.MessageStatus}
+     * column is clicked.
+     */
+    interface IMessageStatusIconClickExtension {
+      __implements__sap_ui_vtm_interfaces_IMessageStatusIconClickExtension: boolean;
+    }
+
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which highlight the scene node that is being hovered over in a viewport.
+     */
+    interface ISceneNodeHoverHighlightExtension {
+      __implements__sap_ui_vtm_interfaces_ISceneNodeHoverHighlightExtension: boolean;
+    }
+
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which show a tooltip for the scene node that is being hovered over in a viewport.
+     */
+    interface ISceneNodeHoverTooltipExtension {
+      __implements__sap_ui_vtm_interfaces_ISceneNodeHoverTooltipExtension: boolean;
+    }
+
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which link the selections in trees across panels.
+     */
+    interface ISelectionLinkingExtension {
+      __implements__sap_ui_vtm_interfaces_ISelectionLinkingExtension: boolean;
+    }
+
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which link the views (camera positions) across VTM viewports.
+     */
+    interface IViewLinkingExtension {
+      __implements__sap_ui_vtm_interfaces_IViewLinkingExtension: boolean;
+    }
+
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which link the selection state between the tree and the viewport in each VTM
+     * panel.
+     */
+    interface IViewportSelectionLinkingExtension {
+      __implements__sap_ui_vtm_interfaces_IViewportSelectionLinkingExtension: boolean;
+    }
+
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which provide a behaviour when the icon in the column header for the {@link
+     * sap.ui.vtm.InternalColumnDescriptor.Visibility} column is clicked.
+     */
+    interface IVisibilityHeaderIconClickExtension {
+      __implements__sap_ui_vtm_interfaces_IVisibilityHeaderIconClickExtension: boolean;
+    }
+
+    /**
+     * @SINCE 1.50
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * Interface for extensions which provide a behaviour when an icon in the {@link sap.ui.vtm.InternalColumnDescriptor.Visibility}
+     * column is clicked.
+     */
+    interface IVisibilityIconClickExtension {
+      __implements__sap_ui_vtm_interfaces_IVisibilityIconClickExtension: boolean;
+    }
+  }
 }
 
 declare module "sap/ui/vtm/ArrayUtilities" {
@@ -2563,7 +2581,7 @@ declare module "sap/ui/vtm/MatrixUtilities" {
       /**
        * The VIT transformation matrix.
        */
-      vkMatrix: any
+      vkMatrix: /* was: sap.ui.vk.TransformationMatrix */ any
     ): Matrix;
     /**
      * Converts a VSM transformation matrix string to a {@link sap.ui.vtm.Matrix} value.
@@ -2638,7 +2656,7 @@ declare module "sap/ui/vtm/MatrixUtilities" {
        * The {@link sap.ui.vtm.Matrix} value
        */
       vtmMatrix: Matrix
-    ): any;
+    ): /* was: sap.ui.vk.TransformationMatrix */ any;
     /**
      * Converts a {@link sap.ui.vtm.Matrix} value to a VSM transformation matrix string.
      */
@@ -9193,6 +9211,99 @@ declare module "sap/ui/vtm/Vtm" {
 }
 
 declare namespace sap {
+  namespace ui {
+    /**
+     * @EXPERIMENTAL (since 1.50.0)
+     *
+     * SAPUI5 library with controls to visualize, map and restructure hierarchical business data that maps to
+     * 3D objects.
+     */
+    namespace vtm {
+      /**
+       * The AXIS1X component.
+       */
+      export const AXIS1X: int;
+
+      /**
+       * The AXIS1Y component.
+       */
+      export const AXIS1Y: int;
+
+      /**
+       * The AXIS1Z component.
+       */
+      export const AXIS1Z: int;
+
+      /**
+       * The AXIS2X component.
+       */
+      export const AXIS2X: int;
+
+      /**
+       * The AXIS2Y component.
+       */
+      export const AXIS2Y: int;
+
+      /**
+       * The AXIS2Z component.
+       */
+      export const AXIS2Z: int;
+
+      /**
+       * The AXIS3X component.
+       */
+      export const AXIS3X: int;
+
+      /**
+       * The AXIS3Y component.
+       */
+      export const AXIS3Y: int;
+
+      /**
+       * The AXIS3Z component.
+       */
+      export const AXIS3Z: int;
+
+      /**
+       * The LOCX (X axis translation) component.
+       */
+      export const LOCX: int;
+
+      /**
+       * The LOCY (Y axis translation) component.
+       */
+      export const LOCY: int;
+
+      /**
+       * The LOCZ (Z axis translation) component.
+       */
+      export const LOCZ: int;
+
+      /**
+       * The SCALE component (there is only one scale component for all axes).
+       */
+      export const SCALE: int;
+
+      /**
+       * Creates an instance of {@link sap.ui.vtm.Vtm} with a default set of extensions.
+       *
+       * The {@link sap.ui.vtm.Vtm} constructor can be used to create an instance of {@link sap.ui.vtm.Vtm} with
+       * a specific set of extensions.
+       */
+      function createVtm(
+        /**
+         * The id to pass to the {@link sap.ui.vtm.Vtm} constructor.
+         */
+        sId: string,
+        /**
+         * The settings to pass to the {@link sap.ui.vtm.Vtm} constructor. Any extensions specified in the settings
+         * will be replaced with a default set.
+         */
+        mSettings: object
+      ): import("sap/ui/vtm/Vtm").default;
+    }
+  }
+
   interface IUI5DefineDependencyNames {
     "sap/ui/vtm/ArrayUtilities": undefined;
 

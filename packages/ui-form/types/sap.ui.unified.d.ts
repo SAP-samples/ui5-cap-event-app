@@ -1,4 +1,4 @@
-// For Library Version: 1.89.0
+// For Library Version: 1.90.0
 
 declare module "sap/ui/unified/library" {
   /**
@@ -2847,7 +2847,7 @@ declare module "sap/ui/unified/calendar/Month" {
          */
         date?: object;
         /**
-         * focused date is in an other month that the displayed one
+         * focused date is in an other month than the displayed one
          */
         otherMonth?: boolean;
         /**
@@ -11038,7 +11038,7 @@ declare module "sap/ui/unified/Currency" {
      *
      * Default value is `Off`.
      */
-    getEmptyIndicatorMode(): any;
+    getEmptyIndicatorMode(): /* was: sap.m.EmptyIndicatorMode */ any;
     /**
      * The formatted value.
      */
@@ -11102,7 +11102,7 @@ declare module "sap/ui/unified/Currency" {
       /**
        * New value for property `emptyIndicatorMode`
        */
-      sEmptyIndicatorMode?: any
+      sEmptyIndicatorMode?: /* was: sap.m.EmptyIndicatorMode */ any
     ): this;
     /**
      * @SINCE 1.54
@@ -11169,7 +11169,9 @@ declare module "sap/ui/unified/Currency" {
      *
      * Specifies if an empty indicator should be displayed when there is no text.
      */
-    emptyIndicatorMode?: any | PropertyBindingInfo;
+    emptyIndicatorMode?: /* was: sap.m.EmptyIndicatorMode */
+      | any
+      | PropertyBindingInfo;
   }
 }
 

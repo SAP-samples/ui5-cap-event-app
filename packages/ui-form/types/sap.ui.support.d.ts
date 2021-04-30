@@ -1,8 +1,8 @@
-// For Library Version: 1.89.0
+// For Library Version: 1.90.0
 
 declare module "sap/ui/support/library" {
   /**
-   * @SINCE 1.89.0-SNAPSHOT
+   * @SINCE 1.90.0-SNAPSHOT
    *
    * Defines the Audiences.
    */
@@ -21,7 +21,7 @@ declare module "sap/ui/support/library" {
     Internal = "Internal",
   }
   /**
-   * @SINCE 1.89.0-SNAPSHOT
+   * @SINCE 1.90.0-SNAPSHOT
    *
    * Issue Categories.
    */
@@ -76,7 +76,7 @@ declare module "sap/ui/support/library" {
     Usage = "Usage",
   }
   /**
-   * @SINCE 1.89.0-SNAPSHOT
+   * @SINCE 1.90.0-SNAPSHOT
    *
    * Analysis history formats.
    */
@@ -91,7 +91,7 @@ declare module "sap/ui/support/library" {
     String = "String",
   }
   /**
-   * @SINCE 1.89.0-SNAPSHOT
+   * @SINCE 1.90.0-SNAPSHOT
    *
    * Defines severity types.
    */
@@ -110,7 +110,7 @@ declare module "sap/ui/support/library" {
     Medium = "Medium",
   }
   /**
-   * @SINCE 1.89.0-SNAPSHOT
+   * @SINCE 1.90.0-SNAPSHOT
    *
    * Contains the available system presets.
    */
@@ -252,6 +252,160 @@ declare module "sap/ui/support/RuleAnalyzer" {
 }
 
 declare namespace sap {
+  namespace ui {
+    /**
+     * UI5 library: sap.ui.support. A library for the Support Assistant tool. Overview: The library provides
+     * the Support Assistant tool. It enables application developers to check whether their applications are
+     * built according to the best practices for building SAPUI5 apps. The tool uses a set of pre-defined rules
+     * to check all aspects of an application.
+     */
+    namespace support {
+      export const CoreFacade: undefined;
+
+      /**
+       * Overview: These channels enable the user to hook to the {@link sap.ui.support.WindowCommunicationBus
+       * } Usage: These channels are used for communication with Main.
+       */
+      export const WCBChannels: undefined;
+
+      /**
+       * Creates a RuleSet. The RuleSet can store multiple rules concerning namespaces. Usage: The RuleSet is
+       * an interface used to create, update and delete rulesets.
+       */
+      namespace RuleSet {
+        /**
+         * Adds rules to RuleSet.
+         */
+        function addRule(
+          /**
+           * Settings object with rule information
+           */
+          oSettings: object
+        ): string;
+        /**
+         * Clears all rulesets inside the RuleSet.
+         */
+        function clearAllRuleSets(): void;
+        /**
+         * Gets all rules from the RuleSet.
+         */
+        function getRules(): object;
+        /**
+         * Loads the previous selection of the user - which rules are selected to be run by the Rule Analyzer. The
+         * method applies the settings to the currently loaded rules.
+         */
+        function loadSelectionOfRules(
+          /**
+           * The current loaded libraries and their rules
+           */
+          aLibraries: Object[]
+        ): void;
+        /**
+         * Remove rule from RuleSet.
+         */
+        function removeRule(
+          /**
+           * Rule object that will be removed
+           */
+          oRule: object
+        ): void;
+        /**
+         * Stores which rules are selected to be run by the analyzer on the next check
+         */
+        function storeSelectionOfRules(
+          /**
+           * The data for the libraries and their rules
+           */
+          aLibraries: Object[]
+        ): void;
+        /**
+         * Updates rules from the RuleSet.
+         */
+        function updateRule(
+          /**
+           * Rule ID
+           */
+          sRuleId: string,
+          /**
+           * Rule settings
+           */
+          ORuleSettings: object
+        ): string;
+      }
+
+      /**
+       * @SINCE 1.48
+       *
+       * Allows to select the scope of analysis on an application.
+       *
+       * Overview:
+       *
+       * `ExecutionScope` is the third parameter of a rule check function. It provides access to internal UI5
+       * objects available for inspection. The `getElements` API method allows the user to select a specific subset
+       * of elements valid for their case. It accepts one query object argument.
+       *
+       * Usage:
+       *
+       * When a rule is executed, three parameters are passed: `oIssueManager`, `oCoreFacade` and `oScope`.
+       *
+       * An `ExecutionScope` instance is passed to every call of a rule check function. When you analyze your
+       * application, available objects are collected depending on the settings passed to the Support Assistant
+       * at the moment when you start it.
+       */
+      class ExecutionScope {
+        /**/
+        constructor();
+
+        /**/
+        static getElements(
+          /**
+           * Object with specific filtering options
+           */
+          oConfig: {
+            /**
+             * Type name to filter by type
+             */
+            type: string;
+            /**
+             * Option to exclude elements that are not public aggregations
+             */
+            public: boolean;
+            /**
+             * Option to exclude elements that are clones of list bindings
+             */
+            cloned: boolean;
+          }
+        ): Array<any>;
+        /**
+         * Gets elements by their type
+         */
+        static getElementsByClassName(
+          /**
+           * Either string or function to be used when selecting a subset of elements
+           */
+          classNameSelector: string | Function
+        ): Array<any>;
+        /**
+         * Gets the logged objects by object type
+         */
+        static getLoggedObjects(
+          /**
+           * Type of logged objects
+           */
+          type: any
+        ): Array<any>;
+        /**
+         * Returns all public elements, i.e. elements that are part of public API aggregations
+         */
+        static getPublicElements(): Array<any>;
+        /**
+         * Gets the type of the execution scope
+         */
+        static getType(): string;
+      }
+    }
+  }
+
   interface IUI5DefineDependencyNames {
     "sap/ui/support/jQuery.sap.support": undefined;
 

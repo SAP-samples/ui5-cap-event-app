@@ -1,17 +1,6 @@
-// For Library Version: 1.89.0
+// For Library Version: 1.90.0
 
-declare module "sap/ui/fl/library/__$apply" {}
-
-declare module "sap/ui/fl/library/__$initial" {}
-
-declare module "sap/ui/fl/library/__$write" {}
-
-declare module "sap/ui/fl/library" {
-  export * as apply from "sap/ui/fl/library/__$apply";
-  export * as initial from "sap/ui/fl/library/__$initial";
-
-  export * as write from "sap/ui/fl/library/__$write";
-}
+declare module "sap/ui/fl/library" {}
 
 declare module "sap/ui/fl/apply/api/ControlVariantApplyAPI" {
   import ManagedObject from "sap/ui/base/ManagedObject";
@@ -56,7 +45,7 @@ declare module "sap/ui/fl/apply/api/ControlVariantApplyAPI" {
         /**
          * Selector of the control
          */
-        selector: any;
+        selector: /* was: sap.ui.fl.Selector */ any;
         /**
          * ID of the variant management control
          */
@@ -100,7 +89,7 @@ declare module "sap/ui/fl/apply/api/ControlVariantApplyAPI" {
         /**
          * Selector of the control
          */
-        selector: any;
+        selector: /* was: sap.ui.fl.Selector */ any;
         /**
          * ID of the variant management control
          */
@@ -223,7 +212,7 @@ declare module "sap/ui/fl/interfaces/Delegate" {
         /**
          * Modifier to harmonize access, creation and manipulation to controls in XML views and JS controls
          */
-        modifier: any;
+        modifier: /* was: sap.ui.core.util.reflection.BaseTreeModifier */ any;
         /**
          * Needed to calculate the correct ID in case you provide a selector
          */
@@ -280,7 +269,7 @@ declare module "sap/ui/fl/interfaces/Delegate" {
         /**
          * Modifier to harmonize access, creation and manipulation to controls in XML views and JS controls
          */
-        modifier: any;
+        modifier: /* was: sap.ui.core.util.reflection.BaseTreeModifier */ any;
         /**
          * Needed to calculate the correct ID in case you provide a selector
          */
@@ -329,7 +318,7 @@ declare module "sap/ui/fl/interfaces/Delegate" {
         /**
          * Modifier to harmonize access, creation and manipulation to controls in XML views and JS controls
          */
-        modifier: any;
+        modifier: /* was: sap.ui.core.util.reflection.BaseTreeModifier */ any;
         /**
          * Needed to calculate the correct ID in case you provide a selector
          */
@@ -530,6 +519,8 @@ declare module "sap/ui/fl/interfaces/Delegate" {
 }
 
 declare module "sap/ui/fl/transport/TransportDialog" {
+  import { default as Dialog, $DialogSettings } from "sap/m/Dialog";
+
   /**
    * @deprecated (since 1.74) - The TransportDialog should be used only internally inside the `sap.ui.fl`
    * library.
@@ -538,8 +529,16 @@ declare module "sap/ui/fl/transport/TransportDialog" {
    * transport request. It is not a generic utility, but part of the Variantmanament and therefore cannot
    * be used in any other application.
    */
-  export default class TransportDialog extends sap.ui.fl.write._internal
-    .transport.TransportDialog {
+  export default class TransportDialog extends Dialog {
+    /**
+     * Constructor for a new transport/TransportDialog.
+     */
+    constructor(
+      /**
+       * initial settings for the new control
+       */
+      mSettings?: $TransportDialogSettings
+    );
     /**
      * Constructor for a new transport/TransportDialog.
      */
@@ -551,9 +550,11 @@ declare module "sap/ui/fl/transport/TransportDialog" {
       /**
        * initial settings for the new control
        */
-      mSettings?: object
+      mSettings?: $TransportDialogSettings
     );
   }
+
+  export interface $TransportDialogSettings extends $DialogSettings {}
 }
 
 declare module "sap/ui/fl/variants/VariantManagement" {
@@ -1410,6 +1411,124 @@ declare module "sap/ui/fl/variants/VariantManagement" {
   }
 }
 
+declare module "sap/ui/fl/write/_internal/fieldExtensibility/ABAPExtensibilityVariant" {
+  import Metadata from "sap/ui/base/Metadata";
+
+  /**
+   * @SINCE 1.87
+   *
+   * Abstraction providing an API to handle an ABAP extension variant. Serves also as base class and dummy
+   * implementation.
+   */
+  interface ABAPExtensibilityVariant {
+    /**
+     * Creates a new subclass of class sap.ui.fl.write._internal.fieldExtensibility.ABAPExtensibilityVariant
+     * with name `sClassName` and enriches it with the information contained in `oClassInfo`.
+     *
+     * `oClassInfo` might contain the same kind of information as described in {@link sap.ui.base.Object.extend}.
+     */
+    extend(
+      /**
+       * Name of the class being created
+       */
+      sClassName: string,
+      /**
+       * Object literal with information about the class
+       */
+      oClassInfo?: object,
+      /**
+       * Constructor function for the metadata object; if not given, it defaults to the metadata implementation
+       * used by this class
+       */
+      FNMetaImpl?: Function
+    ): Function;
+    /**
+     * Returns a metadata object for class sap.ui.fl.write._internal.fieldExtensibility.ABAPExtensibilityVariant.
+     */
+    getMetadata(): Metadata;
+  }
+  const ABAPExtensibilityVariant: ABAPExtensibilityVariant;
+  export default ABAPExtensibilityVariant;
+}
+
+declare module "sap/ui/fl/write/_internal/fieldExtensibility/MultiTenantABAPExtensibilityVariant" {
+  import Metadata from "sap/ui/base/Metadata";
+
+  /**
+   * @SINCE 1.87
+   *
+   * Extension variant for ABAP multi tenant environments (via so called Predefined Fields)
+   */
+  interface MultiTenantABAPExtensibilityVariant {
+    /**
+     * Creates a new subclass of class sap.ui.fl.write._internal.fieldExtensibility.MultiTenantABAPExtensibilityVariant
+     * with name `sClassName` and enriches it with the information contained in `oClassInfo`.
+     *
+     * `oClassInfo` might contain the same kind of information as described in {@link sap.ui.fl.write._internal.fieldExtensibility.ABAPExtensibilityVariant.extend}.
+     */
+    extend(
+      /**
+       * Name of the class being created
+       */
+      sClassName: string,
+      /**
+       * Object literal with information about the class
+       */
+      oClassInfo?: object,
+      /**
+       * Constructor function for the metadata object; if not given, it defaults to the metadata implementation
+       * used by this class
+       */
+      FNMetaImpl?: Function
+    ): Function;
+    /**
+     * Returns a metadata object for class sap.ui.fl.write._internal.fieldExtensibility.MultiTenantABAPExtensibilityVariant.
+     */
+    getMetadata(): Metadata;
+  }
+  const MultiTenantABAPExtensibilityVariant: MultiTenantABAPExtensibilityVariant;
+  export default MultiTenantABAPExtensibilityVariant;
+}
+
+declare module "sap/ui/fl/write/_internal/fieldExtensibility/SingleTenantABAPExtensibilityVariant" {
+  import Metadata from "sap/ui/base/Metadata";
+
+  /**
+   * @SINCE 1.87
+   *
+   * Extension variant for ABAP single tenant environnments (via so called Custom Fields)
+   */
+  interface SingleTenantABAPExtensibilityVariant {
+    /**
+     * Creates a new subclass of class sap.ui.fl.write._internal.fieldExtensibility.SingleTenantABAPExtensibilityVariant
+     * with name `sClassName` and enriches it with the information contained in `oClassInfo`.
+     *
+     * `oClassInfo` might contain the same kind of information as described in {@link sap.ui.fl.write._internal.fieldExtensibility.ABAPExtensibilityVariant.extend}.
+     */
+    extend(
+      /**
+       * Name of the class being created
+       */
+      sClassName: string,
+      /**
+       * Object literal with information about the class
+       */
+      oClassInfo?: object,
+      /**
+       * Constructor function for the metadata object; if not given, it defaults to the metadata implementation
+       * used by this class
+       */
+      FNMetaImpl?: Function
+    ): Function;
+    /**
+     * Returns a metadata object for class sap.ui.fl.write._internal.fieldExtensibility.SingleTenantABAPExtensibilityVariant.
+     */
+    getMetadata(): Metadata;
+  }
+  const SingleTenantABAPExtensibilityVariant: SingleTenantABAPExtensibilityVariant;
+  export default SingleTenantABAPExtensibilityVariant;
+}
+
 declare module "sap/ui/fl/write/api/connectors/ObjectStorageConnector" {
   /**
    * @SINCE 1.84
@@ -1517,6 +1636,10 @@ declare namespace sap {
 
     "sap/ui/fl/apply/_internal/flexObjects/CompVariantRevertData": undefined;
 
+    "sap/ui/fl/apply/_internal/flexObjects/RevertData": undefined;
+
+    "sap/ui/fl/apply/_internal/flexObjects/UpdatableChange": undefined;
+
     "sap/ui/fl/apply/_internal/flexState/changes/DependencyHandler": undefined;
 
     "sap/ui/fl/apply/_internal/flexState/changes/ExtensionPointState": undefined;
@@ -1543,11 +1666,15 @@ declare namespace sap {
 
     "sap/ui/fl/apply/api/UI2PersonalizationApplyAPI": undefined;
 
+    "sap/ui/fl/Cache": undefined;
+
     "sap/ui/fl/Change": undefined;
 
     "sap/ui/fl/changeHandler/Base": undefined;
 
     "sap/ui/fl/changeHandler/BaseAddViaDelegate": undefined;
+
+    "sap/ui/fl/ChangePersistenceFactory": undefined;
 
     "sap/ui/fl/ControlPersonalizationAPI": undefined;
 
@@ -1556,6 +1683,10 @@ declare namespace sap {
     "sap/ui/fl/descriptorRelated/api/DescriptorInlineChangeFactory": undefined;
 
     "sap/ui/fl/descriptorRelated/api/DescriptorVariantFactory": undefined;
+
+    "sap/ui/fl/EventHistory": undefined;
+
+    "sap/ui/fl/FlexControllerFactory": undefined;
 
     "sap/ui/fl/initial/_internal/connectors/BackendConnector": undefined;
 
@@ -1582,6 +1713,10 @@ declare namespace sap {
     "sap/ui/fl/interfaces/Delegate": undefined;
 
     "sap/ui/fl/library": undefined;
+
+    "sap/ui/fl/PreprocessorImpl": undefined;
+
+    "sap/ui/fl/registry/ChangeRegistryItem": undefined;
 
     "sap/ui/fl/registry/Settings": undefined;
 
@@ -1627,6 +1762,12 @@ declare namespace sap {
 
     "sap/ui/fl/write/_internal/extensionPoint/Registry": undefined;
 
+    "sap/ui/fl/write/_internal/fieldExtensibility/ABAPExtensibilityVariant": undefined;
+
+    "sap/ui/fl/write/_internal/fieldExtensibility/MultiTenantABAPExtensibilityVariant": undefined;
+
+    "sap/ui/fl/write/_internal/fieldExtensibility/SingleTenantABAPExtensibilityVariant": undefined;
+
     "sap/ui/fl/write/_internal/flexState/compVariants/CompVariantState": undefined;
 
     "sap/ui/fl/write/_internal/flexState/FlexObjectState": undefined;
@@ -1652,6 +1793,8 @@ declare namespace sap {
     "sap/ui/fl/write/api/FeaturesAPI": undefined;
 
     "sap/ui/fl/write/api/FieldExtensibility": undefined;
+
+    "sap/ui/fl/write/api/LocalResetAPI": undefined;
 
     "sap/ui/fl/write/api/PersistenceWriteAPI": undefined;
 

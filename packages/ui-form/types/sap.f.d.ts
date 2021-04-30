@@ -1,49 +1,8 @@
-// For Library Version: 1.89.0
+// For Library Version: 1.90.0
 
 declare module "sap/tnt/library" {
   export interface IToolHeader {
     __implements__sap_tnt_IToolHeader: boolean;
-  }
-}
-
-declare module "sap/f/library/__$cards" {
-  /**
-   * @SINCE 1.65
-   *
-   * Different options for the position of the header in controls that implement the {@link sap.f.ICard} interface.
-   */
-  export enum HeaderPosition {
-    /**
-     * The Header is under the content.
-     */
-    Bottom = "Bottom",
-    /**
-     * The Header is over the content.
-     */
-    Top = "Top",
-  }
-  /**
-   * @SINCE 1.62
-   *
-   * Marker interface for controls suitable as a header in controls that implement the {@link sap.f.ICard}
-   * interface.
-   */
-  export interface IHeader {
-    __implements__sap_f_cards_IHeader: boolean;
-  }
-}
-
-declare module "sap/f/library/__$dnd" {
-  /**
-   * @SINCE 1.68
-   *
-   * Interface that should be implemented by grid controls, if they are working with the `sap.f.dnd.GridDropInfo`.
-   *
-   * It is highly recommended that those grid controls have optimized `removeItem` and `insertItem` methods
-   * (if "items" is target drop aggregation). Meaning to override them in a way that they don't trigger invalidation.
-   */
-  export interface IGridDroppable {
-    __implements__sap_f_dnd_IGridDroppable: boolean;
   }
 }
 
@@ -60,8 +19,6 @@ declare module "sap/f/library" {
 
   import Control from "sap/ui/core/Control";
 
-  import * as cards from "sap/f/library/__$cards";
-
   /**
    * @SINCE 1.69
    * @deprecated (since 1.73) - Use the {@link sap.m.AvatarColor} instead.
@@ -76,7 +33,7 @@ declare module "sap/f/library" {
    *
    * This is an alias for {@link sap.m.AvatarColor} and only kept for compatibility reasons.
    */
-  export type AvatarColor = AvatarColor1 | keyof typeof AvatarColor1;
+  export type AvatarColor = AvatarColor1;
 
   /**
    * @SINCE 1.73
@@ -104,9 +61,7 @@ declare module "sap/f/library" {
    *
    * This is an alias for {@link sap.m.AvatarImageFitType} and only kept for compatibility reasons.
    */
-  export type AvatarImageFitType =
-    | AvatarImageFitType1
-    | keyof typeof AvatarImageFitType1;
+  export type AvatarImageFitType = AvatarImageFitType1;
 
   /**
    * @SINCE 1.46
@@ -116,7 +71,7 @@ declare module "sap/f/library" {
    *
    * This is an alias for {@link sap.m.AvatarShape} and only kept for compatibility reasons.
    */
-  export type AvatarShape = AvatarShape1 | keyof typeof AvatarShape1;
+  export type AvatarShape = AvatarShape1;
 
   /**
    * @SINCE 1.46
@@ -126,7 +81,7 @@ declare module "sap/f/library" {
    *
    * This is an alias for {@link sap.m.AvatarSize} and only kept for compatibility reasons.
    */
-  export type AvatarSize = AvatarSize1 | keyof typeof AvatarSize1;
+  export type AvatarSize = AvatarSize1;
 
   /**
    * @SINCE 1.46
@@ -136,10 +91,8 @@ declare module "sap/f/library" {
    *
    * This is an alias for {@link sap.m.AvatarType} and only kept for compatibility reasons.
    */
-  export type AvatarType = AvatarType1 | keyof typeof AvatarType1;
+  export type AvatarType = AvatarType1;
 
-  export * as cards from "sap/f/library/__$cards";
-  export * as dnd from "sap/f/library/__$dnd";
   /**
    * @SINCE 1.50
    * @deprecated (since 1.54) - Consumers of the {@link sap.f.DynamicPageTitle} control should now use the
@@ -444,6 +397,48 @@ declare module "sap/f/library" {
      * The direction is up.
      */
     Up = "Up",
+  }
+
+  export namespace cards {
+    /**
+     * @SINCE 1.62
+     *
+     * Marker interface for controls suitable as a header in controls that implement the {@link sap.f.ICard}
+     * interface.
+     */
+    interface IHeader {
+      __implements__sap_f_cards_IHeader: boolean;
+    }
+
+    /**
+     * @SINCE 1.65
+     *
+     * Different options for the position of the header in controls that implement the {@link sap.f.ICard} interface.
+     */
+    enum HeaderPosition {
+      /**
+       * The Header is under the content.
+       */
+      Bottom = "Bottom",
+      /**
+       * The Header is over the content.
+       */
+      Top = "Top",
+    }
+  }
+
+  export namespace dnd {
+    /**
+     * @SINCE 1.68
+     *
+     * Interface that should be implemented by grid controls, if they are working with the `sap.f.dnd.GridDropInfo`.
+     *
+     * It is highly recommended that those grid controls have optimized `removeItem` and `insertItem` methods
+     * (if "items" is target drop aggregation). Meaning to override them in a way that they don't trigger invalidation.
+     */
+    interface IGridDroppable {
+      __implements__sap_f_dnd_IGridDroppable: boolean;
+    }
   }
 }
 
@@ -2655,6 +2650,8 @@ declare module "sap/f/DynamicPage" {
 
   import ElementMetadata from "sap/ui/core/ElementMetadata";
 
+  import ScrollEnablement from "sap/ui/core/delegate/ScrollEnablement";
+
   import { ID } from "sap/ui/core/library";
 
   import DynamicPageTitle from "sap/f/DynamicPageTitle";
@@ -2908,6 +2905,10 @@ declare module "sap/f/DynamicPage" {
      * Default value is `false`.
      */
     getPreserveHeaderStateOnScroll(): boolean;
+    /**
+     * Returns the `sap.ui.core.ScrollEnablement` delegate which is used with this control.
+     */
+    getScrollDelegate(): ScrollEnablement;
     /**
      * Gets current value of property {@link #getShowFooter showFooter}.
      *
@@ -7630,8 +7631,6 @@ declare module "sap/f/GridContainer" {
      * **Note:** If set to `true` the properties `rowSize` for grid layout, and `minRows` and `rows` per item
      * will be ignored.
      *
-     * **Note:** Not supported in IE11, Edge 15.
-     *
      * Default value is `false`.
      */
     getInlineBlockLayout(): boolean;
@@ -7805,8 +7804,6 @@ declare module "sap/f/GridContainer" {
      *
      * **Note:** If set to `true` the properties `rowSize` for grid layout, and `minRows` and `rows` per item
      * will be ignored.
-     *
-     * **Note:** Not supported in IE11, Edge 15.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -8027,8 +8024,6 @@ declare module "sap/f/GridContainer" {
      *
      * **Note:** If set to `true` the properties `rowSize` for grid layout, and `minRows` and `rows` per item
      * will be ignored.
-     *
-     * **Note:** Not supported in IE11, Edge 15.
      */
     inlineBlockLayout?: boolean | PropertyBindingInfo;
 
@@ -8360,9 +8355,7 @@ declare module "sap/f/GridContainerSettings" {
     /**
      * Gets current value of property {@link #getColumnSize columnSize}.
      *
-     * The width of the columns.
-     *
-     * **Note:** Values different than single size in 'px' or 'rem' are not supported for the polyfill for IE.
+     * The width of the columns. **Note:** Use only 'px' or 'rem'. Some features may not work as expected otherwise.
      *
      * Default value is `"80px"`.
      */
@@ -8384,8 +8377,6 @@ declare module "sap/f/GridContainerSettings" {
      * to breath between those two values.
      *
      * **Note:** Will not work in combination with `columnSize`.
-     *
-     * **Note:** Not supported for the polyfill for IE.
      */
     getMaxColumnSize(): CSSSize;
     /**
@@ -8399,8 +8390,6 @@ declare module "sap/f/GridContainerSettings" {
      * to breath between those two values.
      *
      * **Note:** Will not work in combination with `columnSize`.
-     *
-     * **Note:** Not supported for the polyfill for IE.
      */
     getMinColumnSize(): CSSSize;
     /**
@@ -8431,9 +8420,7 @@ declare module "sap/f/GridContainerSettings" {
     /**
      * Sets a new value for property {@link #getColumnSize columnSize}.
      *
-     * The width of the columns.
-     *
-     * **Note:** Values different than single size in 'px' or 'rem' are not supported for the polyfill for IE.
+     * The width of the columns. **Note:** Use only 'px' or 'rem'. Some features may not work as expected otherwise.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      *
@@ -8470,8 +8457,6 @@ declare module "sap/f/GridContainerSettings" {
      *
      * **Note:** Will not work in combination with `columnSize`.
      *
-     * **Note:** Not supported for the polyfill for IE.
-     *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      */
     setMaxColumnSize(
@@ -8487,8 +8472,6 @@ declare module "sap/f/GridContainerSettings" {
      * to breath between those two values.
      *
      * **Note:** Will not work in combination with `columnSize`.
-     *
-     * **Note:** Not supported for the polyfill for IE.
      *
      * When called with a value of `null` or `undefined`, the default value of the property will be restored.
      */
@@ -8527,9 +8510,7 @@ declare module "sap/f/GridContainerSettings" {
     columns?: int | PropertyBindingInfo;
 
     /**
-     * The width of the columns.
-     *
-     * **Note:** Values different than single size in 'px' or 'rem' are not supported for the polyfill for IE.
+     * The width of the columns. **Note:** Use only 'px' or 'rem'. Some features may not work as expected otherwise.
      */
     columnSize?: CSSSize | PropertyBindingInfo;
 
@@ -8538,8 +8519,6 @@ declare module "sap/f/GridContainerSettings" {
      * to breath between those two values.
      *
      * **Note:** Will not work in combination with `columnSize`.
-     *
-     * **Note:** Not supported for the polyfill for IE.
      */
     minColumnSize?: CSSSize | PropertyBindingInfo;
 
@@ -8548,8 +8527,6 @@ declare module "sap/f/GridContainerSettings" {
      * to breath between those two values.
      *
      * **Note:** Will not work in combination with `columnSize`.
-     *
-     * **Note:** Not supported for the polyfill for IE.
      */
     maxColumnSize?: CSSSize | PropertyBindingInfo;
 
@@ -8638,9 +8615,6 @@ declare module "sap/f/GridList" {
    * will be fired. The implementation of the `borderReached` event allows the application developer to control
    * where the focus goes, and depending on the surrounding layout pass the focus to a specific place in a
    * neighboring `GridList` using the method {@link #focusItemByDirection}.
-   *
-   * Current Limitations:
-   * 	 - For Microsoft Internet Explorer some layouts are not supported, due to browser specifics.
    */
   export default class GridList
     extends ListBase
@@ -9198,7 +9172,7 @@ declare module "sap/f/IllustratedMessage" {
      * Determines which illustration type is displayed.
      *
      * **Note:** The {@link sap.f.IllustratedMessageType} enumeration contains a default illustration set. If
-     * you want to use another illustration set, yuu have to register it in the {@link sap.f.IllustrationPool}.
+     * you want to use another illustration set, you have to register it in the {@link sap.f.IllustrationPool}.
      *
      * Example input for the `illustrationType` property is `sapIllus-UnableToLoad`. The logic behind this format
      * is as follows:
@@ -9396,7 +9370,7 @@ declare module "sap/f/IllustratedMessage" {
      * Determines which illustration type is displayed.
      *
      * **Note:** The {@link sap.f.IllustratedMessageType} enumeration contains a default illustration set. If
-     * you want to use another illustration set, yuu have to register it in the {@link sap.f.IllustrationPool}.
+     * you want to use another illustration set, you have to register it in the {@link sap.f.IllustrationPool}.
      *
      * Example input for the `illustrationType` property is `sapIllus-UnableToLoad`. The logic behind this format
      * is as follows:
