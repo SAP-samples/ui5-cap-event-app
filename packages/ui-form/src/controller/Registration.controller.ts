@@ -87,7 +87,7 @@ export default class RegistrationController extends Controller {
 		// CREATE
 		if (!aContexts || aContexts.length === 0) { // no data for this user yet
 			const oBinding = this.oDataModel.bindList("/Person");
-			oBinding.attachCreateCompleted((oEvent: UI5Event) => {
+			oBinding.attachCreateCompleted((oEvent : UI5Event) => {
 				if (oEvent.getParameter("success")) {
 					this.getView().bindObject({path: oEvent.getParameter("context").getPath()});
 				} else {
@@ -145,7 +145,7 @@ export default class RegistrationController extends Controller {
 		}
 	};
 
-	public contextAvailable(sPath: string) {
+	public contextAvailable(sPath : string) {
 		this.getView().bindElement({path: sPath});
 	};
 
@@ -154,15 +154,15 @@ export default class RegistrationController extends Controller {
 		oListBinding.create({});
 	};
 
-	public deleteFamilyMember(oEvent: UI5Event) {
+	public deleteFamilyMember(oEvent : UI5Event) {
 		((oEvent.getSource() as Control).getBindingContext() as V4Context).delete("$auto").then(() => {
 			// deletion success
-		}, (oError: Error) => {
+		}, (oError : Error) => {
 			// TODO: ignore deletion failure?
 		});
 	};
 
-	public validateControl(oControl: Control) {
+	public validateControl(oControl : Control) {
 		if (oControl instanceof InputBase) {
 			if (oControl.getRequired() && !oControl.getValue()) {
 				oControl.fireValidationError({
@@ -179,11 +179,11 @@ export default class RegistrationController extends Controller {
 
 		// determine field names for validation dialog
 		const oBundle = this.oBundle;
-		const mFields = {
+		const mFields : Person = {
 			LastName: oBundle.getText("name"),
 			FirstName: oBundle.getText("firstName"),
 			Birthday: oBundle.getText("dateOfBirth")
-		} as Person;
+		};
 
 		// check for missing fields
 		const aMissing = [];
@@ -248,7 +248,7 @@ export default class RegistrationController extends Controller {
 			// navigate without hash change
 			(this.getOwnerComponent() as UIComponent).getRouter().getTargets().display("confirmation");
 		})
-		.catch((err: Error) => {
+		.catch((err : Error) => {
 			this.showErrorDialog()
 		});
 	};
