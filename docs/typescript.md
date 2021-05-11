@@ -27,7 +27,7 @@ var someNumber: number;
 But of course there are more language constructs, used for defining structured types, classes, enums and so on. For a real introduction to TypeScript with tutorials and an [online playground](https://www.typescriptlang.org/play?#code/PQKgUABCEIYQbjATgSxgIwDYFNImGIkhAM4D2AttgHICuF62SAXBAHb2NIDcYYoeWBABmtNgGMALijJs8BUROmyIFWpmkAHTAE8AFAA9WHBkwA0EHcc5MAlBADekCEmyTaSNhANRLvAL58Ar5w4pgwJCTyYGERJBAA4q5uTI7OEBAA5snSbJmsJJKoebzpEOKyhUi0UmTEelSRMJnYBUUoefZOGT09kgAWKCQAdNnYbh2ZEAC8qthNLby9gb1lY256XWW9ru6eEABEABLYmJhkFgcQANQQA0OjOZNLPYGBYEA), head over to the language homepage at [www.typescriptlang.org](https://www.typescriptlang.org
 ). They also offer a handy [5-minutes introduction for JavaScript developers](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html).
 
-When developers write TypeScript code, the type information is dispersed in the code. But one can also create separate type definition files for already existing JavaScript libraries. Such files have the extension `*.d.ts` and these are exactly what we are providing for UI5 now. For many other JavaScript libraries such type definition files can be found at [definitelytyped.org](https://definitelytyped.org/). 
+When developers write TypeScript code, the type information is scattered across the code. But one can also create separate type definition files for already existing JavaScript libraries. Such files have the extension `*.d.ts` and these are exactly what we are providing for UI5 now. For many other JavaScript libraries such type definition files can be found at [definitelytyped.org](https://definitelytyped.org/). 
 
 
 
@@ -42,7 +42,7 @@ IMPORTANT: As we want to enable and promote using modern JavaScript, these *.d.t
 
 - The type definitions are work in progress with NO COMPATIBILITY GUARANTEES! Changes will happen.
 - The string syntax for bindings is not supported yet. This means instead of e.g. `new Button({text: "{myModel>someText}"})` one has to use the object syntax to prevent TypeScript from complaining: `new Button({text: {path: "myModel>someText"}})`
-- The types of UI5 API parameter and return values are not always precisely defined. This happens especially for nested structures and the types with which Promises resolve. This is because the type definition files are generated from the regular JSDoc documentation, which not always has complete `@param` definitions, but explains some parts in plaintext instead. When you notice a place where types are not fully defined, please open a GitHub ticket. Fixing it will not only improve the TypeScript experience, but also make our regular API documentation more precise.
+- The types of UI5 API parameter and return values are not always precisely defined. This happens especially for nested structures and for the types with which Promises resolve. This is because the type definition files are generated from the regular JSDoc documentation, which not always has complete `@param` definitions, but occasionally explains some parts in plaintext instead. When you notice a place where types are not fully defined, [please open a GitHub issue](https://github.com/SAP/openui5/blob/master/CONTRIBUTING.md#report-an-issue). Fixing it will not only improve the TypeScript experience, but also make our regular API documentation more precise.
 - There is no support yet for automatically defining the API of custom controls.
 
 
@@ -198,6 +198,44 @@ Now enjoy also the other benefits of TypeScript, like the code completion and in
 ![Code Completion Popup for Method Call on Control](code-completion-2.png)
 
 
+#### Good to Know
+
+- When you import the `sap.ui.core.Core` class, you get the singleton instance of the core, just like when you use `sap.ui.require(...)`:
+  ```ts
+  import Core from "sap/ui/core/Core";
+  ...
+  Core.byId("myButton");
+  ```
+
+- Make sure to avoid collisions. The type `Event` is already defined as browser event, so you might want to locally name it `UI5Event`:
+	```ts
+	import UI5Event from "sap/ui/base/Event";
+	```
+
+
+- Often there is a 1:1 relationship between the classes you want to use and the modules to load, so most imports in UI5 apps will look like this, loading a class which is the default export of a module:
+	```ts
+	import Button from "sap/m/Button";
+	```
+	But there are also modules with multiple exports where you may want to pick a specific one: 
+	```ts
+	import { URLHelper } from "sap/m/library";
+	import { CSSColor, ValueState, SortOrder } from "sap/ui/core/library";
+	import MessageBox, { Action as MessageBoxAction } from "sap/m/MessageBox";
+	import { support } from "sap/ui/Device";
+	```
+	This is mostly the case for all types defined in library.js files (e.g. many of the enums) and also enums defined within controls.<br>
+	And of course there are also modules (especially in low-level parts of the core) which define functions to use:
+	```ts
+	import syncStyleClass from "sap/ui/core/syncStyleClass";
+	```
+
+- If you need to use jQuery directly, you can import it like this:
+	```ts
+	import jQuery from "sap/ui/thirdparty/jquery";
+	```
+
+
 ### Check the Code
 
 You can run a TypeScript check of the app from the command line with:
@@ -242,7 +280,7 @@ In the debugger of browsers, you can step through the original TypeScript code y
 This is achieved by generating sourcemaps, which contain the original code and information to which place in that original code the actually executed JavaScript statements belong. At least in Chrome, the TypeScript version of the code is automatically opened when a breakpoint is hit, even when that breakpoint was set in the JavaScript version of a file. If you can't see the TypeScript code, make sure sourcemaps are enabled in the settings of your browser's developer tools.
 
 
-### Additional considerations
+### Additional Considerations
 
 #### Performance
 
@@ -262,7 +300,150 @@ Remember that TypeScript does NOT ensure type correctness at runtime. Despite al
 
 ## Converting UI5 Apps from JavaScript to TypeScript
 
-TODO: this section will describe the typical tasks and issues when an existing JavaScript UI5 app is converted to TypeScript.
+Let's say you have an existing JavaScript UI5 app and want to convert it to TypeScript: what are the steps and efforts?
+
+The general process is to walk through the below steps, guided by the TypeScript errors displayed in the editor (and reported by running `yarn verify-app`).
+
+### 1. Structural Code Changes: Module Loading and Class Definition
+
+These steps are not really related to TypeScript, but convert the code into the more modern JavaScript syntax suppoted by the UI5 type definition files.
+
+The first step is to convert class definitions from the proprietary UI5 syntax to ES class syntax.
+
+From:
+```js
+var AppController = Controller.extend("ui5tssampleapp.controller.AppController", {
+	onInit: function _onInit() {
+		// apply content density mode to root view
+		this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
+	}
+});
+```
+To:
+```js
+/**
+ * @namespace ui5tssampleapp.controller
+ */
+class AppController extends Controller {
+	public onInit() {
+		// apply content density mode to root view
+		this.getView().addStyleClass((this.getOwnerComponent()).getContentDensityClass());
+	};
+};
+```
+It is important to annotate the class with the namespace, so the back transformation can re-add it.
+
+
+The second step is to convert the dependency loading (`sap.ui.require(...)`) to ES module syntax. Many of the JS files in a typical UI5 app actually do not only require dependencies, but also provide a new class on their own - often a controller. In this case `sap.ui.define()` is replaced with ES module imports <i>and</i> a module export.
+
+In the above example, this looks as follows:
+```js
+sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
+	/**
+	 * @namespace ui5tssampleapp.controller
+	 */
+	class AppController extends Controller {
+		... // as above
+	};
+
+  return AppController;
+});
+```
+
+```js
+import Controller from "sap/ui/core/mvc/Controller";
+
+/**
+ * @namespace ui5tssampleapp.controller
+ */
+export default class AppController extends Controller {
+	... // as above
+};
+```
+
+### 2. Standard TypeScript Code Adaptations
+
+- Add type information to method parameters.
+- Add private member class variables (with type information) to the beginning of the class definition. (In JavaScript they are often created on-the-fly later on during the lifetime of a class instance.)
+- Convert conventional functions to arrow functions when `someFunction.bind(...)` is used because TypeScript does not seem to propagate the type of the bound "this" context into the function body.
+- Define further types and structures needed withing the code, if applicable.
+
+Hint: use the most precise type to have all properties available. Examples:
+- Use specific types like `KeyboardEvent`, not just `Event` for browser events.
+- Use `JQuery.DropEvent`, not `JQuery.Event` or `JQueryEventObject` or just `Event` when `event.originalTarget` is needed.
+- Use `JQueryXHR`, not `XMLHttpRequest`.
+- ...
+
+### 3. Casts for Return Values of Generic Methods
+
+Generic getter methods like `document.getElementById(...)` are commonly defined to return the super-type of all possible types (in this case `HTMLElement`) although in practice it will usually be a specific sub-type (e.g. an `HTMLAnchorElement`).
+
+In many cases you will have to cast the return value to the specific type to use it.
+
+The same is valid for several UI5 methods, most prominently the following:
+- core.byId() / view.byId()
+- control.getBinding()
+- ownerComponent.getModel()
+- event.getSource()
+- component.getRootControl()  
+- this.getOwnerComponent()
+ 
+This cast will sometimes also require an additional module import to make the type known. Sometimes this will be offered as "quick fix" by the code editor, sometimes it will have to be done manually.
+
+Coming back to the AppController example used above, this step will complete the TypeScript conversion: an additional import of the app's component is needed (called `AppComponent`), so within the `onInit` implementation the required typecast can be done. Without this typecast, the return type of `getOwnerComponent` would be a `sap.ui.core.Component`, which does not have the `getContentDensityClass` method defined in the app component.
+
+Before:
+```js
+import Controller from "sap/ui/core/mvc/Controller";
+
+/**
+ * @namespace ui5tssampleapp.controller
+ */
+export default class AppController extends Controller {
+
+	public onInit() {
+		// apply content density mode to root view
+		this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
+	};
+
+};
+```
+
+After:
+```ts
+import Controller from "sap/ui/core/mvc/Controller";
+import AppComponent from "../Component";
+
+/**
+ * @namespace ui5tssampleapp.controller
+ */
+export default class AppController extends Controller {
+
+	public onInit() {
+		// apply content density mode to root view
+		this.getView().addStyleClass((this.getOwnerComponent() as AppComponent).getContentDensityClass());
+	};
+
+};
+```
+
+For this controller file, the TypeScript conversion is now complete (and the actual TypeScript part of the conversion is the typecast).
+
+### 4. Solving the Remaining Issues You Might Face
+
+At this point, the number of remaining TypeScript errors should be reduced to a small minority.
+
+Some of the [limitations](#limitations) listed above can lead to TypeScript errors which are left after the above steps. E.g. when some complex types in method return values are not completely defined. This means you will not get code completion nor a type for these values. You are welcome to [report an issue at GitHub](https://github.com/SAP/openui5/blob/master/CONTRIBUTING.md#report-an-issue) to let us know, so we can improve the documentation. The same is recommended when a method has parameters which are not marked as optional, but can be omitted.
+
+
+
+### Conversion Learnings
+
+From our own app conversions for testing, we can say that the effort for converting small apps with 5-6 views and controllers to TypeScript is really limited (few hours).
+
+While doing so, we have found (and fixed) a few places in the UI5 type definitions which were not 100% defined (usually no problem, as easy workarounds like explicitly giving a type are possible),  but we have also found a few actual bugs in the application code, e.g. calling methods with wrong or missing parameters, access to private methods/variables of controls, or just typos.
+
+
 
 ## Resources
 
