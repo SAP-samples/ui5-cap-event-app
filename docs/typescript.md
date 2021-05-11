@@ -334,9 +334,12 @@ class AppController extends Controller {
 It is important to annotate the class with the namespace, so the back transformation can re-add it.
 
 
-The second step is to convert the dependency loading (`sap.ui.require(...)`) to ES module syntax. Many of the JS files in a typical UI5 app actually do not only require dependencies, but also provide a new class on their own - often a controller. In this case `sap.ui.define()` is replaced with ES module imports <i>and</i> a module export.
+The second step is to convert the dependency loading (`sap.ui.require(...)`) to ES module syntax. Many of the JS files in a typical UI5 app actually do not only require dependencies, but also provide a new class on their own - often a controller. In this case `sap.ui.define(...)` is replaced with ES module imports <i>and</i> a module export.
 
-In the above example, this looks as follows:
+In the above example, this looks as follows.
+
+Before:
+
 ```js
 sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
 	/**
@@ -349,6 +352,8 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
   return AppController;
 });
 ```
+
+After:
 
 ```js
 import Controller from "sap/ui/core/mvc/Controller";
