@@ -21,7 +21,7 @@
     "debug": "npm-run-all --parallel debug:server start:ui-form start:ui-admin",
     "debug:server": "yarn workspace ui5-cap-event-app-server cds:debug",
     "verify:ui-form": "yarn workspace ui5-cap-event-app-ui-form ts-typecheck",
-    "lint:ui-form": "yarn workspace ui5-cap-event-app-ui-form ts-lint"
+    "lint:ui-form": "yarn workspace ui5-cap-event-app-ui-form lint"
   },
   "repository": {
     "type": "git",

@@ -2,21 +2,19 @@
     "compilerOptions": {
         "target": "es2015",
         "module": "es2015",
-        "experimentalDecorators": true,
-        "removeComments": false,
         "skipLibCheck": true,
-        "strictNullChecks": false,
-        "strictPropertyInitialization": false,
         "preserveConstEnums": true,
         "sourceMap": false,
         "allowJs": true,
         "strict": true,
+        "strictNullChecks": false,
+        "strictPropertyInitialization": false,
         "rootDir": "./src",
         "outDir": "./dist",
         "baseUrl": "./",
-        "types": [],
         "typeRoots": [
-            "../../node_modules/@types"
+            "../../node_modules/@types",
+            "../../node_modules/@sapui5/ts-types-esm"
         ],
         "paths": {
             "sap/ui/eventregistration/form/*": [
@@ -24,14 +22,7 @@
             ]
         }
     },
-    "files": [
-        "./types/index.d.ts",
-        "../../node_modules/@types/jquery/index.d.ts"
-    ],
     "include": [
         "./src/**/*"
-    ],
-    "exclude": [
-        "./node_modules"
     ]
 }

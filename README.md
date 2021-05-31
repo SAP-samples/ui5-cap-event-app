@@ -2,16 +2,17 @@
 
 Showcase of two UI5 user interfaces, one built with freestyle [SAPUI5](https://sapui5.hana.ondemand.com/) (or rather [OpenUI5](https://openui5.org/)), the other using [SAP Fiori elements](https://community.sap.com/topics/fiori-elements), with a [CAP](https://cap.cloud.sap/docs/) backend, using [OData V4](https://www.odata.org/) with [Draft mode](https://experience.sap.com/fiori-design-web/draft-handling/).
 
-The freestyle SAPUI5 app in this repository branch is written in TypeScript and uses a preview copy of the new UI5 type definitions.
+<b>The freestyle SAPUI5 app in this repository branch is written in TypeScript and uses a preview of the new UI5 type definitions.</b>
 
+<b>You can find an in-depth introduction to using TypeScript in UI5 apps [here](docs/typescript.md).</b>
 
 | :point_up: TypeScript Remarks |
 |:---------------------------|
-| In the folder [packages/ui-form/types](packages/ui-form/types), this project contains a number of \*.d.ts files - a preview version of the new UI5 type definitions.<br/> 
- The file [packages/ui-form/tsconfig.json](packages/ui-form/tsconfig.json) contains the configuration for the TypeScript compilation, including a reference to these \*.d.ts files <br/>
+| The SAPUI5 type definitions are loaded as dev dependency [from npm package `@sapui5/ts-types-esm`](https://www.npmjs.com/package/@sapui5/ts-types-esm). You can inspect the \*.d.ts files in the `node_modules/@sapui5/ts-types-esm/types` directory after installing the dependencies with the `yarn` command.<br/>
+ The file [packages/ui-form/tsconfig.json](packages/ui-form/tsconfig.json) contains the configuration for the TypeScript compilation, including a reference to these \*.d.ts files in its `"typeRoots"` section.<br/>
  Normally, the UI5 JavaScript files (controllers, Component.js etc.) would reside in the `webapp` folder. Now they are in the [packages/ui-form/src](packages/ui-form/src) folder and the TypeScript compilation will create the `webapp` folder and place all output there. <br/>
  In addition to the TypeScript compilation, there is also a conversion from the ES6 module and class syntax used in the source files to the classic UI5 module loading and class definition syntax (`sap.ui.define(...)` and `superClass.extend(...)`). This conversion is using the [babel-plugin-transform-modules-ui5](https://github.com/r-murphy/babel-plugin-transform-modules-ui5) project from Ryan Murphy. <br/> 
- Both, the TypeScript compilation and the ES6 syntax transformation, are executed by Babel, as configured in the file [packages/ui-form/.babelrc](packages/ui-form/.babelrc)<br/> 
+ Both, the TypeScript compilation and the ES6 syntax transformation, are executed by Babel, as configured in the file [packages/ui-form/.babelrc.json](packages/ui-form/.babelrc.json)<br/> 
  This combined transformation is triggered by the `build:ts` and `watch:ts` scripts in [packages/ui-form/package.json](packages/ui-form/package.json#L9) |
  
 
@@ -104,9 +105,9 @@ You can then e.g. use the Node debugger which is built into the Chrome browser: 
 
 ## Limitations
 
-The local database uses in-memory mode. Data will be re-initialized after each restart.
+* The local database uses in-memory mode. Data will be re-initialized after each restart.
 
-The sample does not cover deployment of the app, where additional considerations e.g. regarding database and authentication are needed.
+* The sample does not cover deployment of the app, where additional considerations e.g. regarding database and authentication are needed.
 
 
 ## Known Issues

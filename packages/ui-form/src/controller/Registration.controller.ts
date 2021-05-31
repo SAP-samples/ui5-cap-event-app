@@ -15,6 +15,7 @@ import Control from "sap/ui/core/Control";
 import Button from "sap/m/Button";
 import UIComponent from "sap/ui/core/UIComponent";
 import UI5Event from "sap/ui/base/Event";
+import ODataContextBinding from "sap/ui/model/odata/v4/ODataContextBinding";
 
 
 // some type definitions for data structures used within the app
@@ -43,7 +44,7 @@ export default class RegistrationController extends Controller {
 	private oBundle : ResourceBundle;
 	private oDataModel : ODataModel;
 
-	public onInit() {
+	public onInit() : void {
 
 		// keep the reference to the OData model
 		this.oDataModel = this.getOwnerComponent().getModel() as ODataModel;
@@ -59,6 +60,8 @@ export default class RegistrationController extends Controller {
 		oBinding.filter(oDraftORNoDraftSiblingFilter);
 		oBinding.requestContexts(0, 2).then((aContexts) => { // there should be only one. Request two to detect error situations.
 			this.onExistingDataLoaded(aContexts);
+		}).catch(() => {
+			MessageToast.show(this.oBundle.getText("errorWhenLoadingData"));
 		});
 
 		// store the reference to the i18n model
@@ -81,15 +84,16 @@ export default class RegistrationController extends Controller {
 			}
 		})
 
-	};
+	}
 
-	public onExistingDataLoaded(aContexts : V4Context[]) {
+	public onExistingDataLoaded(aContexts : V4Context[]) : void {
 		// CREATE
 		if (!aContexts || aContexts.length === 0) { // no data for this user yet
 			const oBinding = this.oDataModel.bindList("/Person");
 			oBinding.attachCreateCompleted((oEvent : UI5Event) => {
 				if (oEvent.getParameter("success")) {
-					this.getView().bindObject({path: oEvent.getParameter("context").getPath()});
+					const path : string = (oEvent.getParameter("context") as ODataContextBinding).getPath();
+					this.getView().bindObject({path: path});
 				} else {
 					const sText = this.oBundle.getText("emptyCreateErrorText");
 					const sTitle = this.oBundle.getText("emptyCreateErrorTitle");
@@ -112,7 +116,7 @@ export default class RegistrationController extends Controller {
 			const oContext = aContexts[0];
 
 			// ensure it is in draft state
-			const isActive = oContext.getProperty("IsActiveEntity");
+			const isActive = oContext.getProperty("IsActiveEntity") as boolean;
 			if (isActive) { // bring to draft/edit mode
 				const oOperation = this.oDataModel.bindContext(
 					"EventRegistrationService.draftEdit(...)",
@@ -143,26 +147,26 @@ export default class RegistrationController extends Controller {
 
 			(this.byId("submitButton") as Button).setText(this.oBundle.getText("updateButtonText"));
 		}
-	};
+	}
 
-	public contextAvailable(sPath : string) {
+	public contextAvailable(sPath : string) : void {
 		this.getView().bindElement({path: sPath});
-	};
+	}
 
-	public addFamilyMember() {
+	public addFamilyMember() : void {
 		const oListBinding = this.byId("familyMembersTable").getBinding("items") as ODataListBinding;
 		oListBinding.create({});
-	};
+	}
 
-	public deleteFamilyMember(oEvent : UI5Event) {
+	public deleteFamilyMember(oEvent : UI5Event) : void {
 		((oEvent.getSource() as Control).getBindingContext() as V4Context).delete("$auto").then(() => {
 			// deletion success
-		}, (oError : Error) => {
+		}, () => {
 			// TODO: ignore deletion failure?
 		});
-	};
+	}
 
-	public validateControl(oControl : Control) {
+	public validateControl(oControl : Control) : void {
 		if (oControl instanceof InputBase) {
 			if (oControl.getRequired() && !oControl.getValue()) {
 				oControl.fireValidationError({
@@ -172,9 +176,9 @@ export default class RegistrationController extends Controller {
 				});
 			}
 		}
-	};
+	}
 
-	public validateData() {
+	public validateData() : string[] {
 		const oNewObject = this.getView().getBindingContext().getObject() as Employee;
 
 		// determine field names for validation dialog
@@ -195,7 +199,7 @@ export default class RegistrationController extends Controller {
 		}
 
 		// loop FamilyMembers
-		for (let i: number = 0; i < oNewObject.FamilyMembers.length; i++) {
+		for (let i = 0; i < oNewObject.FamilyMembers.length; i++) {
 			const oFamilyMember = oNewObject.FamilyMembers[i]
 			const bSomethingThere = !!(oFamilyMember.LastName || oFamilyMember.FirstName || oFamilyMember.Birthday);
 			const bSomethingMissing = !(oFamilyMember.LastName && oFamilyMember.FirstName && oFamilyMember.Birthday);
@@ -213,9 +217,9 @@ export default class RegistrationController extends Controller {
 		}
 
 		return aMissing;
-	};
+	}
 
-	public onSubmit() {
+	public onSubmit() : void {
 		// run validation and report validation errors
 		const aMissing = this.validateData();
 		if (aMissing.length > 0) {
@@ -246,20 +250,21 @@ export default class RegistrationController extends Controller {
 		oOperation.execute()
 		.then(() => {
 			// navigate without hash change
+			// eslint-disable-next-line @typescript-eslint/no-floating-promises
 			(this.getOwnerComponent() as UIComponent).getRouter().getTargets().display("confirmation");
 		})
-		.catch((err : Error) => {
+		.catch(() => {
 			this.showErrorDialog()
 		});
-	};
+	}
 
-	public showErrorDialog() {
+	public showErrorDialog() : void {
 		const sText = this.oBundle.getText("submitErrorText");
 		const sTitle = this.oBundle.getText("submitErrorTitle");
 		(this.byId("submitButton") as Button).setEnabled(true);
 		MessageBox.error(sText, {
 			title: sTitle
 		});
-	};
+	}
 
-};
+}

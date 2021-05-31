@@ -6,9 +6,9 @@ import AppComponent from "../Component";
  */
 export default class AppController extends Controller {
 
-	public onInit() {
+	public onInit() : void {
 		// apply content density mode to root view
 		this.getView().addStyleClass((this.getOwnerComponent() as AppComponent).getContentDensityClass());
-	};
+	}
 
-};
+}

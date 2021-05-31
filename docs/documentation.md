@@ -2,7 +2,7 @@
 
 A look at the most important implementation aspects of this sample app.
 
-NOTE: this documentation refers to the JavaScript version of the app, not to the TypeScript code in this branch! There is no specific documentation for the TypeScript flavor of this project right now.
+NOTE: this documentation refers to the JavaScript version of the app, not to the TypeScript code in this branch! While the overall logic and code is the same, the TypeScript specifics are [documented here](typescript.md).
 
 ## Content
 

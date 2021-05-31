@@ -33,7 +33,7 @@ When developers write TypeScript code, the type information is scattered across 
 
 ## The Type Definition Files provided for UI5
 
-The type definitions will be provided via npm soon. Right now, you can get the latest preview drop from the [packages/ui-form/types](../packages/ui-form/types) directory in this project. There is one *.d.ts file per UI5 library.
+The SAPUI5 type definitions are [provided via npm](https://www.npmjs.com/package/@sapui5/ts-types-esm) under the name "@sapui5/ts-types-esm". The OpenUI5 subset will follow soon as a separate package. There is one *.d.ts file per UI5 library.
 
 IMPORTANT: As we want to enable and promote using modern JavaScript, these *.d.ts files are written in a way that supports loading UI5 module with [ES module syntax](https://developer.mozilla.org/de/docs/Web/JavaScript/Guide/Modules) (instead of using the UI5 API `sap.ui.require(...)` or `sap.ui.define(...)`) and defining classes with [ES class syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes) (instead of using the UI5 API `SomeClass.extend(...)`)). If you use our `*.d.ts` files, this is how you should write your UI5 apps.
 
@@ -54,7 +54,7 @@ IMPORTANT: As we want to enable and promote using modern JavaScript, these *.d.t
 - The [packages/ui-form/src](../packages/ui-form/src) directory contains the TypeScript implementation of the UI5 app. See the next section for details of a controller implementation inside this directory.
 - The [packages/ui-form/types](../packages/ui-form/types) directory contains the UI5 type definitions (the `*.d.ts` files). NOTE: this is not the intended final way of using the type definition files. This has only been done to make the *.d.ts files available within the repository and to bridge the time until they are available on npm.
 - The [packages/ui-form/tsconfig.json](../packages/ui-form/tsconfig.json) file defines TypeScript compiler options like the JavaScript target version, the location of the `*.d.ts` files and the source and target directory for the TypeScript compilation. 
-- The [packages/ui-form/.babelrc](../packages/ui-form/.babelrc) file controls the build steps (first TypeScript to ES6 ("modern" JavaScript), then the conversion of some ES6 language constructs (module imports, classes) to the UI5 way of resource loading and class definition)  
+- The [packages/ui-form/.babelrc.json](../packages/ui-form/.babelrc.json) file controls the build steps (first TypeScript to ES6 ("modern" JavaScript), then the conversion of some ES6 language constructs (module imports, classes) to the UI5 way of resource loading and class definition)  
 - The [packages/ui-form/package.json](../packages/ui-form/package.json) file contains the `build:ts`and `watch:ts` scripts for yarn which trigger TypeScript compilation and live serving (used from within yarn scripts inside the [top-level package.json](../package.json) file).
 
 
@@ -90,7 +90,7 @@ Not all apps use structures like these. But if they do, defining the types provi
 
 #### Class Definitions
 
-Then, the controller class is defined, inheriting from `sap.ui.core.mvc.Controller`. This is again just modern JavaScript instead of the UI5-proprietary `Controller.extend(...)`. Also how the member methods like `onInit()` and the private member variables like `oBundle` are defined has nothing to do with TypeScript. The only piece of TypeScript in this section of the controller code is how the private member variables are typed (e.g. `oBundle` is defined to be of type `ResourceBundle`).
+Then, the controller class is defined, inheriting from `sap.ui.core.mvc.Controller`. This is again just modern JavaScript instead of the UI5-proprietary `Controller.extend(...)`. Also how the member methods like `onInit()` and the private member variables like `oBundle` are defined has nothing to do with TypeScript. The only pieces of TypeScript in this section of the controller code are how the private member variables and the `onInit` method are typed (e.g. `oBundle` is defined to be of type `ResourceBundle`).
 
 ```ts
 /**
@@ -101,7 +101,7 @@ export default class RegistrationController extends Controller {
 	private oBundle : ResourceBundle;
 	private oDataModel : ODataModel;
 
-	public onInit() {
+	public onInit() : void {
 ```
 
 
@@ -111,7 +111,7 @@ Within the actual controller implementation, there is very little TypeScript-spe
 
 TypeScript code is found for example after method parameters: they need to be typed explicitly - here `aContexts` is an array of OData V4 contexts:
 ```ts
-public onExistingDataLoaded(aContexts : V4Context[]) {
+public onExistingDataLoaded(aContexts : V4Context[]) : void {
 	...
 }
 ```
@@ -145,7 +145,7 @@ As of writing, the entire controller implementation is almost pure JavaScript wi
 
 ### Setup
 
-This section will be extended once the final mechanism (type definition files available on npm) is in place. For the time being, e.g. copy this example project and use it as starting point for your own app.
+This section will be extended once all type definition files are available on npm. For the time being, e.g. copy this example project and use it as starting point for your own app.
 
 
 ### Code
@@ -424,7 +424,7 @@ import AppComponent from "../Component";
  */
 export default class AppController extends Controller {
 
-	public onInit() {
+	public onInit() : void {
 		// apply content density mode to root view
 		this.getView().addStyleClass((this.getOwnerComponent() as AppComponent).getContentDensityClass());
 	};
@@ -433,6 +433,8 @@ export default class AppController extends Controller {
 ```
 
 For this controller file, the TypeScript conversion is now complete (and the actual TypeScript part of the conversion is the typecast).
+
+(Note: the "void" definition of the method return type is not strictly demanded by TypeScript, but by the current linting settings.)
 
 ### 4. Solving the Remaining Issues You Might Face
 
@@ -452,6 +454,6 @@ While doing so, we have found (and fixed) a few places in the UI5 type definitio
 
 ## Resources
 
-TODO: there has been a preview on TypeScript in a "UI5ers live" web conference. The recording will be linked here, once available.
+There has been a preview on TypeScript in a "UI5ers live" web conference. You can access the recording [on YouTube](https://www.youtube.com/watch?v=0notj9PPTho).
 
 
