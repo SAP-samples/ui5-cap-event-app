@@ -145,7 +145,7 @@ As of writing, the entire controller implementation is almost pure JavaScript wi
 
 ### Setup
 
-This section will be extended once all type definition files are available on npm. For the time being, e.g. copy this example project and use it as starting point for your own app.
+This section will be extended soon. For the time being, e.g. copy this example project and use it as starting point for your own app.
 
 
 ### Code

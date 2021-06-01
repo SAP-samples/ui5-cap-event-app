@@ -22,7 +22,7 @@
     "@types/jquery": "3.5.1",
     "@types/qunit": "2.5.4",
     "@sapui5/ts-types-esm": "1.90.0",
-    "@ui5/cli": "^2.2.6",
+    "@ui5/cli": "^2.11.0",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
     "babel-preset-transform-ui5": "^7.0.3",
