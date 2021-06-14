@@ -2,9 +2,11 @@
 
 Showcase of two UI5 user interfaces, one built with freestyle [SAPUI5](https://sapui5.hana.ondemand.com/) (or rather [OpenUI5](https://openui5.org/)), the other using [SAP Fiori elements](https://community.sap.com/topics/fiori-elements), with a [CAP](https://cap.cloud.sap/docs/) backend, using [OData V4](https://www.odata.org/) with [Draft mode](https://experience.sap.com/fiori-design-web/draft-handling/).
 
-<b>The freestyle SAPUI5 app in this repository branch is written in TypeScript and uses a preview of the new UI5 type definitions.</b>
+<b>The freestyle SAPUI5 app in this "`typescript`" branch is written in TypeScript and uses the new UI5 type definitions.</b>
 
-<b>You can find an in-depth introduction to using TypeScript in UI5 apps [here](docs/typescript.md).</b>
+<b>You can find an in-depth introduction to TypeScript in UI5 app code [here](docs/typescript.md).</b>
+
+<b>To see the basic suggested project setup for TypeScript development, please check out the [TypeScript Hello World app](https://github.com/SAP-samples/ui5-typescript-helloworld). It not only can serve as copy template, but also includes a [detailed step-by-step guide](https://github.com/SAP-samples/ui5-typescript-helloworld/blob/main/step-by-step.md) for creating this setup from scratch.</b>
 
 | :point_up: TypeScript Remarks |
 |:---------------------------|
