@@ -33,7 +33,7 @@ When developers write TypeScript code, the type information is scattered across 
 
 ## The Type Definition Files provided for UI5
 
-The SAPUI5 type definitions are [provided via npm](https://www.npmjs.com/package/@sapui5/ts-types-esm) under the name "@sapui5/ts-types-esm". The OpenUI5 subset will follow soon as a separate package. There is one *.d.ts file per UI5 library.
+The SAPUI5 type definitions are [provided via npm](https://www.npmjs.com/package/@sapui5/ts-types-esm) under the name "@sapui5/ts-types-esm". The OpenUI5 subset is available as "[`@openui5/ts-types-esm`](https://www.npmjs.com/package/@openui5/ts-types-esm)" and also made available by DefinitelyTyped as "[`@types/openui5`](https://www.npmjs.com/package/@types/openui5)" (for the differences, which are related to the versioning, see [this explanation](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/openui5/README.md#versioning)). There is one *.d.ts file per UI5 library.
 
 IMPORTANT: As we want to enable and promote using modern JavaScript, these *.d.ts files are written in a way that supports loading UI5 module with [ES module syntax](https://developer.mozilla.org/de/docs/Web/JavaScript/Guide/Modules) (instead of using the UI5 API `sap.ui.require(...)` or `sap.ui.define(...)`) and defining classes with [ES class syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes) (instead of using the UI5 API `SomeClass.extend(...)`)). If you use our `*.d.ts` files, this is how you should write your UI5 apps.
 
@@ -52,7 +52,6 @@ IMPORTANT: As we want to enable and promote using modern JavaScript, these *.d.t
 
 ### Overview of TypeScript-relevant Parts of the Project:
 - The [packages/ui-form/src](../packages/ui-form/src) directory contains the TypeScript implementation of the UI5 app. See the next section for details of a controller implementation inside this directory.
-- The [packages/ui-form/types](../packages/ui-form/types) directory contains the UI5 type definitions (the `*.d.ts` files). NOTE: this is not the intended final way of using the type definition files. This has only been done to make the *.d.ts files available within the repository and to bridge the time until they are available on npm.
 - The [packages/ui-form/tsconfig.json](../packages/ui-form/tsconfig.json) file defines TypeScript compiler options like the JavaScript target version, the location of the `*.d.ts` files and the source and target directory for the TypeScript compilation. 
 - The [packages/ui-form/.babelrc.json](../packages/ui-form/.babelrc.json) file controls the build steps (first TypeScript to ES6 ("modern" JavaScript), then the conversion of some ES6 language constructs (module imports, classes) to the UI5 way of resource loading and class definition)  
 - The [packages/ui-form/package.json](../packages/ui-form/package.json) file contains the `build:ts`and `watch:ts` scripts for yarn which trigger TypeScript compilation and live serving (used from within yarn scripts inside the [top-level package.json](../package.json) file).
@@ -96,9 +95,9 @@ Then, the controller class is defined, inheriting from `sap.ui.core.mvc.Controll
 /**
  * @namespace sap.ui.eventregistration.form.controller
  */
-export default class RegistrationController extends Controller {
+export default class Registration extends Controller {
 
-	private oBundle : ResourceBundle;
+	private bundle : ResourceBundle;
 	private oDataModel : ODataModel;
 
 	public onInit() : void {
@@ -111,14 +110,14 @@ Within the actual controller implementation, there is very little TypeScript-spe
 
 TypeScript code is found for example after method parameters: they need to be typed explicitly - here `aContexts` is an array of OData V4 contexts:
 ```ts
-public onExistingDataLoaded(aContexts : V4Context[]) : void {
+public onExistingDataLoaded(contexts : V4Context[]) : void {
 	...
 }
 ```
 
-Local variables are sometimes implicitly typed via the assigned value (`this.oBundle` has type `ResourceBundle`, so TypeScript knows this is also the type of the local variable `oBundle`):
+Local variables are sometimes implicitly typed via the assigned value (`this.bundle` has type `ResourceBundle`, so TypeScript knows this is also the type of the local variable `bundle`):
 ```ts
-const oBundle = this.oBundle;
+const bundle = this.bundle;
 ```
 But sometimes the type is specified explicitly, e.g. when there is no immediate assignment to the newly declared variable:
 ```ts
@@ -145,8 +144,8 @@ As of writing, the entire controller implementation is almost pure JavaScript wi
 
 ### Setup
 
-This section will be extended soon. For the time being, e.g. copy this example project and use it as starting point for your own app.
-
+Please refer to the [TypeScript Hello World app](https://github.com/SAP-samples/ui5-typescript-helloworld) and in particular to the [step-by-step setup explanation](https://github.com/SAP-samples/ui5-typescript-helloworld/blob/main/step-by-step.md) to understand the overall project setup for developing TypeScript-based UI5 apps.<br>
+You can also use that app as copy template for getting started quickly.
 
 ### Code
 
@@ -159,11 +158,11 @@ This section will be extended soon. For the time being, e.g. copy this example p
 These are the errors you will encounter most often - and how to solve them.
 
 When TypeScript cannot find out the type of a variable on its own, specify it:<br><br>
-![Error message: "Parameter 'aContexts' implicitly has an 'any' type."](typescript-error.png?raw=true)
+![Error message: "Parameter 'contexts' implicitly has an 'any' type."](typescript-error.png?raw=true)
 
 Solution:
 ```ts
-public onExistingDataLoaded(aContexts : V4Context[]) {
+public onExistingDataLoaded(contexts : V4Context[]) {
 ```
 
 
@@ -312,7 +311,7 @@ The first step is to convert class definitions from the proprietary UI5 syntax t
 
 From:
 ```js
-var AppController = Controller.extend("ui5tssampleapp.controller.AppController", {
+var App = Controller.extend("ui5tssampleapp.controller.App", {
 	onInit: function _onInit() {
 		// apply content density mode to root view
 		this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
@@ -324,7 +323,7 @@ To:
 /**
  * @namespace ui5tssampleapp.controller
  */
-class AppController extends Controller {
+class App extends Controller {
 	public onInit() {
 		// apply content density mode to root view
 		this.getView().addStyleClass((this.getOwnerComponent()).getContentDensityClass());
@@ -345,11 +344,11 @@ sap.ui.define(["sap/ui/core/mvc/Controller"], function (Controller) {
 	/**
 	 * @namespace ui5tssampleapp.controller
 	 */
-	class AppController extends Controller {
+	class App extends Controller {
 		... // as above
 	};
 
-  return AppController;
+  return App;
 });
 ```
 
@@ -361,7 +360,7 @@ import Controller from "sap/ui/core/mvc/Controller";
 /**
  * @namespace ui5tssampleapp.controller
  */
-export default class AppController extends Controller {
+export default class App extends Controller {
 	... // as above
 };
 ```
@@ -395,7 +394,7 @@ The same is valid for several UI5 methods, most prominently the following:
  
 This cast will sometimes also require an additional module import to make the type known. Sometimes this will be offered as "quick fix" by the code editor, sometimes it will have to be done manually.
 
-Coming back to the AppController example used above, this step will complete the TypeScript conversion: an additional import of the app's component is needed (called `AppComponent`), so within the `onInit` implementation the required typecast can be done. Without this typecast, the return type of `getOwnerComponent` would be a `sap.ui.core.Component`, which does not have the `getContentDensityClass` method defined in the app component.
+Coming back to the app controller example used above, this step will complete the TypeScript conversion: an additional import of the app's component is needed (called `AppComponent`), so within the `onInit` implementation the required typecast can be done. Without this typecast, the return type of `getOwnerComponent` would be a `sap.ui.core.Component`, which does not have the `getContentDensityClass` method defined in the app component.
 
 Before:
 ```js
@@ -404,7 +403,7 @@ import Controller from "sap/ui/core/mvc/Controller";
 /**
  * @namespace ui5tssampleapp.controller
  */
-export default class AppController extends Controller {
+export default class App extends Controller {
 
 	public onInit() {
 		// apply content density mode to root view
@@ -422,7 +421,7 @@ import AppComponent from "../Component";
 /**
  * @namespace ui5tssampleapp.controller
  */
-export default class AppController extends Controller {
+export default class App extends Controller {
 
 	public onInit() : void {
 		// apply content density mode to root view
@@ -456,4 +455,4 @@ While doing so, we have found (and fixed) a few places in the UI5 type definitio
 
 There has been a preview on TypeScript in a "UI5ers live" web conference. You can access the recording [on YouTube](https://www.youtube.com/watch?v=0notj9PPTho).
 
-
+The [UI5 TypeScript Hello World app](https://github.com/SAP-samples/ui5-typescript-helloworld) is a great place to learn how the project setup works.

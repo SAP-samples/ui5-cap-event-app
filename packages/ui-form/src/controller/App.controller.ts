@@ -4,7 +4,7 @@ import AppComponent from "../Component";
 /**
  * @namespace sap.ui.eventregistration.form.controller
  */
-export default class AppController extends Controller {
+export default class App extends Controller {
 
 	public onInit() : void {
 		// apply content density mode to root view

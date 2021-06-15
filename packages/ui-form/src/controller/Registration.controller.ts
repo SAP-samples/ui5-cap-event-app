@@ -39,9 +39,9 @@ type Employee = {
 /**
  * @namespace sap.ui.eventregistration.form.controller
  */
-export default class RegistrationController extends Controller {
+export default class Registration extends Controller {
 
-	private oBundle : ResourceBundle;
+	private bundle : ResourceBundle;
 	private oDataModel : ODataModel;
 
 	public onInit() : void {
@@ -50,29 +50,29 @@ export default class RegistrationController extends Controller {
 		this.oDataModel = this.getOwnerComponent().getModel() as ODataModel;
 
 		// load previous data
-		const oBinding = this.oDataModel.bindList("/Person");
-		const oIsDraftFilter = new Filter({path: "IsActiveEntity", operator: FilterOperator.EQ, value1: false});
-		const oHasNoDraftSiblingFilter = new Filter({path: "SiblingEntity/IsActiveEntity", operator: FilterOperator.EQ, value1: null});
-		const oDraftORNoDraftSiblingFilter = new Filter({
-			filters: [oIsDraftFilter, oHasNoDraftSiblingFilter],
+		const binding = this.oDataModel.bindList("/Person");
+		const isDraftFilter = new Filter({path: "IsActiveEntity", operator: FilterOperator.EQ, value1: false});
+		const hasNoDraftSiblingFilter = new Filter({path: "SiblingEntity/IsActiveEntity", operator: FilterOperator.EQ, value1: null});
+		const draftORNoDraftSiblingFilter = new Filter({
+			filters: [isDraftFilter, hasNoDraftSiblingFilter],
 			and: false
 		});
-		oBinding.filter(oDraftORNoDraftSiblingFilter);
-		oBinding.requestContexts(0, 2).then((aContexts) => { // there should be only one. Request two to detect error situations.
-			this.onExistingDataLoaded(aContexts);
+		binding.filter(draftORNoDraftSiblingFilter);
+		binding.requestContexts(0, 2).then((contexts) => { // there should be only one. Request two to detect error situations.
+			this.onExistingDataLoaded(contexts);
 		}).catch(() => {
-			MessageToast.show(this.oBundle.getText("errorWhenLoadingData"));
+			MessageToast.show(this.bundle.getText("errorWhenLoadingData"));
 		});
 
 		// store the reference to the i18n model
-		this.oBundle = (this.getOwnerComponent().getModel("i18n") as ResourceModel).getResourceBundle() as ResourceBundle;
+		this.bundle = (this.getOwnerComponent().getModel("i18n") as ResourceModel).getResourceBundle() as ResourceBundle;
 
 		// listen to focusleave on the fields to validate the user input
-		const aControls = Core.byFieldGroupId("RegForm");
-		aControls.forEach((oControl) => {
-			oControl.addEventDelegate({
-				onsapfocusleave: this.validateControl.bind(this, oControl),
-				onsapenter: this.validateControl.bind(this, oControl)
+		const controls = Core.byFieldGroupId("RegForm");
+		controls.forEach((control) => {
+			control.addEventDelegate({
+				onsapfocusleave: this.validateControl.bind(this, control),
+				onsapenter: this.validateControl.bind(this, control)
 			});
 		});
 
@@ -86,43 +86,43 @@ export default class RegistrationController extends Controller {
 
 	}
 
-	public onExistingDataLoaded(aContexts : V4Context[]) : void {
+	public onExistingDataLoaded(contexts : V4Context[]) : void {
 		// CREATE
-		if (!aContexts || aContexts.length === 0) { // no data for this user yet
-			const oBinding = this.oDataModel.bindList("/Person");
-			oBinding.attachCreateCompleted((oEvent : UI5Event) => {
-				if (oEvent.getParameter("success")) {
-					const path : string = (oEvent.getParameter("context") as ODataContextBinding).getPath();
+		if (!contexts || contexts.length === 0) { // no data for this user yet
+			const binding = this.oDataModel.bindList("/Person");
+			binding.attachCreateCompleted((event : UI5Event) => {
+				if (event.getParameter("success")) {
+					const path : string = (event.getParameter("context") as ODataContextBinding).getPath();
 					this.getView().bindObject({path: path});
 				} else {
-					const sText = this.oBundle.getText("emptyCreateErrorText");
-					const sTitle = this.oBundle.getText("emptyCreateErrorTitle");
-					MessageBox.error(sText, {
-						title: sTitle
+					const text = this.bundle.getText("emptyCreateErrorText");
+					const title = this.bundle.getText("emptyCreateErrorTitle");
+					MessageBox.error(text, {
+						title: title
 					});
 				}
 			});
-			oBinding.create({}, true /* bSkipRefresh */);
+			binding.create({}, true /* bSkipRefresh */);
 
-			MessageToast.show(this.oBundle.getText("existingDataNotFound"), {duration: 5000});
+			MessageToast.show(this.bundle.getText("existingDataNotFound"), {duration: 5000});
 
 		// UPDATE
 		} else { // data found which can be accessed
 			// detect error situation with multiple datasets for one person
-			if (aContexts.length > 1) {
-				MessageBox.error(this.oBundle.getText("moreThanOneDatasetFound"));
+			if (contexts.length > 1) {
+				MessageBox.error(this.bundle.getText("moreThanOneDatasetFound"));
 				return; // TODO: what?
 			}
-			const oContext = aContexts[0];
+			const context = contexts[0];
 
 			// ensure it is in draft state
-			const isActive = oContext.getProperty("IsActiveEntity") as boolean;
+			const isActive = context.getProperty("IsActiveEntity") as boolean;
 			if (isActive) { // bring to draft/edit mode
-				const oOperation = this.oDataModel.bindContext(
+				const operation = this.oDataModel.bindContext(
 					"EventRegistrationService.draftEdit(...)",
-					oContext
+					context
 				);
-				oOperation.execute()
+				operation.execute()
 				.then((oUpdatedContext : V4Context) => {
 					this.getView().bindObject({
 						path: oUpdatedContext.getPath(),
@@ -130,32 +130,32 @@ export default class RegistrationController extends Controller {
 							$expand: "FamilyMembers"
 						}
 					});
-					MessageToast.show(this.oBundle.getText("existingDataLoaded"), {duration: 5000});
+					MessageToast.show(this.bundle.getText("existingDataLoaded"), {duration: 5000});
 				})
 				.catch(() => {
 					alert("draft edit failure");
 				});
 			} else { // already in draft/edit mode
 				this.getView().bindObject({
-					path: oContext.getPath(),
+					path: context.getPath(),
 					parameters: {
 						$expand: "FamilyMembers"
 					}
 				});
-				MessageToast.show(this.oBundle.getText("existingDraftLoaded"), {duration: 5000});
+				MessageToast.show(this.bundle.getText("existingDraftLoaded"), {duration: 5000});
 			}
 
-			(this.byId("submitButton") as Button).setText(this.oBundle.getText("updateButtonText"));
+			(this.byId("submitButton") as Button).setText(this.bundle.getText("updateButtonText"));
 		}
 	}
 
-	public contextAvailable(sPath : string) : void {
-		this.getView().bindElement({path: sPath});
+	public contextAvailable(path : string) : void {
+		this.getView().bindElement({path: path});
 	}
 
 	public addFamilyMember() : void {
-		const oListBinding = this.byId("familyMembersTable").getBinding("items") as ODataListBinding;
-		oListBinding.create({});
+		const listBinding = this.byId("familyMembersTable").getBinding("items") as ODataListBinding;
+		listBinding.create({});
 	}
 
 	public deleteFamilyMember(oEvent : UI5Event) : void {
@@ -166,70 +166,70 @@ export default class RegistrationController extends Controller {
 		});
 	}
 
-	public validateControl(oControl : Control) : void {
-		if (oControl instanceof InputBase) {
-			if (oControl.getRequired() && !oControl.getValue()) {
-				oControl.fireValidationError({
-					element: oControl,
+	public validateControl(control : Control) : void {
+		if (control instanceof InputBase) {
+			if (control.getRequired() && !control.getValue()) {
+				control.fireValidationError({
+					element: control,
 					property: "value",
-					message: this.oBundle.getText("enterValue")
+					message: this.bundle.getText("enterValue")
 				});
 			}
 		}
 	}
 
 	public validateData() : string[] {
-		const oNewObject = this.getView().getBindingContext().getObject() as Employee;
+		const newObject = this.getView().getBindingContext().getObject() as Employee;
 
 		// determine field names for validation dialog
-		const oBundle = this.oBundle;
-		const mFields : Person = {
-			LastName: oBundle.getText("name"),
-			FirstName: oBundle.getText("firstName"),
-			Birthday: oBundle.getText("dateOfBirth")
+		const bundle = this.bundle;
+		const fields : Person = {
+			LastName: bundle.getText("name"),
+			FirstName: bundle.getText("firstName"),
+			Birthday: bundle.getText("dateOfBirth")
 		};
 
 		// check for missing fields
-		const aMissing = [];
+		const missing = [];
 		let prop : PersonProp;
-		for (prop in mFields) {
-			if (!oNewObject[prop]) {
-				aMissing.push(mFields[prop]);
+		for (prop in fields) {
+			if (!newObject[prop]) {
+				missing.push(fields[prop]);
 			}
 		}
 
 		// loop FamilyMembers
-		for (let i = 0; i < oNewObject.FamilyMembers.length; i++) {
-			const oFamilyMember = oNewObject.FamilyMembers[i]
-			const bSomethingThere = !!(oFamilyMember.LastName || oFamilyMember.FirstName || oFamilyMember.Birthday);
-			const bSomethingMissing = !(oFamilyMember.LastName && oFamilyMember.FirstName && oFamilyMember.Birthday);
-			if (bSomethingThere && bSomethingMissing) {
-				aMissing.push(oBundle.getText("validationFamilyMember", [i + 1]));
+		for (let i = 0; i < newObject.FamilyMembers.length; i++) {
+			const familyMember = newObject.FamilyMembers[i]
+			const somethingThere = !!(familyMember.LastName || familyMember.FirstName || familyMember.Birthday);
+			const somethingMissing = !(familyMember.LastName && familyMember.FirstName && familyMember.Birthday);
+			if (somethingThere && somethingMissing) {
+				missing.push(bundle.getText("validationFamilyMember", [i + 1]));
 			}
 		}
 
 		// show validation errors (red borders) for all registration form controls with missing data
-		if (aMissing.length > 0) {
-			const aControls = Core.byFieldGroupId("RegForm");
-			aControls.forEach((oControl) => {
-				this.validateControl(oControl);
+		if (missing.length > 0) {
+			const controls = Core.byFieldGroupId("RegForm");
+			controls.forEach((control) => {
+				this.validateControl(control);
 			});
 		}
 
-		return aMissing;
+		return missing;
 	}
 
 	public onSubmit() : void {
 		// run validation and report validation errors
-		const aMissing = this.validateData();
-		if (aMissing.length > 0) {
-			const sText = this.oBundle.getText("validationText");
-			const sTitle = this.oBundle.getText("validationTitle");
-			MessageBox.alert(sText + "\n- " + aMissing.join("\n- "), {title: sTitle});
+		const missing = this.validateData();
+		if (missing.length > 0) {
+			const text = this.bundle.getText("validationText");
+			const title = this.bundle.getText("validationTitle");
+			MessageBox.alert(text + "\n- " + missing.join("\n- "), {title: title});
 			return;
 		}
 
-		const oContext = this.getView().getBindingContext() as V4Context;
+		const context = this.getView().getBindingContext() as V4Context;
 
 		/* omit this block as failing "draftActivate" is not expected (no data checks in backend) aand a failing PATCH would not be dramatic
 		// ensure there are no pending changes (because otherwise with a failing "save" the last PATCH which might be in the same batch would also fail)
@@ -243,11 +243,11 @@ export default class RegistrationController extends Controller {
 
 		// trigger OData operation for persisting the draft as real data
 
-		const oOperation = this.oDataModel.bindContext(
+		const operation = this.oDataModel.bindContext(
 			"EventRegistrationService.draftActivate(...)",
-			oContext
+			context
 		);
-		oOperation.execute()
+		operation.execute()
 		.then(() => {
 			// navigate without hash change
 			// eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -259,11 +259,11 @@ export default class RegistrationController extends Controller {
 	}
 
 	public showErrorDialog() : void {
-		const sText = this.oBundle.getText("submitErrorText");
-		const sTitle = this.oBundle.getText("submitErrorTitle");
+		const text = this.bundle.getText("submitErrorText");
+		const title = this.bundle.getText("submitErrorTitle");
 		(this.byId("submitButton") as Button).setEnabled(true);
-		MessageBox.error(sText, {
-			title: sTitle
+		MessageBox.error(text, {
+			title: title
 		});
 	}
 

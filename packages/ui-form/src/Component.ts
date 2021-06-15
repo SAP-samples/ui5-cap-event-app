@@ -12,7 +12,7 @@ export default class Component extends UIComponent {
 		manifest: "json"
 	};
 
-	private _sContentDensityClass: string | undefined;
+	private contentDensityClass: string | undefined;
 
 	public init() : void {
 		// call the base component's init function
@@ -43,18 +43,18 @@ export default class Component extends UIComponent {
 	 * @return {string} css class, either 'sapUiSizeCompact' or 'sapUiSizeCozy' - or an empty string if no css class should be set
 	 */
 	public getContentDensityClass() : string {
-		if (this._sContentDensityClass === undefined) {
+		if (this.contentDensityClass === undefined) {
 			// check whether FLP has already set the content density class; do nothing in this case
 			if (document.body.classList.contains("sapUiSizeCozy") || document.body.classList.contains("sapUiSizeCompact")) {
-				this._sContentDensityClass = "";
+				this.contentDensityClass = "";
 			} else if (!support.touch) { // apply "compact" mode if touch is not supported
-				this._sContentDensityClass = "sapUiSizeCompact";
+				this.contentDensityClass = "sapUiSizeCompact";
 			} else {
 				// "cozy" in case of touch support; default for most sap.m controls, but needed for desktop-first controls like sap.ui.table.Table
-				this._sContentDensityClass = "sapUiSizeCozy";
+				this.contentDensityClass = "sapUiSizeCozy";
 			}
 		}
-		return this._sContentDensityClass;
+		return this.contentDensityClass;
 	}
 
 }
