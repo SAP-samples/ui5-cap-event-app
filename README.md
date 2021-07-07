@@ -8,6 +8,10 @@ Showcase of two UI5 user interfaces, one built with freestyle [SAPUI5](https://s
 
 <b>To see the basic suggested project setup for TypeScript development, please check out the [TypeScript Hello World app](https://github.com/SAP-samples/ui5-typescript-helloworld). It not only can serve as copy template, but also includes a [detailed step-by-step guide](https://github.com/SAP-samples/ui5-typescript-helloworld/blob/main/step-by-step.md) for creating this setup from scratch.</b>
 
+<b>The UI5con 2021 session on TypeScript ([recording available at YouTube](https://www.youtube.com/watch?v=aXzcsOZH4q8)) explains the overall approach for TypeScript and UI5.</b>
+
+<b>There is also an [application template](https://github.com/ui5-community/generator-ui5-ts-app) (based on yeoman and easy-ui5) which has been shown in the [UI5con Keynote](https://www.youtube.com/watch?v=aXzcsOZH4q8) and explained in [this blog](https://blogs.sap.com/2021/07/01/getting-started-with-typescript-for-ui5-application-development/).</b>
+
 | :point_up: TypeScript Remarks |
 |:---------------------------|
 | The SAPUI5 type definitions are loaded as dev dependency [from npm package `@sapui5/ts-types-esm`](https://www.npmjs.com/package/@sapui5/ts-types-esm). The OpenUI5 types are available as [`@openui5/ts-types-esm`](https://www.npmjs.com/package/@openui5/ts-types-esm). You can inspect the \*.d.ts files in the `node_modules/@sapui5/ts-types-esm/types` directory after installing the dependencies with the `yarn` command.<br/>
