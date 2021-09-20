@@ -1,0 +1,35 @@
+{
+	"compilerOptions": {
+		"types": [
+			"../../node_modules/@sapui5/ts-types-esm",
+			"../../node_modules/@types/jquery"
+		],
+		"target": "ES2017",
+		"lib": [
+			"ES2017",
+			"DOM"
+		],
+		"noEmit": true,
+		"skipLibCheck": true,
+		"module": "none",
+		"allowJs": true,
+		"allowSyntheticDefaultImports": true,
+		"checkJs": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitReturns": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"strict": true,
+		"strictNullChecks": false,
+
+		"noImplicitAny": true
+	},
+	"include": [
+		"webapp/**/*.js"
+	],
+	"paths": {
+		"sap/ui/eventregistration/form/*": [
+			"./webapp/*"
+		]
+	}
+}

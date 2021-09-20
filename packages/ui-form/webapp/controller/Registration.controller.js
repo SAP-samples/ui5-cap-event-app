@@ -5,18 +5,28 @@ sap.ui.define([
 	"sap/m/InputBase",
 	"sap/ui/model/Filter",
 	"sap/ui/model/FilterOperator"
-], function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperator) {
+],
+/**
+ * @param {typeof import('sap/ui/core/mvc/Controller').default} Controller
+ * @param {typeof import('sap/m/MessageBox').default} MessageBox
+ * @param {typeof import('sap/m/MessageToast').default} MessageToast
+ * @param {typeof import('sap/m/InputBase').default} InputBase
+ * @param {typeof import('sap/ui/model/Filter').default} Filter
+ * @param {typeof import('sap/ui/model/FilterOperator').default} FilterOperator
+ */
+function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperator) {
 	"use strict";
 
-	return Controller.extend("sap.ui.eventregistration.form.controller.Registration", {
+	// sap.ui.eventregistration.form.controller.Registration
+	class RegistrationController extends Controller {
 
-		onInit: function () {
+		onInit() {
 
 			// keep the reference to the OData model
 			this.oDataModel = this.getOwnerComponent().getModel();
 
 			// load previous data
-			var oBinding = this.oDataModel.bindList("/Person");
+			var oBinding = /** @type {import("sap/ui/model/odata/v4/ODataListBinding").default} */ (this.oDataModel.bindList("/Person"));
 			var oIsDraftFilter = new Filter("IsActiveEntity", FilterOperator.EQ, false);
 			var oHasNoDraftSiblingFilter = new Filter("SiblingEntity/IsActiveEntity", FilterOperator.EQ, null);
 			var oDraftORNoDraftSiblingFilter = new Filter({
@@ -24,9 +34,9 @@ sap.ui.define([
 				and: false
 			});
 			oBinding.filter(oDraftORNoDraftSiblingFilter);
-			oBinding.requestContexts(0, 2).then(function(aContexts) { // there should be only one. Request two to detect error situations.
-				this.onExistingDataLoaded(aContexts);
-			}.bind(this)).catch(function(oError) {
+			oBinding.requestContexts(0, 2).then(function(/** @type {import("sap/ui/model/odata/v4/Context").default[]} */ aContexts) { // there should be only one. Request two to detect error situations.
+				this.onExistingDataLoaded(aContexts); // @ts-ignore
+			}.bind(this)).catch(function( oError) {
 				if (oError.status === 401 || oError.status === 403) { // 401 Unauthorized when user cancels login dialog, 403 Forbidden, when giving wrong credentials
 					// navigate without hash change
 					this.getOwnerComponent().getRouter().getTargets().display("notAuthorized");
@@ -34,11 +44,11 @@ sap.ui.define([
 			}.bind(this));
 
 			// store the reference to the i18n model
-			this.oBundle = this.getOwnerComponent().getModel("i18n").getResourceBundle();
+			this.oBundle = /** @type {import('sap/base/i18n/ResourceBundle').default} */ (this.getResourceModel().getResourceBundle());
 
 			// listen to focusleave and enter on the fields to validate the user input
 			var aControls = sap.ui.getCore().byFieldGroupId("RegForm");
-			aControls.forEach(function(oControl) {
+			aControls.forEach(function(/** @type {import("sap/ui/core/Control").default} */ oControl) {
 				oControl.addEventDelegate({
 					onsapfocusleave: this.validateControl.bind(this, oControl),
 					onsapenter: this.validateControl.bind(this, oControl)
@@ -52,14 +62,24 @@ sap.ui.define([
 					this.byId("page").scrollTo(0);
 				}.bind(this)
 			})
+			
 
-		},
+		}
 
-		onExistingDataLoaded: function(aContexts) {
+		/**
+		 * @returns {import('sap/ui/model/resource/ResourceModel').default}
+		 */
+		getResourceModel() {
+			const oResourceModel = /** @type {import('sap/ui/model/resource/ResourceModel').default} */ ( /** @type any */ (this.getView().getModel("i18n")));
+			return oResourceModel;
+		}
+
+
+		onExistingDataLoaded(/** @type {import("sap/ui/model/odata/v4/Context").default[]} */ aContexts) {
 			// CREATE
 			if (!aContexts || aContexts.length === 0) { // no data for this user yet
-				var oBinding = this.oDataModel.bindList("/Person");
-				oBinding.attachCreateCompleted(function(oEvent) {
+				var oBinding = /** @type {import("sap/ui/model/odata/v4/ODataListBinding").default} */ (this.oDataModel.bindList("/Person"));
+				oBinding.attachCreateCompleted(function(/** @type {import("sap/ui/base/Event").default} */ oEvent) {
 					if (oEvent.getParameter("success")) {
 						this.getView().bindObject({path: oEvent.getParameter("context").getPath()});
 					} else {
@@ -79,9 +99,9 @@ sap.ui.define([
 				// detect error situation with multiple datasets for one person
 				if (aContexts.length > 1) {
 					if (aContexts[0].getObject().Email !== aContexts[1].getObject().Email) { // only admins can see data of other users
-						MessageBox.error(this.oBundle.getText("adminsStayOut"), {duration: 5000});
+						MessageBox.error(this.oBundle.getText("adminsStayOut"));
 					} else {
-						MessageBox.error(this.oBundle.getText("moreThanOneDatasetFound"), {duration: 5000});
+						MessageBox.error(this.oBundle.getText("moreThanOneDatasetFound"));
 					}
 					return;
 				}
@@ -90,12 +110,12 @@ sap.ui.define([
 				// ensure it is in draft state
 				var isActive = oContext.getProperty("IsActiveEntity"); // = non-draft
 				if (isActive) { // bring to draft/edit mode
-					var oOperation = this.oDataModel.bindContext(
+					var oOperation = /** @type {import("sap/ui/model/odata/v4/ODataContextBinding").default} */ (this.oDataModel.bindContext(
 						"EventRegistrationService.draftEdit(...)",
 						oContext
-					);
+					));
 					oOperation.execute()
-					.then(function (oUpdatedContext) {
+					.then(function (/** @type {import("sap/ui/model/odata/v4/Context").default} */oUpdatedContext) {
 						this.getView().bindObject({path: oUpdatedContext.getPath()});
 						MessageToast.show(this.oBundle.getText("existingDataLoaded"), {duration: 5000});
 					}.bind(this))
@@ -107,28 +127,32 @@ sap.ui.define([
 					MessageToast.show(this.oBundle.getText("existingDraftLoaded"), {duration: 5000});
 				}
 
-				this.byId("submitButton").setText(this.oBundle.getText("updateButtonText"));
+				var submitButton = /** @type {import("sap/m/Button").default} */ (this.byId("submitButton"));
+				submitButton.setText(this.oBundle.getText("updateButtonText"));
 			}
-		},
+		}
 
-		contextAvailable: function(sPath) {
+		contextAvailable(/** @type {string} */ sPath) {
 			this.getView().bindElement({path: sPath});
-		},
+		}
 
-		addFamilyMember: function (oEvent) {
-			var oListBinding = this.byId("familyMembersTable").getBinding("items");
+		addFamilyMember () {
+			
+			var oListBinding = /** @type {import("sap/ui/model/odata/v4/ODataListBinding").default} */ (this.byId("familyMembersTable").getBinding("items"));
 			oListBinding.create({});
-		},
+		}
 
-		deleteFamilyMember: function(oEvent) {
-			oEvent.getSource().getBindingContext().delete("$auto").then(function () {
+		deleteFamilyMember(/** @type {import("sap/ui/base/Event").default} */ oEvent) {
+			var source = /** @type {import("sap/ui/core/Control").default} */ (oEvent.getSource());
+			var oBindingContext = /** @type {import("sap/ui/model/odata/v4/Context").default} */ (source.getBindingContext());
+			oBindingContext.delete("$auto").then(function () {
 				// deletion success
-			}.bind(this), function (oError) {
+			}.bind(this), function () {
 				// TODO: ignore deletion failure?
 			});
-		},
+		}
 
-		validateControl: function(oControl) {
+		validateControl(/** @type {import("sap/ui/core/Control").default} */ oControl) {
 			if (oControl instanceof InputBase) {
 				if (oControl.getRequired() && !oControl.getValue()) {
 					oControl.fireValidationError({
@@ -138,10 +162,26 @@ sap.ui.define([
 					});
 				}
 			}
-		},
+		}
 
-		validateData: function() {
-			var oNewObject = this.getView().getBindingContext().getObject();
+
+		/**
+		 * @typedef Employee
+		 * @property {string} FirstName
+		 * @property {string} LastName
+		 * @property {string} Birthday
+		 * @property {FamilyMember[]} FamilyMembers
+		 */
+
+		/**
+		 * @typedef {Object.<string, string>} FamilyMember
+		 * @property {string} FirstName
+		 * @property {string} LastName
+		 * @property {string} Birthday
+		 */
+
+		validateData() {
+			var oNewObject = /** @type {Employee} */ (this.getView().getBindingContext().getObject());
 
 			// determine field names for validation dialog
 			var oBundle = this.oBundle;
@@ -153,7 +193,9 @@ sap.ui.define([
 
 			// check for missing fields
 			var aMissing = [];
-			for (var prop in mFields) {
+			/** @type {('FirstName'|'LastName'|'Birthday')} */
+			var prop;
+			for (prop in mFields) {
 				if (!oNewObject[prop]) {
 					aMissing.push(mFields[prop]);
 				}
@@ -172,15 +214,15 @@ sap.ui.define([
 			// show validation errors (red borders) for all registration form controls with missing data
 			if (aMissing.length > 0) {
 				var aControls = sap.ui.getCore().byFieldGroupId("RegForm");
-				aControls.forEach(function(oControl) {
+				aControls.forEach(function(/** @type {import("sap/ui/core/Control").default} */ oControl) {
 					this.validateControl(oControl);
 				}.bind(this));
 			}
 
 			return aMissing;
-		},
+		}
 
-		onSubmit: function() {
+		onSubmit() {
 			// run validation and report validation errors
 			var aMissing = this.validateData();
 			if (aMissing.length > 0) {
@@ -200,32 +242,36 @@ sap.ui.define([
 			*/
 
 			// disable the "Submit" button to prevent double clicks from saving data twice
-			this.byId("submitButton").setEnabled(false);
+			var submitButton = /** @type {import("sap/m/Button").default} */ (this.byId("submitButton"));
+			submitButton.setEnabled(false);
 
 			// trigger OData operation for persisting the draft as real data
-			var oOperation = this.oDataModel.bindContext(
+			var oOperation = /** @type {import("sap/ui/model/odata/v4/ODataContextBinding").default} */ (this.oDataModel.bindContext(
 				"EventRegistrationService.draftActivate(...)",
 				oContext
-			);
+			));
 			oOperation.execute()
 			.then(function () {
 				// navigate without hash change
 				this.getOwnerComponent().getRouter().getTargets().display("confirmation");
 			}.bind(this))
-			.catch(function(err) {
+			.catch(function() {
 				this.showErrorDialog()
 			}.bind(this));
-		},
+		}
 
-		showErrorDialog: function() {
+		showErrorDialog() {
 			var sText = this.oBundle.getText("submitErrorText");
 			var sTitle = this.oBundle.getText("submitErrorTitle");
-			this.byId("submitButton").setEnabled(true);
+			var submitButton = /** @type {import("sap/m/Button").default} */ (this.byId("submitButton"));
+			submitButton.setEnabled(true);
 			MessageBox.error(sText, {
 				title: sTitle
 			});
 		}
 
-	});
+	}
+
+	return RegistrationController;
 
 });

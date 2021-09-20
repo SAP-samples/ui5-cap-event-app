@@ -3,7 +3,13 @@ sap.ui.define([
 	"sap/ui/Device",
 	"./model/models",
 	"sap/ui/core/ComponentSupport"
-], function (UIComponent, Device, models) {
+],
+/**
+ * @param {typeof import('sap/ui/core/UIComponent').default} UIComponent
+ * @param {import('sap/ui/Device').support} support
+ * @param {typeof import('sap/ui/eventregistration/form/models').default} models
+ */
+function (UIComponent, support, models) {
 	"use strict";
 
 	return UIComponent.extend("sap.ui.eventregistration.form.Component", {
@@ -53,7 +59,7 @@ sap.ui.define([
 				// eslint-disable-next-line sap-no-proprietary-browser-api
 				if (document.body.classList.contains("sapUiSizeCozy") || document.body.classList.contains("sapUiSizeCompact")) {
 					this._sContentDensityClass = "";
-				} else if (!Device.support.touch) { // apply "compact" mode if touch is not supported
+				} else if (!support.touch) { // apply "compact" mode if touch is not supported
 					this._sContentDensityClass = "sapUiSizeCompact";
 				} else {
 					// "cozy" in case of touch support; default for most sap.m controls, but needed for desktop-first controls like sap.ui.table.Table
@@ -76,11 +82,11 @@ sap.ui.define([
 			.done(function() {
 				// this should not happen, as the server returns a 401 error code
 			})
-			.fail(function(err) {
+			.fail(function() {
 				// 401 Unauthorized error means we are successfully logged out.
 				// This causes the browser to forget the credentials.
 				// Redirect to get a login box again.
-				window.location = "/index.html";
+				window.location.href = "/index.html";
 			});
 			return false;
 		}
