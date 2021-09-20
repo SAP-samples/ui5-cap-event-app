@@ -80,7 +80,7 @@ sap.ui.define([
 				// 401 Unauthorized error means we are successfully logged out.
 				// This causes the browser to forget the credentials.
 				// Redirect to get a login box again.
-				window.location = "/index.html";
+				window.location.href = "/index.html";
 			});
 			return false;
 		}
