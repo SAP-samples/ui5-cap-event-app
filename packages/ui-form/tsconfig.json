@@ -20,8 +20,7 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"strict": true,
-		"strictNullChecks": false,
-
+		"strictNullChecks": true,
 		"noImplicitAny": true
 	},
 	"include": [

@@ -2,7 +2,7 @@ sap.ui.define([
 	"sap/ui/core/mvc/Controller"
 ],
 /**
- * @param {typeof import('sap/ui/core/mvc/Controller').default} Controller
+ * @param {typeof import('sap/ui/core/mvc/Controller').default} Controller 
  */
 function (Controller) {
 	"use strict";
@@ -11,7 +11,8 @@ function (Controller) {
 
 		onInit : function () {
 			// apply content density mode to root view
-			this.getView().addStyleClass(this.getOwnerComponent().getContentDensityClass());
+			var appComponent = /** @type {AppComponent} */ (/** @type {any} */ (this.getOwnerComponent()));
+			this.getView().addStyleClass(appComponent.getContentDensityClass());
 		}
 	});
 

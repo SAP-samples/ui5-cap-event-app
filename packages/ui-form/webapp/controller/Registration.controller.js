@@ -20,6 +20,14 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 	// sap.ui.eventregistration.form.controller.Registration
 	class RegistrationController extends Controller {
 
+		constructor(/** @type {(string | object[])} */ arg) {
+			super(arg);
+			/** @type {import('sap/base/i18n/ResourceBundle').default} */ // @ts-ignore
+			this.oBundle = {};
+			/** @type {import('sap/ui/model/Model').default} */ // @ts-ignore
+			this.oDataModel = {};
+		}
+
 		onInit() {
 
 			// keep the reference to the OData model
@@ -34,52 +42,47 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 				and: false
 			});
 			oBinding.filter(oDraftORNoDraftSiblingFilter);
-			oBinding.requestContexts(0, 2).then(function(/** @type {import("sap/ui/model/odata/v4/Context").default[]} */ aContexts) { // there should be only one. Request two to detect error situations.
-				this.onExistingDataLoaded(aContexts); // @ts-ignore
-			}.bind(this)).catch(function( oError) {
+			oBinding.requestContexts(0, 2).then((/** @type {import("sap/ui/model/odata/v4/Context").default[]} */ aContexts) => { // there should be only one. Request two to detect error situations.
+				this.onExistingDataLoaded(aContexts);
+				// @ts-ignore
+			}).catch((oError) => {
 				if (oError.status === 401 || oError.status === 403) { // 401 Unauthorized when user cancels login dialog, 403 Forbidden, when giving wrong credentials
 					// navigate without hash change
-					this.getOwnerComponent().getRouter().getTargets().display("notAuthorized");
+					var targets = /** @type {import("sap/ui/core/UIComponent").default} */ (this.getOwnerComponent()).getRouter().getTargets();
+					if (targets) {
+						targets.display("notAuthorized")
+					}
 				}
-			}.bind(this));
+			});
 
-			// store the reference to the i18n model
-			this.oBundle = /** @type {import('sap/base/i18n/ResourceBundle').default} */ (this.getResourceModel().getResourceBundle());
+			// store the reference to the i18n bundle
+			var oResourceModel = /** @type {import('sap/ui/model/resource/ResourceModel').default} */ ( /** @type any */ (this.getOwnerComponent().getModel("i18n")));
+			this.oBundle = /** @type {import('sap/base/i18n/ResourceBundle').default} */ (oResourceModel.getResourceBundle());
 
 			// listen to focusleave and enter on the fields to validate the user input
 			var aControls = sap.ui.getCore().byFieldGroupId("RegForm");
-			aControls.forEach(function(/** @type {import("sap/ui/core/Control").default} */ oControl) {
+			aControls.forEach((/** @type {import("sap/ui/core/Control").default} */ oControl) => {
 				oControl.addEventDelegate({
 					onsapfocusleave: this.validateControl.bind(this, oControl),
 					onsapenter: this.validateControl.bind(this, oControl)
 				});
-			}.bind(this));
+			});
 
 			// put focus in firstName and scroll to top again
 			this.getView().addEventDelegate({
-				onAfterShow: function() {
+				onAfterShow: () => {
 					this.byId("firstName").focus();
-					this.byId("page").scrollTo(0);
-				}.bind(this)
+					/** @type {import("sap/m/Page").default} */ (this.byId("page")).scrollTo(0);
+				}
 			})
-			
 
 		}
-
-		/**
-		 * @returns {import('sap/ui/model/resource/ResourceModel').default}
-		 */
-		getResourceModel() {
-			const oResourceModel = /** @type {import('sap/ui/model/resource/ResourceModel').default} */ ( /** @type any */ (this.getView().getModel("i18n")));
-			return oResourceModel;
-		}
-
 
 		onExistingDataLoaded(/** @type {import("sap/ui/model/odata/v4/Context").default[]} */ aContexts) {
 			// CREATE
 			if (!aContexts || aContexts.length === 0) { // no data for this user yet
 				var oBinding = /** @type {import("sap/ui/model/odata/v4/ODataListBinding").default} */ (this.oDataModel.bindList("/Person"));
-				oBinding.attachCreateCompleted(function(/** @type {import("sap/ui/base/Event").default} */ oEvent) {
+				oBinding.attachCreateCompleted((/** @type {import("sap/ui/base/Event").default} */ oEvent) => {
 					if (oEvent.getParameter("success")) {
 						this.getView().bindObject({path: oEvent.getParameter("context").getPath()});
 					} else {
@@ -89,7 +92,7 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 							title: sTitle
 						});
 					}
-				}.bind(this));
+				});
 				oBinding.create({}, true /* bSkipRefresh */); // automatically in draft mode
 
 				MessageToast.show(this.oBundle.getText("existingDataNotFound"), {duration: 5000});
@@ -115,10 +118,10 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 						oContext
 					));
 					oOperation.execute()
-					.then(function (/** @type {import("sap/ui/model/odata/v4/Context").default} */oUpdatedContext) {
+					.then((/** @type {import("sap/ui/model/odata/v4/Context").default} */ oUpdatedContext) => {
 						this.getView().bindObject({path: oUpdatedContext.getPath()});
 						MessageToast.show(this.oBundle.getText("existingDataLoaded"), {duration: 5000});
-					}.bind(this))
+					})
 					.catch(function() {
 						alert("draft edit failure");
 					});
@@ -127,8 +130,8 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 					MessageToast.show(this.oBundle.getText("existingDraftLoaded"), {duration: 5000});
 				}
 
-				var submitButton = /** @type {import("sap/m/Button").default} */ (this.byId("submitButton"));
-				submitButton.setText(this.oBundle.getText("updateButtonText"));
+				var oSubmitButton = /** @type {import("sap/m/Button").default} */ (this.byId("submitButton"));
+			oSubmitButton.setText(this.oBundle.getText("updateButtonText"));
 			}
 		}
 
@@ -136,16 +139,15 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 			this.getView().bindElement({path: sPath});
 		}
 
-		addFamilyMember () {
-			
+		addFamilyMember() {
 			var oListBinding = /** @type {import("sap/ui/model/odata/v4/ODataListBinding").default} */ (this.byId("familyMembersTable").getBinding("items"));
 			oListBinding.create({});
 		}
 
 		deleteFamilyMember(/** @type {import("sap/ui/base/Event").default} */ oEvent) {
-			var source = /** @type {import("sap/ui/core/Control").default} */ (oEvent.getSource());
-			var oBindingContext = /** @type {import("sap/ui/model/odata/v4/Context").default} */ (source.getBindingContext());
-			oBindingContext.delete("$auto").then(function () {
+			var oEventSource = /** @type {import("sap/ui/core/Control").default} */ (oEvent.getSource());
+			var oContext = /** @type {import("sap/ui/model/odata/v4/Context").default} */ (oEventSource.getBindingContext());
+			oContext.delete("$auto").then(function () {
 				// deletion success
 			}.bind(this), function () {
 				// TODO: ignore deletion failure?
@@ -174,14 +176,18 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 		 */
 
 		/**
-		 * @typedef {Object.<string, string>} FamilyMember
+		 * @typedef FamilyMember
 		 * @property {string} FirstName
 		 * @property {string} LastName
 		 * @property {string} Birthday
 		 */
 
 		validateData() {
-			var oNewObject = /** @type {Employee} */ (this.getView().getBindingContext().getObject());
+			var oBindingContext = this.getView().getBindingContext();
+			if (!oBindingContext) {
+				return [];
+			}
+			var oNewObject = /** @type {Employee} */ (oBindingContext.getObject());
 
 			// determine field names for validation dialog
 			var oBundle = this.oBundle;
@@ -214,9 +220,9 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 			// show validation errors (red borders) for all registration form controls with missing data
 			if (aMissing.length > 0) {
 				var aControls = sap.ui.getCore().byFieldGroupId("RegForm");
-				aControls.forEach(function(/** @type {import("sap/ui/core/Control").default} */ oControl) {
+				aControls.forEach((/** @type {import("sap/ui/core/Control").default} */ oControl) => {
 					this.validateControl(oControl);
-				}.bind(this));
+				});
 			}
 
 			return aMissing;
@@ -233,6 +239,9 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 			}
 
 			var oContext = this.getView().getBindingContext();
+			if (!oContext) {
+				return;
+			}
 
 			/* omit this block as failing "draftActivate" is not expected (no data checks in backend) aand a failing PATCH would not be dramatic
 			// ensure there are no pending changes (because otherwise with a failing "save" the last PATCH which might be in the same batch would also fail)
@@ -242,8 +251,8 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 			*/
 
 			// disable the "Submit" button to prevent double clicks from saving data twice
-			var submitButton = /** @type {import("sap/m/Button").default} */ (this.byId("submitButton"));
-			submitButton.setEnabled(false);
+			var oSubmitButton = /** @type {import("sap/m/Button").default} */ (this.byId("submitButton"));
+			oSubmitButton.setEnabled(false);
 
 			// trigger OData operation for persisting the draft as real data
 			var oOperation = /** @type {import("sap/ui/model/odata/v4/ODataContextBinding").default} */ (this.oDataModel.bindContext(
@@ -251,20 +260,23 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 				oContext
 			));
 			oOperation.execute()
-			.then(function () {
+			.then(() => {
 				// navigate without hash change
-				this.getOwnerComponent().getRouter().getTargets().display("confirmation");
-			}.bind(this))
-			.catch(function() {
+				var targets = /** @type {import("sap/ui/core/UIComponent").default} */ (this.getOwnerComponent()).getRouter().getTargets();
+				if (targets) {
+					targets.display("confirmation");
+				}
+			})
+			.catch(() => {
 				this.showErrorDialog()
-			}.bind(this));
+			});
 		}
 
 		showErrorDialog() {
 			var sText = this.oBundle.getText("submitErrorText");
 			var sTitle = this.oBundle.getText("submitErrorTitle");
-			var submitButton = /** @type {import("sap/m/Button").default} */ (this.byId("submitButton"));
-			submitButton.setEnabled(true);
+			var oSubmitButton = /** @type {import("sap/m/Button").default} */ (this.byId("submitButton"));
+			oSubmitButton.setEnabled(true);
 			MessageBox.error(sText, {
 				title: sTitle
 			});

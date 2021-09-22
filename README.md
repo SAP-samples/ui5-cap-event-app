@@ -295,7 +295,145 @@ So while continuing below, keep the question in your mind: shouldn't I use real 
 Setting up the additional transpilation step is very limited one-time effort, so why not? The good news is that you can switch at any time. You just have to convert the JSDoc type annotations to real TypeScript type information once you decide to do this final step. So most of the effort invested into adding the JSDoc annotations is not lost.
 
 
+### Tighter Typing
 
+While most variables are typed and TypeScript does not report any further issues, quite some untyped variables are still hiding throughout the code because TypeScript implicitly types tham as `any` which basically disables any type checks. To prevent TypeScript from doing so, change the value of "noImplicitAny" in `tsconfig.json` to "true":
+```
+"noImplicitAny": true
+```
+
+As result, there will be a lot of new errors again - 20 of them in the UI5 CAP event app.
+
+#### Type the Method Parameters
+
+Luckily, most of the new errors can be fixed easily by giving type information for method parameters:
+```js
+onExistingDataLoaded(/** @type {import("sap/ui/model/odata/v4/Context").default[]} */ aContexts) {
+```
+
+Some of them will require subsequent type casts when chains of methods are called on these variables.
+
+#### Refine the Custom Types
+
+When custom types are defined, further refinements may become necessary now. Saying an `Employee` has just one property of type `object[]` won't cut it anymore. The Employee and FamilyMember structures now need to be fully specified to satisfy the type checks for the code handling them:
+
+```js
+/**
+ * @typedef  Employee
+ * @property {string} FirstName
+ * @property {string} LastName
+ * @property {string} Birthday
+ * @property {FamilyMember[]} FamilyMembers
+ */
+
+/**
+ * @typedef FamilyMember
+ * @property {string} FirstName
+ * @property {string} LastName
+ * @property {string} Birthday
+ */
+```
+
+This is pretty straightforward as well - plus it will improve type checking and code assist a LOT when handling these application-defined structures.
+
+#### Fix Further Issues
+
+The few remaining errors may be of various types. E.g. one says that "'string' can't be used to index type 'Employee'" when iterating. In such a case it can help to restrict the iterator variable to the specific strings which occur and which are all present as properties in the `Employee` type:
+
+```js
+/** @type {('FirstName'|'LastName'|'Birthday')} */
+var prop;
+for (prop in mFields) {
+	if (!oNewObject[prop]) {
+```
+
+### Even Stricter Type Checking
+
+Most parts of the code are now type-checked. Still there are a few `any`s left, which can be uncovered by changing one more line in `tsconfig.json` to enable strict type checks:
+```js
+"strict": true,
+```
+
+And you are back to almost 20 errors!<br>
+This might be the point where you draw the line for type checking in a pure JavaScript project. After all, the "strict" checks are an option which can also be disabled in real TypeScript projects.
+
+But then again, the more type checking and code assist, the better. And in fact almost all new errors are of the same type and the fix is super-easy and makes sense in several ways!
+
+#### Fix the 'this' Context Errors
+
+In the UI5 CAP event app, almost ALL new errors are saying:
+> `'this' implicitly has type 'any' ...`<br>
+> `An outer value of 'this' is shadowed by this container.`
+
+They are caused by functions where the `this`context is set with `bind(this)`:
+```js
+.catch(function() {
+	this.showErrorDialog()
+}.bind(this));
+```
+
+Just replace them with arrow functions! Those preserve the 'this'  context:
+```js
+.catch(() => {
+	this.showErrorDialog()
+});
+```
+
+Not working in IE11, but this browser is anyway no longer supported by UI5.
+
+
+#### Fix the 'arguments' Errors
+
+For places where `someFunction.apply(this, arguments);` is called, an error is raised for the `arguments` parameter ("Argument of type 'IArguments' is not assignable to parameter of type '[]'").
+
+This can be solved by explicitly declaring a variable with spread operator ("`...`") for the arguments and passing this array on to the `apply` call:
+
+```js
+destroy : function (...args) {
+	UIComponent.prototype.destroy.apply(this, args);
+},
+```
+
+Back to zero errors with strict type checking! Yay!
+
+
+### Make the Checks Even Stricter
+
+Now pretty much every variable should be typed, but checks can still be made even stricter, by targeting those cases where something is inadvertantly `undefined`. This step is again optional, but honestly: have you never encountered errors like "'undefined' is not an object" at runtime?<br>
+This is the chance to catch these issues earlier! Just change the respective line in `tsconfig.json` to say:
+```js
+"strictNullChecks": true,
+```
+
+Back to more than 20 errors <i>again</i>!<br>
+But you know the drill now. The errors are of type "Object is possibly 'undefined'" and most of them can be fixed with one change.
+
+#### Fix the Member Variable Errors
+
+Most new errors are targeting the same variable: `this.oBundle` (the ResourceBundle for translation texts). The TypeScript compiler does not know that the `onInit` method will be called before any other method calls and that hence this member will be initialized in advance.<br>
+The same kind of error will likely occur in other apps for other class members. A solution is to create a dummy constructor which does nothing - it just initializes these members:
+
+```js
+constructor(/** @type {(string | object[])} */ arg) {
+	super(arg);
+	/** @type {import('sap/base/i18n/ResourceBundle').default} */ // @ts-ignore
+	this.oBundle = {};
+}
+```
+
+Array members can be simply initialized with an empty array, but because `this.oBundle` is typed, it only accepts objects of type ResorceModel. As we don't want to pollute the code with the instantiation of an additional unneded model, we get a bit hacky, assign an empty object and apply a `@ts-ignore` to suppress the resulting type error. There might be better solutions to this, but it works.
+
+#### Fix the Other "possibly 'undefined'" Errors
+
+For the other occurrences of this error, you will typically add a plain null-check.
+
+Some of them will actually make your application more robust, which is the point of this setting. Others may be actually unnecessary because with the given parameters there is <i>always</i> a value returned by the used methods.<br>
+This is why some consider the `strictNullChecks` rule "too much" while others like to apply it.
+
+### Done!
+
+At this point, you have achieved strict type checking and very good code-assist support.<br>
+You can maintain this by adding type info as the code grows and sooner or later consider switching to TypeScript altogether. After all you have already added all the needed type annotations and the configuration file. Just convert the type infos to real TypeScript syntax and add the transpilation step as described in the [TypeScript "Hello World" tutorial](https://github.com/SAP-samples/ui5-typescript-helloworld/blob/main/step-by-step.md).
 
 
 ## Running the Project
@@ -306,7 +444,7 @@ Just like in the main branch, execute the following command to run the project l
 yarn start
 ```
 
-As also shown in the terminal after executing this command, the form UI, which this branch is about, is then running on http://localhost:8080/index.html.
+As also shown in the terminal after executing this command, the form UI (which this branch is about) is then running on http://localhost:8080/index.html.
 
 For the form UI, you can use user name `employee@test.com` with password `123`.
 

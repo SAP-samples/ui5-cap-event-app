@@ -5,10 +5,14 @@
   "private": true,
   "scripts": {
     "build": "ui5 build --clean-dest",
-    "start": "ui5 serve --port 8080"
+    "start": "ui5 serve --port 8080",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@sapui5/ts-types-esm": "1.94.0",
+    "@types/jquery": "3.5.1",
     "@ui5/cli": "^2.2.6",
+    "typescript": "^4.4.3",
     "ui5-middleware-livereload": "^0.5.2",
     "ui5-middleware-simpleproxy": "^0.7.1"
   },

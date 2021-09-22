@@ -156,7 +156,7 @@
     debug "3.1.0"
     verror "1.10.0"
 
-"@sapui5/ts-types-esm@^1.93.1":
+"@sapui5/ts-types-esm@1.94.0":
   version "1.94.0"
   resolved "https://registry.yarnpkg.com/@sapui5/ts-types-esm/-/ts-types-esm-1.94.0.tgz#c8597f318c73c787c2320f5b5b5865b545f20ef1"
   integrity sha512-3Z5lwIwe7U8lMgoOZbUBxOaIEcUZaHILTvxe0qZTmC0EWOLOp7GbpGwWqk0utz9qgPfjElGqMxeau3MXIkuMdQ==

@@ -1,4 +1,11 @@
-sap.ui.define([
+/**
+ * The application-specific Component
+ * @typedef AppComponent
+ * @type {object}
+ * @property {function} getContentDensityClass
+ */
+	
+ sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"sap/ui/Device",
 	"./model/models",
@@ -6,13 +13,14 @@ sap.ui.define([
 ],
 /**
  * @param {typeof import('sap/ui/core/UIComponent').default} UIComponent
- * @param {import('sap/ui/Device').support} support
- * @param {typeof import('sap/ui/eventregistration/form/models').default} models
+ * @param {import('sap/ui/Device').default} Device
+ * @param {models} models
  */
-function (UIComponent, support, models) {
+function (UIComponent, Device, models) {
 	"use strict";
 
-	return UIComponent.extend("sap.ui.eventregistration.form.Component", {
+	
+	return UIComponent.extend("sap.ui.eventregistration.form.AppComponent", {
 
 		metadata : {
 			manifest: "json"
@@ -24,9 +32,9 @@ function (UIComponent, support, models) {
 		 * @public
 		 * @override
 		 */
-		init : function () {
+		init : function (...args) {
 			// call the base component's init function
-			UIComponent.prototype.init.apply(this, arguments);
+			UIComponent.prototype.init.apply(this, args);
 
 			// set the device model
 			this.setModel(models.createDeviceModel(), "device");
@@ -42,9 +50,9 @@ function (UIComponent, support, models) {
 		 * @public
 		 * @override
 		 */
-		destroy : function () {
+		destroy : function (...args) {
 			// call the base component's destroy function
-			UIComponent.prototype.destroy.apply(this, arguments);
+			UIComponent.prototype.destroy.apply(this, args);
 		},
 
 		/**
@@ -59,7 +67,7 @@ function (UIComponent, support, models) {
 				// eslint-disable-next-line sap-no-proprietary-browser-api
 				if (document.body.classList.contains("sapUiSizeCozy") || document.body.classList.contains("sapUiSizeCompact")) {
 					this._sContentDensityClass = "";
-				} else if (!support.touch) { // apply "compact" mode if touch is not supported
+				} else if (!Device.support.touch) { // apply "compact" mode if touch is not supported
 					this._sContentDensityClass = "sapUiSizeCompact";
 				} else {
 					// "cozy" in case of touch support; default for most sap.m controls, but needed for desktop-first controls like sap.ui.table.Table
