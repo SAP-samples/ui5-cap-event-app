@@ -11,7 +11,7 @@ function (Controller) {
 
 		onInit : function () {
 			// apply content density mode to root view
-			var appComponent = /** @type {AppComponent} */ (/** @type {any} */ (this.getOwnerComponent()));
+			var appComponent = /** @type {sap.ui.eventregistration.form.AppComponent} */ (this.getOwnerComponent());
 			this.getView().addStyleClass(appComponent.getContentDensityClass());
 		}
 	});

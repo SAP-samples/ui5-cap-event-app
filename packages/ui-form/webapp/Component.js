@@ -1,10 +1,13 @@
 /**
  * The application-specific Component
- * @typedef AppComponent
- * @type {object}
- * @property {function} getContentDensityClass
+ * 
+ * @typedef {object} AppComponentExt
+ * @property {function():string} getContentDensityClass
+ * @property {function():boolean} doLogout
+ *
+ * @typedef {import('sap/ui/core/UIComponent').default & AppComponentExt} sap.ui.eventregistration.form.AppComponent
  */
-	
+
  sap.ui.define([
 	"sap/ui/core/UIComponent",
 	"sap/ui/Device",
@@ -13,12 +16,11 @@
 ],
 /**
  * @param {typeof import('sap/ui/core/UIComponent').default} UIComponent
- * @param {import('sap/ui/Device').default} Device
- * @param {models} models
+ * @param {typeof import('sap/ui/Device').default} Device
+ * @param {sap.ui.eventregistration.form.models} models
  */
 function (UIComponent, Device, models) {
 	"use strict";
-
 	
 	return UIComponent.extend("sap.ui.eventregistration.form.AppComponent", {
 

@@ -56,7 +56,7 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 			});
 
 			// store the reference to the i18n bundle
-			var oResourceModel = /** @type {import('sap/ui/model/resource/ResourceModel').default} */ ( /** @type any */ (this.getOwnerComponent().getModel("i18n")));
+			var oResourceModel = /** @type {import('sap/ui/model/resource/ResourceModel').default} */ (this.getOwnerComponent().getModel("i18n"));
 			this.oBundle = /** @type {import('sap/base/i18n/ResourceBundle').default} */ (oResourceModel.getResourceBundle());
 
 			// listen to focusleave and enter on the fields to validate the user input
