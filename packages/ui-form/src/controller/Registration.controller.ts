@@ -250,8 +250,7 @@ export default class Registration extends Controller {
 		operation.execute()
 		.then(() => {
 			// navigate without hash change
-			// eslint-disable-next-line @typescript-eslint/no-floating-promises
-			(this.getOwnerComponent() as UIComponent).getRouter().getTargets().display("confirmation");
+			void UIComponent.getRouterFor(this).getTargets().display("confirmation"); // the "void" keyword indicates to ESLint that the promise result is intentionally not handled
 		})
 		.catch(() => {
 			this.showErrorDialog()

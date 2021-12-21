@@ -14,23 +14,23 @@
     "start": "npm-run-all --parallel watch:ts start:ui5"
   },
   "devDependencies": {
-    "@babel/cli": "^7.13.10",
-    "@babel/core": "^7.13.10",
-    "@babel/preset-env": "^7.13.10",
-    "@babel/preset-typescript": "^7.13.0",
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-typescript": "^7.16.0",
     "@types/dompurify": "^2.2.1",
     "@types/jquery": "3.5.1",
     "@types/qunit": "2.5.4",
-    "@sapui5/ts-types-esm": "1.90.0",
-    "@ui5/cli": "^2.11.0",
-    "@typescript-eslint/eslint-plugin": "^4.25.0",
-    "@typescript-eslint/parser": "^4.25.0",
-    "babel-preset-transform-ui5": "^7.0.3",
-    "eslint": "^7.27.0",
+    "@sapui5/ts-types-esm": "1.97.0",
+    "@ui5/cli": "^2.14.1",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
+    "babel-preset-transform-ui5": "^7.0.5",
+    "eslint": "^8.4.1",
     "npm-run-all": "^4.1.5",
-    "typescript": "^4.2.3",
-    "ui5-middleware-livereload": "^0.5.2",
-    "ui5-middleware-simpleproxy": "^0.7.1"
+    "typescript": "^4.5.3",
+    "ui5-middleware-livereload": "^0.5.8",
+    "ui5-middleware-simpleproxy": "^0.7.5"
   },
   "ui5": {
     "dependencies": [

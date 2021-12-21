@@ -1,33 +1,30 @@
-# ui5-cap-event-app - in TypeScript flavor
+# ui5-cap-event-app - in TypeScript
 
-Showcase of two UI5 user interfaces, one built with freestyle [SAPUI5](https://sapui5.hana.ondemand.com/) (or rather [OpenUI5](https://openui5.org/)), the other using [SAP Fiori elements](https://community.sap.com/topics/fiori-elements), with a [CAP](https://cap.cloud.sap/docs/) backend, using [OData V4](https://www.odata.org/) with [Draft mode](https://experience.sap.com/fiori-design-web/draft-handling/).
+<b>The [freestyle SAPUI5 app in the `packages/ui-form` directory](packages/ui-form) in this "`typescript`" branch of the repository is written in TypeScript and uses the UI5 type definitions. It serves as a real-world-style example for a UI5 app developed in TypeScript.</b>
 
-<b>The freestyle SAPUI5 app in this "`typescript`" branch is written in TypeScript and uses the new UI5 type definitions.</b>
+<b>Overall, the central entry point for all TypeScript-related information, documentation, samples, tutorials etc. about UI5 can be found at [https://sap.github.io/ui5-typescript](https://sap.github.io/ui5-typescript/).</b>
 
-<b>You can find an in-depth introduction to TypeScript in UI5 app code [here](docs/typescript.md).</b>
+This app is a showcase of two UI5 user interfaces, one built with freestyle [SAPUI5](https://sapui5.hana.ondemand.com/) (or rather [OpenUI5](https://openui5.org/)), the other using [SAP Fiori elements](https://community.sap.com/topics/fiori-elements), with a [CAP](https://cap.cloud.sap/docs/) backend, using [OData V4](https://www.odata.org/) with [Draft mode](https://experience.sap.com/fiori-design-web/draft-handling/).
 
-<b>To see the basic suggested project setup for TypeScript development, please check out the [TypeScript Hello World app](https://github.com/SAP-samples/ui5-typescript-helloworld). It not only can serve as copy template, but also includes a [detailed step-by-step guide](https://github.com/SAP-samples/ui5-typescript-helloworld/blob/main/step-by-step.md) for creating this setup from scratch.</b>
 
-<b>The UI5con 2021 session on TypeScript ([recording available at YouTube](https://www.youtube.com/watch?v=aXzcsOZH4q8)) explains the overall approach for TypeScript and UI5.</b>
+<b>You can find an in-depth introduction to TypeScript in UI5 app code, including an explanation of the most important code in this projects [here](docs/typescript.md).</b>
 
-<b>There is also an [application template](https://github.com/ui5-community/generator-ui5-ts-app) (based on yeoman and easy-ui5) which has been shown in the [UI5con Keynote](https://www.youtube.com/watch?v=aXzcsOZH4q8) and explained in [this blog](https://blogs.sap.com/2021/07/01/getting-started-with-typescript-for-ui5-application-development/).</b>
 
 | :point_up: TypeScript Remarks |
 |:---------------------------|
-| The SAPUI5 type definitions are loaded as dev dependency [from npm package `@sapui5/ts-types-esm`](https://www.npmjs.com/package/@sapui5/ts-types-esm). The OpenUI5 types are available as [`@openui5/ts-types-esm`](https://www.npmjs.com/package/@openui5/ts-types-esm). You can inspect the \*.d.ts files in the `node_modules/@sapui5/ts-types-esm/types` directory after installing the dependencies with the `yarn` command.<br/>
+| The SAPUI5 type definitions are loaded as dev dependency [from npm package `@sapui5/ts-types-esm`](https://www.npmjs.com/package/@sapui5/ts-types-esm). The OpenUI5 types are available as [`@openui5/ts-types-esm`](https://www.npmjs.com/package/@openui5/ts-types-esm) and [ `@types/openui5`](https://www.npmjs.com/package/@types/openui5). You can inspect the \*.d.ts files in the `node_modules/@sapui5/ts-types-esm/types` directory after installing the dependencies with the `yarn` command.<br/>
  The file [packages/ui-form/tsconfig.json](packages/ui-form/tsconfig.json) contains the configuration for the TypeScript compilation, including a reference to these \*.d.ts files in its `"typeRoots"` section.<br/>
  Normally, the UI5 JavaScript files (controllers, Component.js etc.) would reside in the `webapp` folder. Now they are in the [packages/ui-form/src](packages/ui-form/src) folder and the TypeScript compilation will create the `webapp` folder and place all output there. <br/>
  In addition to the TypeScript compilation, there is also a conversion from the ES6 module and class syntax used in the source files to the classic UI5 module loading and class definition syntax (`sap.ui.define(...)` and `superClass.extend(...)`). This conversion is using the [babel-plugin-transform-modules-ui5](https://github.com/r-murphy/babel-plugin-transform-modules-ui5) project from Ryan Murphy. <br/> 
  Both, the TypeScript compilation and the ES6 syntax transformation, are executed by Babel, as configured in the file [packages/ui-form/.babelrc.json](packages/ui-form/.babelrc.json)<br/> 
  This combined transformation is triggered by the `build:ts` and `watch:ts` scripts in [packages/ui-form/package.json](packages/ui-form/package.json#L9) |
  
-
 ## Description
 
 This app uses simple attendee registration and administration for events as an example scenario for demonstrating the data handling and overall setup. The app consists of three parts: an end-user UI implemented in freestyle SAPUI5, a metadata-driven administrator UI generated with Fiori elements and a Node.js-based CAP backend.
 While the code implements a complete end-to-end full-stack app, it is kept as simple as possible and the main focus is on freestyle SAPUI5 code making use of OData V4 as well as of "Draft" functionality to persist non-final datasets.
 
-Further details about how the functionality is implemented can be found [in the documentation](docs/documentation.md).
+Further details about how the functionality is implemented can be found in the [documentation in the 'main' branch of this repository](https://github.com/SAP-samples/ui5-cap-event-app/blob/main/docs/documentation.md#The-Heart-of-the-App-the-Registration-Controller).
 
 ## Requirements
 
@@ -126,7 +123,9 @@ The sample code is provided **as-is**. No support is provided.
 
 ## References
 
-Other projects demonstrating similar use-cases:
+Regarding TypeScript and UI5, all information is bundled at [https://sap.github.io/ui5-typescript](https://sap.github.io/ui5-typescript/).
+
+Other projects demonstrating similar application use-cases:
 
 * https://github.com/vobu/ui5-cap - a repository showcasing the use of UI5 Tooling, CAP + UIveri5-based testing in an app for media upload and preview (as presented at UI5conBE in Feb 2020) by Volker Buzek.
 * https://blogs.sap.com/2020/07/08/ui5-freestyle-app-in-cap - a UI5 freestyle app in CAP, with approuter, by Wouter Lemaire.
