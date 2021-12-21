@@ -69,6 +69,7 @@ function (UIComponent, Device, models) {
 				// eslint-disable-next-line sap-no-proprietary-browser-api
 				if (document.body.classList.contains("sapUiSizeCozy") || document.body.classList.contains("sapUiSizeCompact")) {
 					this._sContentDensityClass = "";
+					// @ts-ignore Device.support is not defined in the types even tough it exists; with ES module imports in regular TypeScript the named export "support" can be used - but not in JavaScript with sap.ui.define(...)
 				} else if (!Device.support.touch) { // apply "compact" mode if touch is not supported
 					this._sContentDensityClass = "sapUiSizeCompact";
 				} else {

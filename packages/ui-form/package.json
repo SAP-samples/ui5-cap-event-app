@@ -9,12 +9,12 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@sapui5/ts-types-esm": "1.94.0",
+    "@sapui5/ts-types-esm": "1.97.0",
     "@types/jquery": "3.5.1",
-    "@ui5/cli": "^2.2.6",
-    "typescript": "^4.4.3",
-    "ui5-middleware-livereload": "^0.5.2",
-    "ui5-middleware-simpleproxy": "^0.7.1"
+    "@ui5/cli": "^2.14.1",
+    "typescript": "^4.5.3",
+    "ui5-middleware-livereload": "^0.5.8",
+    "ui5-middleware-simpleproxy": "^0.7.5"
   },
   "ui5": {
     "dependencies": [

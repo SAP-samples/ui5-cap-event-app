@@ -2,6 +2,8 @@
 
 This `js-with-typescript-support` branch of the "UI5 CAP Event App" repository demonstrates how the UI5 TypeScript type definitions can provide type checking and code assist even when developing your UI5 app in regular JavaScript.
 
+<b>Overall, the central entry point for all TypeScript-related information, documentation, samples, tutorials etc. about UI5 can be found at [https://sap.github.io/ui5-typescript](https://sap.github.io/ui5-typescript/).</b>
+
 For general information about the app and for setup instructions, please check the [main branch](../../tree/main).
 
 # Table of Content

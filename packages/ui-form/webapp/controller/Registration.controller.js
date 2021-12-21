@@ -4,7 +4,8 @@ sap.ui.define([
 	"sap/m/MessageToast",
 	"sap/m/InputBase",
 	"sap/ui/model/Filter",
-	"sap/ui/model/FilterOperator"
+	"sap/ui/model/FilterOperator",
+	"sap/ui/core/UIComponent"
 ],
 /**
  * @param {typeof import('sap/ui/core/mvc/Controller').default} Controller
@@ -13,8 +14,9 @@ sap.ui.define([
  * @param {typeof import('sap/m/InputBase').default} InputBase
  * @param {typeof import('sap/ui/model/Filter').default} Filter
  * @param {typeof import('sap/ui/model/FilterOperator').default} FilterOperator
+ * @param {typeof import('sap/ui/core/UIComponent').default} UIComponent
  */
-function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperator) {
+function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperator, UIComponent) {
 	"use strict";
 
 	// sap.ui.eventregistration.form.controller.Registration
@@ -48,7 +50,7 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 			}).catch((oError) => {
 				if (oError.status === 401 || oError.status === 403) { // 401 Unauthorized when user cancels login dialog, 403 Forbidden, when giving wrong credentials
 					// navigate without hash change
-					var targets = /** @type {import("sap/ui/core/UIComponent").default} */ (this.getOwnerComponent()).getRouter().getTargets();
+					var targets = UIComponent.getRouterFor(this).getTargets();
 					if (targets) {
 						targets.display("notAuthorized")
 					}
@@ -262,7 +264,7 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 			oOperation.execute()
 			.then(() => {
 				// navigate without hash change
-				var targets = /** @type {import("sap/ui/core/UIComponent").default} */ (this.getOwnerComponent()).getRouter().getTargets();
+				var targets = UIComponent.getRouterFor(this).getTargets();
 				if (targets) {
 					targets.display("confirmation");
 				}
