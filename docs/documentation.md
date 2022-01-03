@@ -761,7 +761,7 @@ packages/ui-form
   [...]
 
   <script id="sap-ui-bootstrap"
-          src="https://sapui5.hana.ondemand.com/1.94.0/resources/sap-ui-core.js"
+          src="https://sapui5.hana.ondemand.com/1.97.0/resources/sap-ui-core.js"
 ```
 
 Another important aspect is the development server of the UI5 Tooling used to serve the UI5 applications at development time. The UI5 Tooling can be extended with custom middlewares to improve the development experience or to proxy OData services. For the Form UI project we are using the [ui5-middleware-livereload](https://www.npmjs.com/package/ui5-middleware-livereload) to improve the development experience by getting a save and update behavior (once a resource has been changed and saved in your editor, the UI5 application is reloaded) and [ui5-middleware-simpleproxy](https://www.npmjs.com/package/ui5-middleware-simpleproxy) to proxy the CAP server running on port `4004` to avoid [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues.
