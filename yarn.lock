@@ -1104,10 +1104,10 @@
     node-rsa "^1.1.1"
     valid-url "1.0.9"
 
-"@sapui5/ts-types-esm@1.97.0":
-  version "1.97.0"
-  resolved "https://registry.yarnpkg.com/@sapui5/ts-types-esm/-/ts-types-esm-1.97.0.tgz#4d9df38342f635d8ff3525d9ab9f5e21dce28934"
-  integrity sha512-say59lDQKgm2h0cAwIap3mEK2sCHPGJd6WAfo1oI1m0ns/PWhd7vpHoT8+W8iPys/Wg2HP3lO8CyQH1fm80Q6Q==
+"@sapui5/ts-types-esm@1.98.0":
+  version "1.98.0"
+  resolved "https://registry.yarnpkg.com/@sapui5/ts-types-esm/-/ts-types-esm-1.98.0.tgz#21e4127164d4ca80f87b9062f78bcf4167945019"
+  integrity sha512-GKxrhBJiAmU7qUKJ0gHykYpoySVk1AYndGyLLqaors3JG3RjyFkwE51SCDOdgMNNd4keqHnAomV9X7jgY4LXHA==
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -1141,10 +1141,10 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/jquery@3.5.1":
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.1.tgz#cebb057acf5071c40e439f30e840c57a30d406c3"
-  integrity sha512-Tyctjh56U7eX2b9udu3wG853ASYP0uagChJcQJXLUXEU6C/JiW5qt5dl8ao01VRj1i5pgXPAf8f1mq4+FDLRQg==
+"@types/jquery@3.5.9":
+  version "3.5.9"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.9.tgz#08e4b1dcff0626926ffe545a2bc90f18140c53d6"
+  integrity sha512-B8pDk+sH/tSv/HKdx6EQER6BfUOb2GtKs0LOmozziS4h7cbe8u/eYySfUAeTwD+J09SqV3man7AMWIA5mgzCBA==
   dependencies:
     "@types/sizzle" "*"
 
