@@ -1,3 +1,4 @@
 {
-    "files.watcherExclude": {}
+    "files.watcherExclude": {},
+    "WhiteSource Advise.Diff.BaseBranch": "main"
 }
