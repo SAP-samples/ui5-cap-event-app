@@ -10,7 +10,7 @@
   "devDependencies": {
     "@ui5/cli": "^2.14.1",
     "ui5-middleware-livereload": "^0.5.8",
-    "ui5-middleware-simpleproxy": "^0.7.5"
+    "ui5-middleware-simpleproxy": "^0.8.0"
   },
   "ui5": {
     "dependencies": [

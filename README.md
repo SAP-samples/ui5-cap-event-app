@@ -1,4 +1,4 @@
-# ui5-cap-event-app
+# ui5-cap-event-app - JavaScript with TypeScript Support
 
 This `js-with-typescript-support` branch of the "UI5 CAP Event App" repository demonstrates how the UI5 TypeScript type definitions can provide type checking and code assist even when developing your UI5 app in regular JavaScript.
 
@@ -73,6 +73,11 @@ Depending on your project structure, this can happen at top-level, or in a singl
 cd packages/ui-form
 ```
 
+Or if you not have entered the project directory yet after cloning from GitHub, do this instead:
+```sh
+cd ui5-cap-event-app/packages/ui-form
+```
+
 Then trigger the actual dev dependency installation:
 
 ```sh
@@ -82,12 +87,12 @@ yarn add typescript --dev
 The [UI5 type definitions](https://www.npmjs.com/package/@sapui5/ts-types-esm) need to be installed as dev dependency as well. You should choose the same major/minor version of the type definitions as used by your application code. (If this is not possible because you are working with an older version of UI5 at runtime, you can also try using a higher version of the type definitions, but be aware that some of the proposed APIs might not exist in your actually used UI5 version.)
 
 ```sh
-yarn add @sapui5/ts-types-esm@1.94.0 --dev
+yarn add @sapui5/ts-types-esm@1.100.0 --dev
 ```
 
-NOTE: we are working with the new "-esm" flavor of the type definitions. This has advantages and disadvantages, so you might also choose the `@sapui5/ts-types` package instead:
+NOTE: we are working with the new "-esm" flavor of the type definitions. This has advantages but also disadvantages when developing in JavaScript, so you might also choose the `@sapui5/ts-types` package instead:
  * Advantage: the `ts-types-esm` packages are the best-quality type definition files, the ones the UI5 team is focusing on. While the `ts-types` packages are also automatically updated with every new UI5 release, there might be some TypeScript glitches inside which are not fixed with priority.
- * Disadvantage: The "-esm" definitions define only ES6 modules, not the legacy global names of UI5 classes (like "sap.ui.core.Control" in the global namespace). This makes referencing types in the JSDoc comments a bit ugly. Instead of `@type {sap.m.Button}` one has to write `@type {import('sap/m/Button').default}`.
+ * Disadvantage: The "-esm" definitions define only ES6 modules, not the legacy global names of UI5 classes (like "sap.m.Button" in the global namespace). This makes referencing types in the JSDoc comments a bit ugly. Instead of `@type {sap.m.Button}` one has to write `@type {import('sap/m/Button').default}`.
 
 We are using the SAPUI5 type definitions in this document, but if you are only using controls contained in OpenUI5, you can also just use the OpenUI5 type definitions ([`@openui5/ts-types-esm`](https://www.npmjs.com/package/@openui5/ts-types-esm)).
 
@@ -168,7 +173,7 @@ But even when not doing so, the editor will also highlight any errors inline! Yo
 
 ## Get Rid of the Initial Errors
 
-It makes sense to get the initially displayed errors out of the way before starting to add type information. Of course, the list of initial errors will vary between apps, in case of the event app, there are eight:
+It makes sense to get the initially displayed errors out of the way before starting to add type information. Of course, the list of initial errors will vary between apps, in case of the event app, there are eight at the time of writing (this may vary over time as the original app is modified):
 
 * Four issues are about variables which are declared but never used (parameters of anonymous functions). Simply remove the variable declarations. You could also change the respective TypeScript compiler setting to make this a non-error.
 
@@ -180,21 +185,18 @@ It makes sense to get the initially displayed errors out of the way before start
         }
    ```
 
-   Note how the syntax of declaring the methods changes and don't forget to return the new class in the end!
+   Note how the syntax of declaring the methods changes! No `function` keyword anymore, no colon, no comma. Do it for all methods and don't forget to return the new class in the end after it has been defined!
 
    ```js
    return RegistrationController;
    ```
 
+   > Using ES6 classes will not work for all UI5 entities and will make them have no metadata, but it works for this simple controller.
 
-* The last error says "<i>Cannot use namespace 'jQuery' as a value</i>". To solve this - and similar errors about third-party libraries which are used directly in the app code - add a dev dependency to its type definitions:
 
-   ```sh
-   yarn add @types/jquery@3.5.1 --dev
-   ```
-   NOTE: use the version included in UI5!
+* The last error says "<i>Cannot use namespace 'jQuery' as a value</i>". This means the TypeScript compiler does currently not know the jQuery type definitions. This is because in `tsconfig.json` the `compilerOptions > types` are explicitly set. When this is done, TypeScript ignores the types at the default location (in the `node_modules/@types` directory). So even though (since UI5 1.100) the jQuery type definitions are installed as dependency of the SAPUI5 types, they are ignored.
 
-   Also add this new set of type definitions to the `compilerOptions > types` list in `tsconfig.json`:
+   To solve this problem, add the path to the jQuery types in `tsconfig.json`:
 
    ```json
    "types": [
@@ -202,8 +204,8 @@ It makes sense to get the initially displayed errors out of the way before start
 		"../../node_modules/@types/jquery"
 	],
    ```
-
-   Do it similarly for any other used third-party libraries like qunit if there are further such error messages.
+   
+   In case other third-party libraries are used directly in the app code, it might be required to add a dev dependency to their type definitions and then also add their path here.
 
 You might have other issues in your own app, but at the end of this step, `yarn typecheck` should finish with no errors.
 
