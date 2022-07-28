@@ -4,9 +4,9 @@
   "description": "A simple CAP-based UI5 Event Application Server.",
   "private": true,
   "dependencies": {
-    "@sap/cds": "^5.9.1",
+    "@sap/cds": "^6.0.4",
     "express": "*",
-    "passport": "^0.5.2",
+    "passport": "^0.6.0",
     "sqlite3": "^5.0.0"
   },
   "scripts": {

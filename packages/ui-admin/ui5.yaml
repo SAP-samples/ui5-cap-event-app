@@ -5,7 +5,7 @@ metadata:
 type: application
 framework:
   name: SAPUI5
-  version: "1.100.0"
+  version: "1.104.2"
   libraries:
     - name: sap.f
     - name: sap.fe.templates
