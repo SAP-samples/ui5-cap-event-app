@@ -1306,7 +1306,7 @@
     xml2js "^0.4.23"
     yazl "^2.5.1"
 
-"@ui5/cli@^2.14.1":
+"@ui5/cli@^2.14.2":
   version "2.14.10"
   resolved "https://registry.yarnpkg.com/@ui5/cli/-/cli-2.14.10.tgz#eb289d2a81f03c8719cfb5c9a8b55e0cbfac3ec7"
   integrity sha512-+oy/e/fHZ3G/p+4Da1mk9pctlvR/RAUdljGFIae8ZRtUoVWa/Xx/6zxNMxnjHfLYyjmzghZ/oDrqPe71iEX59A==
