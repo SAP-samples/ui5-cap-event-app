@@ -4,11 +4,10 @@
   "description": "UI5 CAP Event Application",
   "private": true,
   "scripts": {
-    "build": "npm-run-all build:clean --parallel build:server build:ui-form build:ui-admin --parallel build:server:copy-app build:server:copy-cdsrc build:server:copy-gen build:ui-form:copy build:ui-admin:copy",
+    "build": "npm-run-all build:clean --parallel build:server build:ui-form build:ui-admin --parallel build:server:copy-app build:server:copy-gen build:ui-form:copy build:ui-admin:copy",
     "build:clean": "rimraf dist",
     "build:server": "yarn workspace ui5-cap-event-app-server cds:build",
-    "build:server:copy-app": "cpy \"packages/server/app/sandbox.html\" dist/app --rename=index.html",
-    "build:server:copy-cdsrc": "cpy \"packages/server/.cdsrc.json\" dist",
+    "build:server:copy-app": "cpy \"packages/server/app/sandbox.html\" dist/app --rename=index.html --flat",
     "build:server:copy-gen": "cpy \"packages/server/gen/srv/**\" dist",
     "build:ui-form": "yarn workspace ui5-cap-event-app-ui-form build",
     "build:ui-form:copy": "cpy \"packages/ui-form/dist/**\" dist/app/form",
