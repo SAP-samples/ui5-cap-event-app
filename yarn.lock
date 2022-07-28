@@ -151,10 +151,10 @@
     "@sap/cds-compiler" ">=2.13.0"
     "@sap/cds-foss" ">=3"
 
-"@sapui5/ts-types-esm@1.100.0":
-  version "1.100.0"
-  resolved "https://registry.yarnpkg.com/@sapui5/ts-types-esm/-/ts-types-esm-1.100.0.tgz#f333342bee340c6fe6cd185b56d8411738ed1d66"
-  integrity sha512-A1ahS2bvG2t8WipDfDl94cYpOadcUhvZAzaCXEdKs89mLaeEqavahcWBuPV1d3H2cQ3wHJly/51LVe8EerloFg==
+"@sapui5/ts-types-esm@1.104.2":
+  version "1.104.2"
+  resolved "https://registry.yarnpkg.com/@sapui5/ts-types-esm/-/ts-types-esm-1.104.2.tgz#8375bbf54992713e9abf20cbdc77ada727dd2496"
+  integrity sha512-qgYzu2dbTFa5IWNA/vnW3IDyJSz1PX3PxBMocurFJsMR4oUVDn8+qhKgE2qOmD7fuM83VocwKgrEzvJMREC9Rg==
   dependencies:
     "@types/jquery" "3.5.13"
     "@types/offscreencanvas" "2019.6.4"
