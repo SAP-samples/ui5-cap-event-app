@@ -13,7 +13,7 @@ For general information about the app and for setup instructions, please check t
   * [Requirements](#requirements)
   * [Basic Setup](#basic-setup)
     + [Add Needed Dependencies](#add-needed-dependencies)
-    + [Add the `tsconfig.json` File](#add-the--tsconfigjson--file)
+    + [Add the `tsconfig.json` File](#add-the-tsconfigjson-file)
     + [Try the Setup](#try-the-setup)
     + [Add a Check Script](#add-a-check-script)
   * [Get Rid of the Initial Errors](#get-rid-of-the-initial-errors)
@@ -94,7 +94,7 @@ NOTE: we are working with the new "-esm" flavor of the type definitions. This ha
  * Advantage: the `ts-types-esm` packages are the best-quality type definition files, the ones the UI5 team is focusing on. While the `ts-types` packages are also automatically updated with every new UI5 release, there might be some TypeScript glitches inside which are not fixed with priority.
  * Disadvantage: The "-esm" definitions define only ES6 modules, not the legacy global names of UI5 classes (like "sap.m.Button" in the global namespace). This makes referencing types in the JSDoc comments a bit ugly. Instead of `@type {sap.m.Button}` one has to write `@type {import('sap/m/Button').default}`.
 
-We are using the SAPUI5 type definitions in this document, but if you are only using controls contained in OpenUI5, you can also just use the OpenUI5 type definitions ([`@openui5/ts-types-esm`](https://www.npmjs.com/package/@openui5/ts-types-esm)).
+We are using the SAPUI5 type definitions in this document, but if you are only using controls contained in OpenUI5, you can also just use the OpenUI5 type definitions ([`@openui5/ts-types-esm`](https://www.npmjs.com/package/@openui5/ts-types-esm) or `@types/openui5`).
 
 
 ### Add the `tsconfig.json` File
@@ -102,7 +102,7 @@ We are using the SAPUI5 type definitions in this document, but if you are only u
 Create a file named `tsconfig.json` at the appropriate location: in a one-app project with the `webapp` folder residing directly in the root of the repository, this location for `tsconfig.json` would be the root directory of the project. In a multi-app monorepo like this demo application, the appropriate place might rather be the root of one specific sub-package. We have already decided for the `packages/ui-form` sub-project, so we go for this location.
 
 Paste the following content into the file, but pay attention to some of the entries:
-* The `types` entry should properly point to the UI5 type definitions as installed by yarn. In this app, the node_modules folder is on top-level, as managed by yarn, so it is two levels above the tsconfig.json.
+* The `typeRoots` entry should properly point to the UI5 type definitions as installed by yarn. In this app, the node_modules folder is on top-level, as managed by yarn, so it is two levels above the tsconfig.json. The other entry similarly points to the standard @types folder. When using the `@types/openui5` package, the entire `typeRoots` entry is not needed.
 * While many of the flags in the middle part relate to the check strictness and could also be used with the opposite value (some will actually be toggled later!), you MUST make sure that `allowJs` and `checkJs` are set to `true` - otherwise JS code will not profit from type knowledge.
 * Make sure the `include` section matches the files you want to cover.
 * In the `paths` section, you may maintain application namespaces, just like they are also configured with UI5. This might help with addressing local app modules by their "official" name.
@@ -110,8 +110,9 @@ Paste the following content into the file, but pay attention to some of the entr
 ```json
 {
 	"compilerOptions": {
-		"types": [
-			"../../node_modules/@sapui5/ts-types-esm"
+		"typeRoots": [
+			"../../node_modules/@sapui5/ts-types-esm",
+			"../../node_modules/@types"
 		],
 		"target": "ES2017",
 		"lib": [
@@ -193,19 +194,6 @@ It makes sense to get the initially displayed errors out of the way before start
 
    > Using ES6 classes will not work for all UI5 entities and will make them have no metadata, but it works for this simple controller.
 
-
-* The last error says "<i>Cannot use namespace 'jQuery' as a value</i>". This means the TypeScript compiler does currently not know the jQuery type definitions. This is because in `tsconfig.json` the `compilerOptions > types` are explicitly set. When this is done, TypeScript ignores the types at the default location (in the `node_modules/@types` directory). So even though (since UI5 1.100) the jQuery type definitions are installed as dependency of the SAPUI5 types, they are ignored.
-
-   To solve this problem, add the path to the jQuery types in `tsconfig.json`:
-
-   ```json
-   "types": [
-		...,
-		"../../node_modules/@types/jquery"
-	],
-   ```
-   
-   In case other third-party libraries are used directly in the app code, it might be required to add a dev dependency to their type definitions and then also add their path here.
 
 You might have other issues in your own app, but at the end of this step, `yarn typecheck` should finish with no errors.
 

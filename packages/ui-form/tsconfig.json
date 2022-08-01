@@ -1,8 +1,8 @@
 {
 	"compilerOptions": {
-		"types": [
+		"typeRoots": [
 			"../../node_modules/@sapui5/ts-types-esm",
-			"../../node_modules/@types/jquery"
+			"../../node_modules/@types"
 		],
 		"target": "ES2017",
 		"lib": [
