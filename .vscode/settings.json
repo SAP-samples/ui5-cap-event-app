@@ -1,4 +1,7 @@
 {
     "files.watcherExclude": {},
-    "WhiteSource Advise.Diff.BaseBranch": "main"
+    "WhiteSource Advise.Diff.BaseBranch": "main",
+    "eslint.workingDirectories": [
+        "./packages/ui-form"
+    ]
 }
