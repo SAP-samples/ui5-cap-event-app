@@ -4,27 +4,27 @@ A look at the most important implementation aspects of this sample app.
 
 ## Content
 
-* [What's in for you?](#Whats-in-for-you)
-* [Project Overview](#Project-Overview)
-* [The Server (the CAP Service)](#The-Server-the-CAP-Service)
-  * [Schema](#Schema)
-  * [Registration Service](#Registration-Service)
-  * [Sample Data](#Sample-Data)
-  * [Login/Logout](#LoginLogout)
-* [The Form UI (Freestyle App for End-User Registration)](#The-Form-UI-Freestyle-App-for-End-User-Registration)
-  * [App Structure / Flow / Routing (and Other Manifest Settings)](#App-Structure--Flow--Routing-and-Other-Manifest-Settings)
-  * [The Heart of the App: the Registration Controller](#The-Heart-of-the-App-the-Registration-Controller)
-    * [Loading Data (Draft Handling)](#Loading-Data-Draft-Handling)
-    * [Family Members](#Family-Members)
-    * [Data Validation](#Data-Validation)
-    * [Saving Data (Persisting the Draft)](#Saving-Data-Persisting-the-Draft)
-* [The Admin UI (Fiori Elements Registration List)](#The-Admin-UI-Fiori-Elements-Registration-List)
-* [Project Structure and Lifecycle](#Project-Structure-and-Lifecycle)
-  * [Workspace Root](#Workspace-Root)
-  * [CAP Server](#CAP-Server)
-  * [Form UI](#Form-UI)
-  * [Admin UI](#Admin-UI)
-  * [Deployment](#Deployment)
+- [What's in for you?](#Whats-in-for-you)
+- [Project Overview](#Project-Overview)
+- [The Server (the CAP Service)](#The-Server-the-CAP-Service)
+  - [Schema](#Schema)
+  - [Registration Service](#Registration-Service)
+  - [Sample Data](#Sample-Data)
+  - [Login/Logout](#LoginLogout)
+- [The Form UI (Freestyle App for End-User Registration)](#The-Form-UI-Freestyle-App-for-End-User-Registration)
+  - [App Structure / Flow / Routing (and Other Manifest Settings)](#App-Structure--Flow--Routing-and-Other-Manifest-Settings)
+  - [The Heart of the App: the Registration Controller](#The-Heart-of-the-App-the-Registration-Controller)
+    - [Loading Data (Draft Handling)](#Loading-Data-Draft-Handling)
+    - [Family Members](#Family-Members)
+    - [Data Validation](#Data-Validation)
+    - [Saving Data (Persisting the Draft)](#Saving-Data-Persisting-the-Draft)
+- [The Admin UI (Fiori Elements Registration List)](#The-Admin-UI-Fiori-Elements-Registration-List)
+- [Project Structure and Lifecycle](#Project-Structure-and-Lifecycle)
+  - [Workspace Root](#Workspace-Root)
+  - [CAP Server](#CAP-Server)
+  - [Form UI](#Form-UI)
+  - [Admin UI](#Admin-UI)
+  - [Deployment](#Deployment)
 
 ## What's in for you?
 
@@ -97,6 +97,7 @@ Employees can only read and update their own datasets (the e-mail address must b
 ```
 
 Administrators simply get all privileges (note the `WRITE` shortcut):
+
 ```js
     {
       grant : [
@@ -110,7 +111,7 @@ Administrators simply get all privileges (note the `WRITE` shortcut):
 The e-mail address is not entered by the user (and not editable in the UI), but added from user data on server side when a new dataset is created. This is happening in custom code in [`eventregistration-service.js`](../packages/server/srv/eventregistration-service.js):
 
 ```js
-srv.on('NEW', 'Person', (req, next) => {
+srv.on("NEW", "Person", (req, next) => {
   req.data.Email = req.user.id; // add user e-mail to the dataset (not entered in the UI, but derived from logged-in user)
 });
 ```
@@ -119,10 +120,10 @@ Mock authentication is used in this sample. The roles and users are defined in t
 
 There are plenty of annotations describing the data in [`eventregistration-service-annotations.cds`](../packages/server/srv/eventregistration-service-annotations.cds). The most important ones:
 
-* Translatable UI texts are referenced as `'{i18n>translationKey}'` and fetched from the respective language file in the [`_i18n`](../packages/server/_i18n) subdirectory.
-* Draft mode is enabled by the statement: `annotate EventRegistrationService.Person with @odata.draft.enabled;`
-* The `@Core.Computed` annotation for the Person ID prevents a popup (that asks for the ID)  from appearing in the metadata-driven UI when a person is created.
-* Several UI annotations configure the appearance of the metadata-driven Fiori elements UI further. The `LineItem` section, for example, defines which properties appear in the Person list, and in which order. 
+- Translatable UI texts are referenced as `'{i18n>translationKey}'` and fetched from the respective language file in the [`_i18n`](../packages/server/_i18n) subdirectory.
+- Draft mode is enabled by the statement: `annotate EventRegistrationService.Person with @odata.draft.enabled;`
+- The `@Core.Computed` annotation for the Person ID prevents a popup (that asks for the ID) from appearing in the metadata-driven UI when a person is created.
+- Several UI annotations configure the appearance of the metadata-driven Fiori elements UI further. The `LineItem` section, for example, defines which properties appear in the Person list, and in which order.
 
 ### Sample Data
 
@@ -133,18 +134,18 @@ In [sap.ui5.eventregistration-Person.csv](../packages/server/db/data/sap.ui5.eve
 
 The mock authentication automatically causes browsers to open the basic authentication login dialog where users enter username and password. But logging out of basic authentication is not that easy - end-users even cannot do so using the standard browser UI elements.
 
-To make browsers forget that the user is authenticated, the server needs to send an HTTP 401/Unauthorized error code for a request to the same directory level where the user actually *is* authorized.
+To make browsers forget that the user is authenticated, the server needs to send an HTTP 401/Unauthorized error code for a request to the same directory level where the user actually _is_ authorized.
 
 To achieve this, a custom [`server.js`](../packages/server/server.js) file was created, which hooks into the CDS bootstrap and registers an additional route for [Express.js](https://expressjs.com/) (which is used by CAP under the hood):
 
 ```js
-cds.on('bootstrap',(app) => {
-    app.post("/event-registration/logout", (req, res) => {
-        // Send 401 Unauthorized to tell the browser to forget the credentials.
-        // NOTE: while this works for the sample app, it is not double-checked for 100% security! 
-        res.status(401);
-        res.send();
-    });
+cds.on("bootstrap", (app) => {
+  app.post("/event-registration/logout", (req, res) => {
+    // Send 401 Unauthorized to tell the browser to forget the credentials.
+    // NOTE: while this works for the sample app, it is not double-checked for 100% security!
+    res.status(401);
+    res.send();
+  });
 });
 ```
 
@@ -154,7 +155,7 @@ Providing a custom `server.js` file normally requires the custom code to take ov
 
 ```js
 // Delegate bootstrapping to built-in server.js of CDS
-module.exports = cds.server
+module.exports = cds.server;
 ```
 
 ## The Form UI (Freestyle App for End-User Registration)
@@ -170,9 +171,10 @@ Upon sending the data to the server, the `Confirmation` View is shown, containin
 In case there is an authentication problem, the `NotAuthorized` view is navigated to. It also offers a way to log out, as a new login can be attempted this way. The navigation is triggered in `Registration.controller.js` after the server response has been received. Just like the navigation to the confirmation page, this one navigates without changing the URL hash, because there is no point in making the `NotAuthorized` or `Confirmation` page bookmarkable:
 
 ```js
-if (oError.status === 401 || oError.status === 403) { // 401 Unauthorized when user cancels login dialog, 403 Forbidden, when giving wrong credentials
-	// navigate without hash change
-	this.getOwnerComponent().getRouter().getTargets().display("notAuthorized");
+if (oError.status === 401 || oError.status === 403) {
+  // 401 Unauthorized when user cancels login dialog, 403 Forbidden, when giving wrong credentials
+  // navigate without hash change
+  this.getOwnerComponent().getRouter().getTargets().display("notAuthorized");
 }
 ```
 
@@ -216,11 +218,11 @@ The reason is this setting in [ui5.yaml](../packages/ui-form/ui5.yaml), where a 
 ```yaml
 server:
   customMiddleware:
-  - name: ui5-middleware-simpleproxy
-    mountPath: /event-registration/
-    afterMiddleware: compression
-    configuration:
-      baseUri: http://localhost:4004/event-registration/ 
+    - name: ui5-middleware-simpleproxy
+      mountPath: /event-registration/
+      afterMiddleware: compression
+      configuration:
+        baseUri: http://localhost:4004/event-registration/
 ```
 
 The [Component.js](../packages/ui-form/Component.js) file only has typical boilerplate code, except for the `doLogout` function. This function is triggered by buttons in different views and sends a POST request to the custom Express.js route we registered earlier to send a `401` response and make the browser forget the current login. On error, which is the expected case here, the browser is redirected to `index.html`, which will restart the app and prompt the user to log in anew.
@@ -250,9 +252,9 @@ doLogout: function() {
 
 The Registration controller fulfills the following main tasks:
 
-* Loading and saving data (incl. draft handling)
-* Validating user input
-* Some special support while entering data (aggregated family members)
+- Loading and saving data (incl. draft handling)
+- Validating user input
+- Some special support while entering data (aggregated family members)
 
 #### Loading Data (Draft Handling)
 
@@ -264,15 +266,19 @@ The solution is to use two filters:
 
 1. A filter that only returns draft-mode elements (`IsActiveEntity === false`)
 1. A filter that only returns data elements which have no sibling in draft mode (`SiblingEntity/IsActiveEntity === null` - `SiblingEntity` is a pointer to the other version of the data element within a persisted-and-draft pair of data)
-When these filters are OR-combined, any matching data element is the one in the needed state.
+   When these filters are OR-combined, any matching data element is the one in the needed state.
 
 ```js
 var oBinding = this.oDataModel.bindList("/Person");
 var oIsDraftFilter = new Filter("IsActiveEntity", FilterOperator.EQ, false);
-var oHasNoDraftSiblingFilter = new Filter("SiblingEntity/IsActiveEntity", FilterOperator.EQ, null);
+var oHasNoDraftSiblingFilter = new Filter(
+  "SiblingEntity/IsActiveEntity",
+  FilterOperator.EQ,
+  null
+);
 var oDraftORNoDraftSiblingFilter = new Filter({
-	filters: [oIsDraftFilter, oHasNoDraftSiblingFilter],
-	and: false
+  filters: [oIsDraftFilter, oHasNoDraftSiblingFilter],
+  and: false,
 });
 oBinding.filter(oDraftORNoDraftSiblingFilter);
 ```
@@ -284,13 +290,25 @@ However, the app right now requests two data elements, just to be sure nothing w
 Any `401` or `403` error during data access, which means the user is not properly logged in or is not allowed to access data, will navigate to the `notAuthorized` view, from where the user can re-login.
 
 ```js
-oBinding.requestContexts(0, 2).then(function(aContexts) { // there should be only one. Request two to detect error situations.
-	this.onExistingDataLoaded(aContexts);
-}.bind(this)).catch(function(oError) {
-	if (oError.status === 401 || oError.status === 403) { // 401 Unauthorized when user cancels login dialog, 403 Forbidden, when giving wrong credentials
-		this.getOwnerComponent().getRouter().getTargets().display("notAuthorized");
-	}
-}.bind(this));
+oBinding
+  .requestContexts(0, 2)
+  .then(
+    function (aContexts) {
+      // there should be only one. Request two to detect error situations.
+      this.onExistingDataLoaded(aContexts);
+    }.bind(this)
+  )
+  .catch(
+    function (oError) {
+      if (oError.status === 401 || oError.status === 403) {
+        // 401 Unauthorized when user cancels login dialog, 403 Forbidden, when giving wrong credentials
+        this.getOwnerComponent()
+          .getRouter()
+          .getTargets()
+          .display("notAuthorized");
+      }
+    }.bind(this)
+  );
 ```
 
 When the request for data returns successfully, another decision has to be taken: if there is no data for the user yet, a new data element has to be created. Otherwise, the existing data element needs to be used for editing. Editing a data element means yet another decision: if the data element is already in draft mode, it can be bound to the UI right away. If it is not in draft mode, it first has to be changed to draft mode.
@@ -341,22 +359,31 @@ If only one data context is loaded, it's the one to edit. If in "active" mode (=
 ```js
 // ensure it is in draft state
 var isActive = oContext.getProperty("IsActiveEntity"); // = non-draft
-if (isActive) { // bring to draft/edit mode
-	var oOperation = this.oDataModel.bindContext(
-		"EventRegistrationService.draftEdit(...)",
-		oContext
-	);
-	oOperation.execute()
-	.then(function (oUpdatedContext) {
-		this.getView().bindObject({path: oUpdatedContext.getPath()});
-		MessageToast.show(this.oBundle.getText("existingDataLoaded"), {duration: 5000});
-	}.bind(this))
-	.catch(function() {
-		alert("draft edit failure");
-	});
-} else { // already in draft/edit mode
-	this.getView().bindObject({path: oContext.getPath()});
-	MessageToast.show(this.oBundle.getText("existingDraftLoaded"), {duration: 5000});
+if (isActive) {
+  // bring to draft/edit mode
+  var oOperation = this.oDataModel.bindContext(
+    "EventRegistrationService.draftEdit(...)",
+    oContext
+  );
+  oOperation
+    .execute()
+    .then(
+      function (oUpdatedContext) {
+        this.getView().bindObject({ path: oUpdatedContext.getPath() });
+        MessageToast.show(this.oBundle.getText("existingDataLoaded"), {
+          duration: 5000,
+        });
+      }.bind(this)
+    )
+    .catch(function () {
+      alert("draft edit failure");
+    });
+} else {
+  // already in draft/edit mode
+  this.getView().bindObject({ path: oContext.getPath() });
+  MessageToast.show(this.oBundle.getText("existingDraftLoaded"), {
+    duration: 5000,
+  });
 }
 ```
 
@@ -373,7 +400,7 @@ addFamilyMember: function (oEvent) {
 },
 ```
 
-For removing family members, there is a button in each row of the family member table, which triggers the removal of the family member this row contains. Because `oEvent.getSource()` returns the button residing in the respective row, one can simply call `getBindingContext` to get the binding context of this row, which is nothing else than the data element to remove. Calling `delete` on this context is everything to update the data and the bound UI. Error handling *could* be added here.
+For removing family members, there is a button in each row of the family member table, which triggers the removal of the family member this row contains. Because `oEvent.getSource()` returns the button residing in the respective row, one can simply call `getBindingContext` to get the binding context of this row, which is nothing else than the data element to remove. Calling `delete` on this context is everything to update the data and the bound UI. Error handling _could_ be added here.
 
 ```js
 deleteFamilyMember: function(oEvent) {
@@ -399,25 +426,27 @@ The focus registration for each field happens in the `onInit()` method of the co
 ```js
 // listen to focusleave and enter on the fields to validate the user input
 var aControls = sap.ui.getCore().byFieldGroupId("RegForm");
-aControls.forEach(function(oControl) {
-	oControl.addEventDelegate({
-		onsapfocusleave: this.validateControl.bind(this, oControl),
-		onsapenter: this.validateControl.bind(this, oControl)
-	});
-}.bind(this));
+aControls.forEach(
+  function (oControl) {
+    oControl.addEventDelegate({
+      onsapfocusleave: this.validateControl.bind(this, oControl),
+      onsapenter: this.validateControl.bind(this, oControl),
+    });
+  }.bind(this)
+);
 ```
 
 The red border is activated in the `validateControl` method by firing a validation error after a sanity check for the control type and a check whether the field is required and empty:
 
 ```js
 if (oControl instanceof InputBase) {
-	if (oControl.getRequired() && !oControl.getValue()) {
-		oControl.fireValidationError({
-			element: oControl,
-			property: "value",
-			message: this.oBundle.getText("enterValue")
-		});
-	}
+  if (oControl.getRequired() && !oControl.getValue()) {
+    oControl.fireValidationError({
+      element: oControl,
+      property: "value",
+      message: this.oBundle.getText("enterValue"),
+    });
+  }
 }
 ```
 
@@ -425,23 +454,31 @@ The overall validation method called on submit (`validateData`) method also call
 
 ```js
 var mFields = {
-	LastName: oBundle.getText("name"),
-	FirstName: oBundle.getText("firstName"),
-	Birthday: oBundle.getText("dateOfBirth")
-}
+  LastName: oBundle.getText("name"),
+  FirstName: oBundle.getText("firstName"),
+  Birthday: oBundle.getText("dateOfBirth"),
+};
 ```
 
-For a family member, as mentioned, there is only an error when *some* data has been entered, but *some* is missing for a particular row. There is also not a specific text for each field, but just one for the entire row:
+For a family member, as mentioned, there is only an error when _some_ data has been entered, but _some_ is missing for a particular row. There is also not a specific text for each field, but just one for the entire row:
 
 ```js
 // loop FamilyMembers
 for (var i = 0; i < oNewObject.FamilyMembers.length; i++) {
-	var oFamilyMember = oNewObject.FamilyMembers[i]
-	var bSomethingThere = !!(oFamilyMember.LastName || oFamilyMember.FirstName || oFamilyMember.Birthday);
-	var bSomethingMissing = !(oFamilyMember.LastName && oFamilyMember.FirstName && oFamilyMember.Birthday);
-	if (bSomethingThere && bSomethingMissing) {
-		aMissing.push(oBundle.getText("validationFamilyMember", [i + 1]));
-	}
+  var oFamilyMember = oNewObject.FamilyMembers[i];
+  var bSomethingThere = !!(
+    oFamilyMember.LastName ||
+    oFamilyMember.FirstName ||
+    oFamilyMember.Birthday
+  );
+  var bSomethingMissing = !(
+    oFamilyMember.LastName &&
+    oFamilyMember.FirstName &&
+    oFamilyMember.Birthday
+  );
+  if (bSomethingThere && bSomethingMissing) {
+    aMissing.push(oBundle.getText("validationFamilyMember", [i + 1]));
+  }
 }
 ```
 
@@ -451,10 +488,10 @@ for (var i = 0; i < oNewObject.FamilyMembers.length; i++) {
 // run validation and report validation errors
 var aMissing = this.validateData();
 if (aMissing.length > 0) {
-	var sText = this.oBundle.getText("validationText");
-	var sTitle = this.oBundle.getText("validationTitle");
-	MessageBox.alert(sText + "\n- " + aMissing.join("\n- "), {title: sTitle});
-	return;
+  var sText = this.oBundle.getText("validationText");
+  var sTitle = this.oBundle.getText("validationTitle");
+  MessageBox.alert(sText + "\n- " + aMissing.join("\n- "), { title: sTitle });
+  return;
 }
 ```
 
@@ -472,17 +509,22 @@ this.byId("submitButton").setEnabled(false);
 
 // trigger OData operation for persisting the draft as real data
 var oOperation = this.oDataModel.bindContext(
-	"EventRegistrationService.draftActivate(...)",
-	oContext
+  "EventRegistrationService.draftActivate(...)",
+  oContext
 );
-oOperation.execute()
-.then(function () {
-	// navigate without hash change
-	this.getOwnerComponent().getRouter().getTargets().display("confirmation");
-}.bind(this))
-.catch(function(err) {
-	this.showErrorDialog()
-}.bind(this));
+oOperation
+  .execute()
+  .then(
+    function () {
+      // navigate without hash change
+      this.getOwnerComponent().getRouter().getTargets().display("confirmation");
+    }.bind(this)
+  )
+  .catch(
+    function (err) {
+      this.showErrorDialog();
+    }.bind(this)
+  );
 ```
 
 Upon success, the router is navigating to the "confirmation" page. In case of error, a Dialog is shown and the user remains on the data entry page, so there is a chance to try again without loosing all the entered data.
@@ -496,10 +538,10 @@ The admin UI is based on [SAP Fiori elements for OData V4](https://blogs.sap.com
 
 The few files comprising the app are:
 
-* just two translatable texts in the [`i18n`](../packages/server/ui-admin/webapp/i18n) directory
-* an almost empty [`Component.js`](../packages/server/ui-admin/webapp/Component.js) file (only the logout method explained earlier in the Form UI app has some lines of code)
-* an [`index.html`](../packages/server/ui-admin/webapp/index.html) file which is  needed for running the app locally in a sandbox
-* the [`the manifest.json`](../packages/server/ui-admin/webapp/manifest.json) file. Even this content looks largely standard, pointing to the data service as described before for the Form UI app.
+- just two translatable texts in the [`i18n`](../packages/server/ui-admin/webapp/i18n) directory
+- an almost empty [`Component.js`](../packages/server/ui-admin/webapp/Component.js) file (only the logout method explained earlier in the Form UI app has some lines of code)
+- an [`index.html`](../packages/server/ui-admin/webapp/index.html) file which is needed for running the app locally in a sandbox
+- the [`the manifest.json`](../packages/server/ui-admin/webapp/manifest.json) file. Even this content looks largely standard, pointing to the data service as described before for the Form UI app.
 
 Some parts of `manifest.json` are worth a look, though, to understand how the generic floorplan is configured:  
 The default routing target, the "PersonList", is not a View, but a Component. And it's not a Component provided as part of the app, but one named "sap.fe.templates.ListReport", which comes with SAPUI5 and is the generic ListReport floorplan. In the "options" block of the manifest, there are some floorplan-specific settings, most importantly the entity set to display ("Person").  
@@ -515,7 +557,7 @@ In the "controlConfiguration" section, there are even settings configuring the a
 			"settings": {
 				"entitySet": "Person",
 				"variantManagement": "Page",
-				"initialLoad": true, 
+				"initialLoad": true,
 				"controlConfiguration": {
 					"@com.sap.vocabularies.UI.v1.LineItem": {
 						"tableSettings": {
@@ -523,7 +565,7 @@ In the "controlConfiguration" section, there are even settings configuring the a
 							"enableExport": "true"
 						}
 					}
-				},   
+				},
 				"navigation": {
 					"Person": {
 						"detail": {
@@ -536,7 +578,7 @@ In the "controlConfiguration" section, there are even settings configuring the a
 	}
 ```
 
-All other needed information to compose the UI comes from the CAP service metadata, e.g. the list of fields to display and their data types, the translated texts maintained in the annotations, etc. 
+All other needed information to compose the UI comes from the CAP service metadata, e.g. the list of fields to display and their data types, the translated texts maintained in the annotations, etc.
 
 Behind the scenes, it's the controls of the still-under-development "[sap.ui.mdc](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc)" ("metadata-driven controls") library, together with OData-V4-specific delegates doing all the interpretation of the OData metadata and annotations.
 
@@ -588,7 +630,7 @@ In the workspace root a `package.json` is located which contains the metadata fo
 }
 ```
 
-Additionally, the workspace root is a *private* package which must not be published on the npm registry. Therefore, the package is marked as `private`.
+Additionally, the workspace root is a _private_ package which must not be published on the npm registry. Therefore, the package is marked as `private`.
 
 To simplify the handling of the mono repository, the `package.json` in the workspace root provides npm scripts to build, to debug, or to start the project.
 
@@ -604,9 +646,9 @@ To simplify the handling of the mono repository, the `package.json` in the works
 }
 ```
 
-The npm scripts can be called with Yarn via: `yarn build`, `yarn start`, or `yarn debug`. All those npm scripts are using [npm-run-all](https://www.npmjs.com/package/npm-run-all) to run *sub-scripts* sequential or in parallel.
+The npm scripts can be called with Yarn via: `yarn build`, `yarn start`, or `yarn debug`. All those npm scripts are using [npm-run-all](https://www.npmjs.com/package/npm-run-all) to run _sub-scripts_ sequential or in parallel.
 
-Most of the *subscripts* are using the `yarn workspace` command to run the npm scripts of the concrete package, e.g. `yarn workspace ui5-cap-event-app-ui-form start` runs the `yarn start` script in the `ui5-cap-event-app-ui-form` which is the package name of the `packages/ui-form` package.
+Most of the _subscripts_ are using the `yarn workspace` command to run the npm scripts of the concrete package, e.g. `yarn workspace ui5-cap-event-app-ui-form start` runs the `yarn start` script in the `ui5-cap-event-app-ui-form` which is the package name of the `packages/ui-form` package.
 
 The following snippet visualizes the **`build`** script execution:
 
@@ -751,7 +793,7 @@ packages/ui-form
     └── manifest.json
 ```
 
-*Remark:* for the sake of simplicity, UI5 is loaded from CDN rather than using the local UI5 resources which are available as npm dependencies via the development server of the UI5 Tooling. To use the local UI5 resources you can change the `src` attribute of the UI5 bootstrap tag to `resources/sap-ui-core.js`.
+_Remark:_ for the sake of simplicity, UI5 is loaded from CDN rather than using the local UI5 resources which are available as npm dependencies via the development server of the UI5 Tooling. To use the local UI5 resources you can change the `src` attribute of the UI5 bootstrap tag to `resources/sap-ui-core.js`.
 
 ```html
 <!DOCTYPE html>
@@ -761,7 +803,7 @@ packages/ui-form
   [...]
 
   <script id="sap-ui-bootstrap"
-          src="https://sapui5.hana.ondemand.com/1.100.0/resources/sap-ui-core.js"
+          src="https://sapui5.hana.ondemand.com/1.104.2/resources/sap-ui-core.js"
 ```
 
 Another important aspect is the development server of the UI5 Tooling used to serve the UI5 applications at development time. The UI5 Tooling can be extended with custom middlewares to improve the development experience or to proxy OData services. For the Form UI project we are using the [ui5-middleware-livereload](https://www.npmjs.com/package/ui5-middleware-livereload) to improve the development experience by getting a save and update behavior (once a resource has been changed and saved in your editor, the UI5 application is reloaded) and [ui5-middleware-simpleproxy](https://www.npmjs.com/package/ui5-middleware-simpleproxy) to proxy the CAP server running on port `4004` to avoid [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues.
@@ -864,10 +906,9 @@ packages/ui-admin
 
 Similar like for the Form UI, the Admin UI is bootstrapping from CDN for the sake of simplicity and uses custom middlewares to improve the development experience and to proxy the OData service to overcome cross-domain issues.
 
-
 ### Deployment
 
 The deployment, e.g. to CloudFoundry, is not in scope of this sample app - we had to stop somewhere and the focus is on the interaction between UI5 and CAP and on using OData V4 with draft mode.
 Helpful information around the deployment can be found in many blog posts like this one: [Developing a Fiori elements app with CAP and Fiori Tools](https://blogs.sap.com/2020/09/06/developing-a-fiori-elements-app-with-cap-and-fiori-tools/).
 If you want to extend the sample, making it ready for deployment, you are welcome to contribute!
-There are several aspects to consider, e.g. the database and the authentication (incl. logout). 
+There are several aspects to consider, e.g. the database and the authentication (incl. logout).
