@@ -5,7 +5,7 @@ metadata:
 type: application
 framework:
   name: SAPUI5
-  version: "1.104.2"
+  version: "1.108.0"
   libraries:
     - name: sap.f
     - name: sap.fe.templates
@@ -38,11 +38,11 @@ server:
     afterMiddleware: compression
     mountPath: /sap/ui2/
     configuration:
-      baseUri: "https://sapui5.hana.ondemand.com/resources/sap/ui2/"
+      baseUri: "https://ui5.sap.com/1.108.0/resources/sap/ui2/"
       strictSSL: false
   - name: ui5-middleware-simpleproxy
     afterMiddleware: compression
     mountPath: /sap/ushell_abap/
     configuration:
-      baseUri: "https://sapui5.hana.ondemand.com/resources/sap/ushell_abap/"
+      baseUri: "https://ui5.sap.com/1.108.0/resources/sap/ushell_abap/"
       strictSSL: false

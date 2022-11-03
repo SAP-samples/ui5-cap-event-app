@@ -18,7 +18,7 @@
     "@babel/core": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-typescript": "^7.16.0",
-    "@sapui5/ts-types-esm": "1.104.2",
+    "@sapui5/ts-types-esm": "1.108.0",
     "@types/dompurify": "^2.2.1",
     "@typescript-eslint/eslint-plugin": "^5.6.0",
     "@typescript-eslint/parser": "^5.6.0",
