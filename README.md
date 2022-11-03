@@ -87,7 +87,7 @@ yarn add typescript --dev
 The [UI5 type definitions](https://www.npmjs.com/package/@sapui5/ts-types-esm) need to be installed as dev dependency as well. You should choose the same major/minor version of the type definitions as used by your application code. (If this is not possible because you are working with an older version of UI5 at runtime, you can also try using a higher version of the type definitions, but be aware that some of the proposed APIs might not exist in your actually used UI5 version.)
 
 ```sh
-yarn add @sapui5/ts-types-esm@1.104.2 --dev
+yarn add @sapui5/ts-types-esm@1.108.0 --dev
 ```
 
 NOTE: we are working with the new "-esm" flavor of the type definitions. This has advantages but also disadvantages when developing in JavaScript, so you might also choose the `@sapui5/ts-types` package instead:
@@ -326,7 +326,7 @@ this.getView().addStyleClass(appComponent.getContentDensityClass());
 
 ### Fix Actual App Code Issues
 
-Some of the errors are actually application code errors: as of writing, the UI5 CAP event app called the `MessageBox.error(...)` API with a `duration` parameter, but when you check [the official documentation](https://sapui5.hana.ondemand.com/1.94.0/#/api/sap.m.MessageBox%23methods/sap.m.MessageBox.error), the `error` method does not support this parameter! (Actually the implementation does, but this is a mismatch within UI5 and sort of indended... long story...). To fix it, remove the `duration` parameter.
+Some of the errors are actually application code errors: as of writing, the UI5 CAP event app called the `MessageBox.error(...)` API with a `duration` parameter, but when you check [the official documentation](https://ui5.sap.com/1.108.0/#/api/sap.m.MessageBox%23methods/sap.m.MessageBox.error), the `error` method does not support this parameter! (Actually the implementation does, but this is a mismatch within UI5 and sort of indended... long story...). To fix it, remove the `duration` parameter.
 
 
 ### Ignore the Rest
