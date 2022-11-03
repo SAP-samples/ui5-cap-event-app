@@ -488,6 +488,8 @@ For the other occurrences of this error, you will typically add a plain null-che
 Some of them will actually make your application more robust, which is the point of this setting. Others may be actually unnecessary because with the given parameters there is <i>always</i> a value returned by the used methods.<br>
 This is why some consider the `strictNullChecks` rule "too much" while others like to apply it.
 
+In fact, many UI5 APIs _could_ return `null` or `undefined` in exceptional cases, while they _usually_ do not. Null-checking all those return values just to satisfy the TypeScript compiler (and prevent the remote chance of something being undefined) would indeed add a lot of overhead, so the code in this repository does not actually go that step and stays with `strictNullChacks: false`.
+
 ## Done!
 
 At this point, you have achieved strict type checking and very good code-assist support.<br>
