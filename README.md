@@ -210,7 +210,7 @@ Depending on the flavor of type definitions you are using ("-esm" with modules o
 1. With globals, the global name can be used, which is pretty straightforward:<br>
 `@type {sap.ui.core.mvc.Controller}`
 2. The "-esm" type definitions only declare the paths of ES6 modules. To derive a type, the respective module needs to be imported and the default export of the module needs to be selected:<br>
-`@type import('sap/ui/core/mvc/Controller').default}`
+`@type {import('sap/ui/core/mvc/Controller').default}`
 
 
 In case of `sap.ui.require(...)` and `sap.ui.define(...)` calls, the parameters given to the callback function are not <i>instances</i> of `Controller` and other UI5 classes, but the parameters are the <i>types/classes</i> themselves! Hence an additional `typeof` operator needs to be added when specifying the types of the callback parameters.
