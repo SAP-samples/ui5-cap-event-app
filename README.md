@@ -21,12 +21,29 @@ yarn
 
 ### 1. Get the service metadata
 
-You can now do:
+There's a longer and illustrative and a shorter way to get a file with the metadata (and a slight difference in the result).
+
+Let's start with the longer one, which is not depending on CAP/cds and should similarly work for any OData server implementation:
+
+You can now do
 ```sh
 yarn start:server
 ```
-to start the CAP server. It will report to be listeninge.g. at http://localhost:4004. After opening this URL in the browser, you can click the "$metadata" link to see [the OData metadata](http://localhost:4004/event-registration/$metadata). Save this file as `packages/ui-form/src/model/event-registration-metadata.xml`. (You can then stop the server again.)
+to start the CAP server. It will report to be listening e.g. at http://localhost:4004. After opening this URL in the browser, you can click the "$metadata" link to see [the OData metadata](http://localhost:4004/event-registration/$metadata). Save this file as `packages/ui-form/src/model/event-registration-metadata.xml`. (You can then stop the server again.)
 When asked for user/password of the service, you can use: `employee@test.com` / `123`.
+
+The shorter way is to use the cds tools to get the XML files. As you may need to do this again when the metadata is changed, create a package.json script for convenience. Add the following line to the `scripts` in the top-level package.json:
+```json
+"gen-meta": "cds packages/server/srv/eventregistration-service.cds -2 edmx > packages/ui-form/src/model/event-registration-metadata.xml"
+```
+
+Now execute:
+```sh
+yarn gen-meta
+```
+
+The metadata XML file will now be updated with a shorter version, not containing the draft-related properties like "IsActiveEntity", "HasActiveEntity" etc.
+
 
 ### 2. Add the `odata2ts` dependency
 
@@ -52,7 +69,7 @@ const config: ConfigFileOptions = {
 			output: "gen",
 			propertiesByName: [
 				// list of managed fields which are not editable from the user's perspective
-				...["ID", "createdAt", "createdBy", "modifiedAt", "modifiedBy", "IsActiveEntity", "HasActiveEntity", "HasDraftEntity", "Email"].map(
+				...["createdAt", "createdBy", "modifiedAt", "modifiedBy", "Email"].map(
                     (prop) => ({ name: prop, managed: true })
                 )
 			]
@@ -69,7 +86,7 @@ Explanation for the settings:
 - `services`: here, the service is configured for which the type definitions are generated:
   - `source` points to the metadata xml file (relative path)
   - `output` says where the type definitions should go (let's use "gen" as sibling of "src" - caution: the contents of this directory may be deleted when generating!)
-  - `propertiesByName`  is used to declare certain system properties as "[managed](https://odata2ts.github.io/docs/generator/managed-props/)". This means they are not "normal" data properties which the user can change, but set by the system. This will be useful in the controller code when we loop over the user-entered properties: TypeScript will know which ones they are.
+  - `propertiesByName`  is used to declare certain system properties as "[managed](https://odata2ts.github.io/docs/generator/managed-props/)". This means they are not "normal" data properties which the user can change, but set by the system. This will be useful in the controller code when we loop over the user-entered properties: TypeScript will know which ones they are. Note: make sure you followed step 1 to the very end, otherwise you will also need to list the draft-related properties here.
 
 ### 4. Run it (and provide npm scripts for convenience)
 
@@ -80,12 +97,12 @@ npx odata2ts
 
 As result, the file `packages/ui-form/gen/EventRegistrationServiceModel.d.ts` will be generated, containing types for the entities like "Person" and "FamilyMember".
 
-For convenience, you can also add a script in the top-level package.json file. After addingthe following to the "scripts" section:
+For convenience, you can also add a script in the top-level package.json file. After adding the following to the "scripts" section:
 ```json
-"gen-odata": "yarn workspace ui5-cap-event-app-ui-form gen-odata"
+"gen-odata": "yarn gen-meta & yarn workspace ui5-cap-event-app-ui-form gen-odata"
 ```
 
-You can simply trigger the generation from the root directory of the project:
+You can simply trigger the metadata update *and* the type generation from the root directory of the project:
 ```sh
 yarn gen-odata
 ```

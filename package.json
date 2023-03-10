@@ -23,7 +23,8 @@
     "verify:ui-form": "yarn workspace ui5-cap-event-app-ui-form ts-typecheck",
     "lint": "npm-run-all --parallel lint:ui-form",
     "lint:ui-form": "yarn workspace ui5-cap-event-app-ui-form lint",
-    "gen-odata": "yarn workspace ui5-cap-event-app-ui-form gen-odata"
+    "gen-meta": "cds packages/server/srv/eventregistration-service.cds -2 edmx > packages/ui-form/src/model/event-registration-metadata.xml",
+    "gen-odata": "yarn gen-meta & yarn workspace ui5-cap-event-app-ui-form odata2ts"
   },
   "repository": {
     "type": "git",

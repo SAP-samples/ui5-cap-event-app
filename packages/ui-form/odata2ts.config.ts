@@ -9,7 +9,7 @@ const config: ConfigFileOptions = {
 			output: "gen",
 			propertiesByName: [
 				// list of managed fields which are not editable from the user's perspective
-				...["ID", "createdAt", "createdBy", "modifiedAt", "modifiedBy", "IsActiveEntity", "HasActiveEntity", "HasDraftEntity", "Email"].map((prop) => ({ name: prop, managed: true }))
+				...["createdAt", "createdBy", "modifiedAt", "modifiedBy", "Email"].map((prop) => ({ name: prop, managed: true }))
 			  ]
 		}
 	}

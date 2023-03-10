@@ -11,8 +11,7 @@
     "build:ui5": "ui5 build --clean-dest",
     "start:ui5": "ui5 serve --port 8080 -o index.html",
     "build": "npm-run-all build:ts build:ui5",
-    "start": "npm-run-all --parallel watch:ts start:ui5",
-    "gen-odata": "odata2ts"
+    "start": "npm-run-all --parallel watch:ts start:ui5"
   },
   "devDependencies": {
     "@babel/cli": "^7.16.0",
