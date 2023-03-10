@@ -1,139 +1,173 @@
-# ui5-cap-event-app - in TypeScript
+# ui5-cap-event-app - in TypeScript, supported by `odata2ts`
 
-<b>The [freestyle SAPUI5 app in the `packages/ui-form` directory](packages/ui-form) in this "`typescript`" branch of the repository is written in TypeScript and uses the UI5 type definitions. It serves as a real-world-style example for a UI5 app developed in TypeScript.</b>
+<b>This special branch enhances the [UI5 app in the `packages/ui-form` directory](packages/ui-form) taken from the `typescript` branch of the repository by using the [odata2ts](https://github.com/odata2ts/odata2ts) tool (documentation [here](https://odata2ts.github.io/)) for generating type definitions from the OData metadata.</b>
 
-<b>Overall, the central entry point for all TypeScript-related information, documentation, samples, tutorials etc. about UI5 can be found at [https://sap.github.io/ui5-typescript](https://sap.github.io/ui5-typescript/).</b>
-
-This app is a showcase of two UI5 user interfaces, one built with freestyle [SAPUI5](https://ui5.sap.com/) (or rather [OpenUI5](https://openui5.org/)), the other using [SAP Fiori elements](https://community.sap.com/topics/fiori-elements), with a [CAP](https://cap.cloud.sap/docs/) backend, using [OData V4](https://www.odata.org/) with [Draft mode](https://experience.sap.com/fiori-design-web/draft-handling/).
+General information about the app can be found in the [readme of the `main` branch](https://github.com/SAP-samples/ui5-cap-event-app) and of the [`typescript` branch](https://github.com/SAP-samples/ui5-cap-event-app/tree/typescript).
 
 
-<b>You can find an in-depth introduction to TypeScript in UI5 app code, including an explanation of the most important code in this projects [here](docs/typescript.md).</b>
+## Generating Types for the ODataModel
 
 
-| :point_up: TypeScript Remarks |
-|:---------------------------|
-| The SAPUI5 type definitions are loaded as dev dependency [from npm package `@sapui5/ts-types-esm`](https://www.npmjs.com/package/@sapui5/ts-types-esm). The OpenUI5 types are available as [`@openui5/ts-types-esm`](https://www.npmjs.com/package/@openui5/ts-types-esm) and [ `@types/openui5`](https://www.npmjs.com/package/@types/openui5). You can inspect the \*.d.ts files in the `node_modules/@sapui5/ts-types-esm/types` directory after installing the dependencies with the `yarn` command.<br/>
- The file [packages/ui-form/tsconfig.json](packages/ui-form/tsconfig.json) contains the configuration for the TypeScript compilation, including a reference to these \*.d.ts files in its `"typeRoots"` section.<br/>
- Normally, the UI5 JavaScript files (controllers, Component.js etc.) would reside in the `webapp` folder. Now they are in the [packages/ui-form/src](packages/ui-form/src) folder and the TypeScript compilation will create the `webapp` folder and place all output there. <br/>
- In addition to the TypeScript compilation, there is also a conversion from the ES6 module and class syntax used in the source files to the classic UI5 module loading and class definition syntax (`sap.ui.define(...)` and `superClass.extend(...)`). This conversion is using the [babel-plugin-transform-modules-ui5](https://github.com/r-murphy/babel-plugin-transform-modules-ui5) project from Ryan Murphy. <br/> 
- Both, the TypeScript compilation and the ES6 syntax transformation, are executed by Babel, as configured in the file [packages/ui-form/.babelrc.json](packages/ui-form/.babelrc.json)<br/> 
- This combined transformation is triggered by the `build:ts` and `watch:ts` scripts in [packages/ui-form/package.json](packages/ui-form/package.json#L9) |
- 
-## Description
+This is roughly following https://odata2ts.github.io/docs/getting-started/generator-setup
 
-This app uses simple attendee registration and administration for events as an example scenario for demonstrating the data handling and overall setup. The app consists of three parts: an end-user UI implemented in freestyle SAPUI5, a metadata-driven administrator UI generated with Fiori elements and a Node.js-based CAP backend.
-While the code implements a complete end-to-end full-stack app, it is kept as simple as possible and the main focus is on freestyle SAPUI5 code making use of OData V4 as well as of "Draft" functionality to persist non-final datasets.
-
-Further details about how the functionality is implemented can be found in the [documentation in the 'main' branch of this repository](https://github.com/SAP-samples/ui5-cap-event-app/blob/main/docs/documentation.md#The-Heart-of-the-App-the-Registration-Controller).
-
-## Requirements
-
-[Node.js](https://nodejs.org), [Yarn 1.x](https://classic.yarnpkg.com/) (just do `npm install -g yarn`), [sqlite3](https://www.sqlite.org) (only needed separately on Windows, [commandline tools](https://www.sqlite.org/download.html) zip need to be downloaded, extracted, and directory added to the PATH)
-
-## Download and Installation
-
-1. Clone the project and check out the "typescript" branch.
-
-    ```sh
-    git clone https://github.com/SAP-samples/ui5-cap-event-app.git
-    cd ui5-cap-event-app
-    git checkout typescript
-    ```
-
-    (or download from https://github.com/SAP-samples/ui5-cap-event-app/archive/refs/heads/typescript.zip)
-
-2. Use Yarn to install the dependencies.
-
-    ```sh
-    yarn
-    ```
-
-    (if you do not have yarn installed, simply get it with `npm install --global yarn`)
-
-## Running the Project
-
-Execute the following command to run the project locally for development (start form UI, admin UI, and CDS server):
+### 0. Get the TypeScript version of the app
 
 ```sh
-yarn start
+git clone https://github.com/SAP-samples/ui5-cap-event-app.git
+cd ui5-cap-event-app
+git checkout typescript
+yarn
 ```
 
-This actually starts the ui-form project in 'watch' mode, so the browser will reload when the source files are changed and re-compiled.
+### 1. Get the service metadata
 
-As shown in the terminal after executing this command, the form UI is then running on http://localhost:8080/index.html, the admin UI on http://localhost:8081/index.html, and the CDS server on http://localhost:4004/.
-
-For the form UI, you can use user name `employee@test.com` with password `123`. For the admin UI, use `admin@test.com` and password `123`.
-
-## Building the Project
-
-Execute the following command to build the project and get one integrated app that can be deployed (build the form UI, admin UI, and CDS server):
-
+You can now do:
 ```sh
-yarn build
+yarn start:server
 ```
+to start the CAP server. It will report to be listeninge.g. at http://localhost:4004. After opening this URL in the browser, you can click the "$metadata" link to see [the OData metadata](http://localhost:4004/event-registration/$metadata). Save this file as `packages/ui-form/src/model/event-registration-metadata.xml`. (You can then stop the server again.)
+When asked for user/password of the service, you can use: `employee@test.com` / `123`.
 
-**Prerequisite:** `yarn build` runs `cds build` in the CDS server package which requires `@sap/cds-dk`. Please ensure to install `@sap/cds-dk` globally via:
+### 2. Add the `odata2ts` dependency
+
+First navigate into the ui-form sub project, then add the dev dependency:
 ```sh
-npm i -g @sap/cds-dk
+cd packages/ui-form
+yarn add --dev @odata2ts/odata2ts
 ```
 
-After building the individual packages, the build results will be copied to the central `dist` folder. The resulting package inside the `dist` folder consists of the CDS server hosting the form UI and the admin UI as well as a sandbox Fiori launchpad to start the individual UIs.
+### 3. Configure `odata2ts`
 
-To start the generated package, just run `npm install` and `npm start` inside the `dist` folder. This installs the dependencies and starts the CDS server hosting the UIs. Now the sandbox Fiori launchpad can be opened on http://localhost:4004/.
+To tell the tool what to do, create the file `packages/ui-form/odata2ts.config.ts` with the following content - explained further down:
 
-## Debugging the Project
+```ts
+import { ConfigFileOptions, EmitModes, Modes } from "@odata2ts/odata2ts";
 
-While the client-side part of the project can of course be debugged inside the browser, we have prepared two ways of debugging the Node.js part of the app easily.
+const config: ConfigFileOptions = {
+	mode: Modes.models,
+	emitMode: EmitModes.dts,
+	services: {
+		eventRegistration: {
+			source: "src/model/event-registration-metadata.xml",
+			output: "gen",
+			propertiesByName: [
+				// list of managed fields which are not editable from the user's perspective
+				...["ID", "createdAt", "createdBy", "modifiedAt", "modifiedBy", "IsActiveEntity", "HasActiveEntity", "HasDraftEntity", "Email"].map(
+                    (prop) => ({ name: prop, managed: true })
+                )
+			]
+		}
+	}
+}
 
-When debugging the client-side code, you can directly debug the original TypeScript code, which is supplied via sourcemaps (need to be enabled in the browser's developer console). If the browser doesn't automatically jump to the TypeScript code when setting breakpoints, use e.g. Ctrl+P in Chrome to open the *.ts file you want to debug.
+export default config;
+```
 
-The two options for debugging the Node.js part of the app are:
+Explanation for the settings:
+- `mode`: the tool has three major modes, the most powerful is a full-fledged OData client, the middle one provides type-safe querying and the most basic mode just provides the data models. As we are using the UI5 ODataModel for server communication, we only use the `models` mode to get the type definitions generated.
+- `emitMode`: we do not need code, only the type definitions, so we choose the `dts` emit mode, which only generates *.d.ts files.
+- `services`: here, the service is configured for which the type definitions are generated:
+  - `source` points to the metadata xml file (relative path)
+  - `output` says where the type definitions should go (let's use "gen" as sibling of "src" - caution: the contents of this directory may be deleted when generating!)
+  - `propertiesByName`  is used to declare certain system properties as "[managed](https://odata2ts.github.io/docs/generator/managed-props/)". This means they are not "normal" data properties which the user can change, but set by the system. This will be useful in the controller code when we loop over the user-entered properties: TypeScript will know which ones they are.
 
-### Debugging with VSCode
+### 4. Run it (and provide npm scripts for convenience)
 
-The launch configuration "debug server in vscode" is part of the project and can be used to run the CAP server in debug mode and debug directly in VSCode (e.g. set breakpoints).
-
-Note: the UI parts are not started by this launch configuration. To debug the interaction of server and UI, the form UI or admin UI has to be started separately with `yarn start:ui-form` or `yarn start:ui-admin`.
-
-### Debugging with any Node.js Debugging Client (e.g. Chrome)
-
-Execute the following command to run the CAP server in debug mode, so Node.js debugging tools can connect. Form UI and admin UI are also started, like with `yarn start`:
-
+You can now trigger generation in the "ui-form" directory by executing:
 ```sh
-yarn debug
+npx odata2ts
 ```
 
-You can then e.g. use the Node debugger which is built into the Chrome browser: enter `chrome://inspect` into the URL bar of Chrome and then select "Open dedicated DevTools for Node" to open the debugger.
+As result, the file `packages/ui-form/gen/EventRegistrationServiceModel.d.ts` will be generated, containing types for the entities like "Person" and "FamilyMember".
+
+For convenience, you can also add a script in the top-level package.json file. After addingthe following to the "scripts" section:
+```json
+"gen-odata": "yarn workspace ui5-cap-event-app-ui-form gen-odata"
+```
+
+You can simply trigger the generation from the root directory of the project:
+```sh
+yarn gen-odata
+```
+
+### 5. Use the types!
+
+Let's make use of the generated type definitions to simplify the Registration controller!
+
+Close to the top of `packages/ui-form/src/controller/Registration.controller.ts` there are three manually-written type definitions: `type Person...`,  `type PersonProp = keyof Person` and `type Employee...` that were added when the app was converted to TypeScript. Delete them!
+
+Instead, add the imports of the types you will use (actually, they would also be automatically added as you use them and do the respective "Quick Fix"):
+```ts
+import { EditablePerson, Person } from "../../gen/EventRegistrationServiceModel";
+```
+
+The type removal leads to four TypeScript errors in the beginning of the `validateData()` method. Let's tackle them one by one.
+
+#### Solve error 1: use the generated type
+
+The first one is that the prior manually crafted type "Employee" does no longer exist in this line:
+```ts
+const newObject = this.getView().getBindingContext().getObject() as Employee;
+```
+Simply change the last word to "Person", as that's the actual name of the entity and generated type!
+
+#### Solve error 2: Use type `EditablePerson` to ignore managed properties
+
+The second error is that in the following assignment `fields` does not have all properties of the type `Person`:
+```ts
+const fields : Person = {
+	LastName: bundle.getText("name"),
+	FirstName: bundle.getText("firstName"),
+	Birthday: bundle.getText("dateOfBirth")
+};
+```
+Missing are technical managed properties like "createdAt" which are not supposed to be set by the user or application. Luckily, we already have defined these properties in the `odata2ts.config.ts` configuration above. The tool hence also generated the type `EditablePerson` containing only the *non-managed* properties. Just change the first line to
+```ts
+const fields : EditablePerson = {
+```
+and TypeScript knows that the object you are creating here does not need any of these managed properties.
+
+Ok, this is hacky, as the created object is not really supposed to be a person, but rather a helper object for the subsequent check loop: the property values are not names + birthday, but rather translated property names which are supposed to be shown to the user when the respective property is not filled. It only incidentally works as all properties of EditablePerson are strings in the generated type.<br>
+Still, this was a way to demonstrate the use of the "Editable<EntityName>" types and to show how you *would* declare a Person object. :-)
+
+For a clean solution, as `fields` is actually a map of property names to strings, what should *really* be written is:
+```ts
+const fields : Record<keyof EditablePerson, string> = {
+```
+
+#### Solve error 3: use `keyof EditablePerson` to define a string type with all property names which the app can change
+
+The third error is that the previously manually written type `PersonProp` does no longer exist, which is referenced in line
+```ts
+let prop : PersonProp;
+```
+This type used to be a list of the property names for which it should be checked whether the user has entered data.
+
+Well, the `EditablePerson` type used above has exactly these properties, so we can use TypeScript's `keyof` to define a string type that can have only these property names:
+```ts
+let prop : EditablePerson;
+```
+
+#### Error 4 has disappeared - enjoy the result
+
+Error 4 had been a follow-up error of PersonProp not being defined and is gone now.<br>
+This gives us the time to run the app and enjoy the result. :-)
+
+Of coure the types in this sample are simple and not going to ever change, so having them written manually was maybe easier than generating them. But in real-life projects, this can be a lot different, so it's great to have this tool!
 
 
-## Limitations
+## Requirements / Download / Installation / Running
 
-* The local database uses in-memory mode. Data will be re-initialized after each restart.
-
-* The sample does not cover deployment of the app, where additional considerations e.g. regarding database and authentication are needed.
+All information about the general setup of the project can be found in the [readme of the `main` branch](https://github.com/SAP-samples/ui5-cap-event-app) and of the [`typescript` branch](https://github.com/SAP-samples/ui5-cap-event-app/tree/typescript).
 
 
-## Known Issues
-
-* Starting the admin app with `?sap-iapp-state=...` URL parameters (e.g. from a bookmark or when reloading) fails. Remove the URL parameter when you reload the page.
 
 ## How to obtain support
 
 The sample code is provided **as-is**. No support is provided.
 
-## References
-
-Regarding TypeScript and UI5, all information is bundled at [https://sap.github.io/ui5-typescript](https://sap.github.io/ui5-typescript/).
-
-Other projects demonstrating similar application use-cases:
-
-* https://github.com/vobu/ui5-cap - a repository showcasing the use of UI5 Tooling, CAP + UIveri5-based testing in an app for media upload and preview (as presented at UI5conBE in Feb 2020) by Volker Buzek.
-* https://blogs.sap.com/2020/07/08/ui5-freestyle-app-in-cap - a UI5 freestyle app in CAP, with approuter, by Wouter Lemaire.
-* https://blogs.sap.com/2020/09/06/developing-a-fiori-elements-app-with-cap-and-fiori-tools/ - about developing a Fiori elements app with CAP and Fiori Tools
-* https://blogs.sap.com/2020/04/07/ui5-tooling-a-modern-development-experience-for-ui5/ - an overview on the UI5 Tooling and its extensions for a modern development experience.
-
 
 ## License
 
-Copyright (c) 2021 SAP SE or an SAP affiliate company. All rights reserved.
+Copyright (c) 2023 SAP SE or an SAP affiliate company. All rights reserved.
 This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSE) file.

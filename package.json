@@ -22,7 +22,8 @@
     "verify": "npm-run-all --parallel verify:ui-form",
     "verify:ui-form": "yarn workspace ui5-cap-event-app-ui-form ts-typecheck",
     "lint": "npm-run-all --parallel lint:ui-form",
-    "lint:ui-form": "yarn workspace ui5-cap-event-app-ui-form lint"
+    "lint:ui-form": "yarn workspace ui5-cap-event-app-ui-form lint",
+    "gen-odata": "yarn workspace ui5-cap-event-app-ui-form gen-odata"
   },
   "repository": {
     "type": "git",

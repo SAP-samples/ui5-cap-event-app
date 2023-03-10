@@ -16,24 +16,7 @@ import Button from "sap/m/Button";
 import UIComponent from "sap/ui/core/UIComponent";
 import UI5Event from "sap/ui/base/Event";
 import ODataContextBinding from "sap/ui/model/odata/v4/ODataContextBinding";
-
-
-// some type definitions for data structures used within the app
-
-type Person = {
-	LastName: string,
-	FirstName: string,
-	Birthday: string
-};
-
-type PersonProp = keyof Person;
-
-type Employee = {
-	LastName: string,
-	FirstName: string,
-	Birthday: string,
-	FamilyMembers: Person[]
-};
+import { EditablePerson, Person } from "../../gen/EventRegistrationServiceModel";
 
 
 /**
@@ -179,11 +162,11 @@ export default class Registration extends Controller {
 	}
 
 	public validateData() : string[] {
-		const newObject = this.getView().getBindingContext().getObject() as Employee;
+		const newObject = this.getView().getBindingContext().getObject() as Person;
 
 		// determine field names for validation dialog
 		const bundle = this.bundle;
-		const fields : Person = {
+		const fields : Record<keyof EditablePerson, string> = {
 			LastName: bundle.getText("name"),
 			FirstName: bundle.getText("firstName"),
 			Birthday: bundle.getText("dateOfBirth")
@@ -191,7 +174,7 @@ export default class Registration extends Controller {
 
 		// check for missing fields
 		const missing = [];
-		let prop : PersonProp;
+		let prop : keyof EditablePerson;
 		for (prop in fields) {
 			if (!newObject[prop]) {
 				missing.push(fields[prop]);
