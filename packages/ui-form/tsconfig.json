@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"typeRoots": [
-			"../../node_modules/@sapui5/ts-types-esm",
+			"../../node_modules/@sapui5/types",
 			"../../node_modules/@types"
 		],
 		"target": "ES2017",

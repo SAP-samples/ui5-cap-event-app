@@ -84,17 +84,17 @@ Then trigger the actual dev dependency installation:
 yarn add typescript --dev
 ```
 
-The [UI5 type definitions](https://www.npmjs.com/package/@sapui5/ts-types-esm) need to be installed as dev dependency as well. You should choose the same major/minor version of the type definitions as used by your application code. (If this is not possible because you are working with an older version of UI5 at runtime, you can also try using a higher version of the type definitions, but be aware that some of the proposed APIs might not exist in your actually used UI5 version.)
+The [UI5 type definitions](https://www.npmjs.com/package/@sapui5/types) need to be installed as dev dependency as well. You should choose the same major/minor version of the type definitions as used by your application code. (If this is not possible because you are working with an older version of UI5 at runtime, you can also try using a higher version of the type definitions, but be aware that some of the proposed APIs might not exist in your actually used UI5 version.)
 
 ```sh
-yarn add @sapui5/ts-types-esm@1.108.0 --dev
+yarn add @sapui5/types@1.113.0 --dev
 ```
 
 NOTE: we are working with the new "-esm" flavor of the type definitions. This has advantages but also disadvantages when developing in JavaScript, so you might also choose the `@sapui5/ts-types` package instead:
- * Advantage: the `ts-types-esm` packages are the best-quality type definition files, the ones the UI5 team is focusing on. While the `ts-types` packages are also automatically updated with every new UI5 release, there might be some TypeScript glitches inside which are not fixed with priority.
+ * Advantage: the `types` packages are the best-quality type definition files, the ones the UI5 team is focusing on. While the `ts-types` packages are also automatically updated with every new UI5 release, there might be some TypeScript glitches inside which are not fixed with priority.
  * Disadvantage: The "-esm" definitions define only ES6 modules, not the legacy global names of UI5 classes (like "sap.m.Button" in the global namespace). This makes referencing types in the JSDoc comments a bit ugly. Instead of `@type {sap.m.Button}` one has to write `@type {import('sap/m/Button').default}`.
 
-We are using the SAPUI5 type definitions in this document, but if you are only using controls contained in OpenUI5, you can also just use the OpenUI5 type definitions ([`@openui5/ts-types-esm`](https://www.npmjs.com/package/@openui5/ts-types-esm) or `@types/openui5`).
+We are using the SAPUI5 type definitions in this document, but if you are only using controls contained in OpenUI5, you can also just use the OpenUI5 type definitions ([`@openui5/types`](https://www.npmjs.com/package/@openui5/types) or `@types/openui5`).
 
 
 ### Add the `tsconfig.json` File
@@ -111,7 +111,7 @@ Paste the following content into the file, but pay attention to some of the entr
 {
 	"compilerOptions": {
 		"typeRoots": [
-			"../../node_modules/@sapui5/ts-types-esm",
+			"../../node_modules/@sapui5/types",
 			"../../node_modules/@types"
 		],
 		"target": "ES2017",
@@ -326,7 +326,7 @@ this.getView().addStyleClass(appComponent.getContentDensityClass());
 
 ### Fix Actual App Code Issues
 
-Some of the errors are actually application code errors: as of writing, the UI5 CAP event app called the `MessageBox.error(...)` API with a `duration` parameter, but when you check [the official documentation](https://ui5.sap.com/1.108.0/#/api/sap.m.MessageBox%23methods/sap.m.MessageBox.error), the `error` method does not support this parameter! (Actually the implementation does, but this is a mismatch within UI5 and sort of indended... long story...). To fix it, remove the `duration` parameter.
+Some of the errors are actually application code errors: as of writing, the UI5 CAP event app called the `MessageBox.error(...)` API with a `duration` parameter, but when you check [the official documentation](https://ui5.sap.com/1.113.0/#/api/sap.m.MessageBox%23methods/sap.m.MessageBox.error), the `error` method does not support this parameter! (Actually the implementation does, but this is a mismatch within UI5 and sort of indended... long story...). To fix it, remove the `duration` parameter.
 
 
 ### Ignore the Rest
