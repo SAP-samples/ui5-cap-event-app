@@ -14,10 +14,8 @@ This app is a showcase of two UI5 user interfaces, one built with freestyle [SAP
 |:---------------------------|
 | The SAPUI5 type definitions are loaded as dev dependency [from npm package `@sapui5/types`](https://www.npmjs.com/package/@sapui5/types). The OpenUI5 types are available as [`@openui5/types`](https://www.npmjs.com/package/@openui5/types) and [ `@types/openui5`](https://www.npmjs.com/package/@types/openui5). You can inspect the \*.d.ts files in the `node_modules/@sapui5/types/types` directory after installing the dependencies with the `yarn` command.<br/>
  The file [packages/ui-form/tsconfig.json](packages/ui-form/tsconfig.json) contains the configuration for the TypeScript compilation, including a reference to these \*.d.ts files in its `"typeRoots"` section.<br/>
- Normally, the UI5 JavaScript files (controllers, Component.js etc.) would reside in the `webapp` folder. Now they are in the [packages/ui-form/src](packages/ui-form/src) folder and the TypeScript compilation will create the `webapp` folder and place all output there. <br/>
- In addition to the TypeScript compilation, there is also a conversion from the ES6 module and class syntax used in the source files to the classic UI5 module loading and class definition syntax (`sap.ui.define(...)` and `superClass.extend(...)`). This conversion is using the [babel-plugin-transform-modules-ui5](https://github.com/r-murphy/babel-plugin-transform-modules-ui5) project from Ryan Murphy. <br/> 
- Both, the TypeScript compilation and the ES6 syntax transformation, are executed by Babel, as configured in the file [packages/ui-form/.babelrc.json](packages/ui-form/.babelrc.json)<br/> 
- This combined transformation is triggered by the `build:ts` and `watch:ts` scripts in [packages/ui-form/package.json](packages/ui-form/package.json#L9) |
+ In addition to the TypeScript compilation, there is also a conversion from the ES6 module and class syntax used in the source files to the classic UI5 module loading and class definition syntax (`sap.ui.define(...)` and `superClass.extend(...)`). This conversion is using the [babel-plugin-transform-modules-ui5](https://www.npmjs.com/package/babel-plugin-transform-modules-ui5) package.<br/> 
+ Both, the TypeScript compilation and the ES6 syntax transformation, are executed under the hood within the UI5 build and the UI5 dev server by [ui5-tooling-transpile](https://www.npmjs.com/package/ui5-tooling-transpile). |
  
 ## Description
 
@@ -32,7 +30,7 @@ Further details about how the functionality is implemented can be found in the [
 
 ## Download and Installation
 
-1. Clone the project and check out the "typescript" branch.
+1. Clone the project and check out the `typescript` branch.
 
     ```sh
     git clone https://github.com/SAP-samples/ui5-cap-event-app.git
@@ -85,7 +83,7 @@ To start the generated package, just run `npm install` and `npm start` inside th
 
 While the client-side part of the project can of course be debugged inside the browser, we have prepared two ways of debugging the Node.js part of the app easily.
 
-When debugging the client-side code, you can directly debug the original TypeScript code, which is supplied via sourcemaps (need to be enabled in the browser's developer console). If the browser doesn't automatically jump to the TypeScript code when setting breakpoints, use e.g. Ctrl+P in Chrome to open the *.ts file you want to debug.
+When debugging the client-side code, you can directly debug the original TypeScript code, which is supplied via sourcemaps (need to be enabled in the browser's developer console). If the browser doesn't automatically jump to the TypeScript code when setting breakpoints, use e.g. Ctrl+P inside the Chrome developer tools to open the *.ts file you want to debug.
 
 The two options for debugging the Node.js part of the app are:
 
@@ -135,5 +133,5 @@ Other projects demonstrating similar application use-cases:
 
 ## License
 
-Copyright (c) 2021 SAP SE or an SAP affiliate company. All rights reserved.
+Copyright (c) 2021-2023 SAP SE or an SAP affiliate company. All rights reserved.
 This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSE) file.

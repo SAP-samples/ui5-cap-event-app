@@ -51,14 +51,14 @@ IMPORTANT: As we want to enable and promote using modern JavaScript, these *.d.t
 
 
 ### Overview of TypeScript-relevant Parts of the Project:
-- The [packages/ui-form/src](../packages/ui-form/src) directory contains the TypeScript implementation of the UI5 app. See the next section for details of a controller implementation inside this directory.
+- The [packages/ui-form/webapp](../packages/ui-form/webapp) directory contains the TypeScript implementation of the UI5 app. See the next section for details of a controller implementation inside this directory.
 - The [packages/ui-form/tsconfig.json](../packages/ui-form/tsconfig.json) file defines TypeScript compiler options like the JavaScript target version, the location of the `*.d.ts` files and the source and target directory for the TypeScript compilation. 
 - The [packages/ui-form/.babelrc.json](../packages/ui-form/.babelrc.json) file controls the build steps (first TypeScript to ES6 ("modern" JavaScript), then the conversion of some ES6 language constructs (module imports, classes) to the UI5 way of resource loading and class definition)  
 - The [packages/ui-form/package.json](../packages/ui-form/package.json) file contains the `build:ts`and `watch:ts` scripts for yarn which trigger TypeScript compilation and live serving (used from within yarn scripts inside the [top-level package.json](../package.json) file).
 
 
 ### The Most Important Controller in Detail
-Most of the application logic is implemented in the [Registration.controller.ts](../packages/ui-form/src/controller/Registration.controller.ts) file. For a general explanation of this file, please check the [documentation in the main branch of this repository](https://github.com/SAP-samples/ui5-cap-event-app/blob/main/docs/documentation.md#The-Heart-of-the-App-the-Registration-Controller), which describes the JavaScript version of the controller in detail. The logic is the same in TypeScript and most of the code as well - after all TypeScript is a superset of JavaScript which "only" adds type information. So let's look at the differences only:
+Most of the application logic is implemented in the [Registration.controller.ts](../packages/ui-form/webapp/controller/Registration.controller.ts) file. For a general explanation of this file, please check the [documentation in the main branch of this repository](https://github.com/SAP-samples/ui5-cap-event-app/blob/main/docs/documentation.md#The-Heart-of-the-App-the-Registration-Controller), which describes the JavaScript version of the controller in detail. The logic is the same in TypeScript and most of the code as well - after all TypeScript is a superset of JavaScript which "only" adds type information. So let's look at the differences only:
 
 
 #### Module Loading

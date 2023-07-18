@@ -9,7 +9,7 @@
         "strict": true,
         "strictNullChecks": false,
         "strictPropertyInitialization": false,
-        "rootDir": "./src",
+        "rootDir": "./webapp",
         "outDir": "./dist",
         "baseUrl": "./",
         "typeRoots": [
@@ -18,11 +18,11 @@
         ],
         "paths": {
             "sap/ui/eventregistration/form/*": [
-                "./src/*"
+                "./webapp/*"
             ]
         }
     },
     "include": [
-        "./src/**/*"
+        "./webapp/**/*"
     ]
 }

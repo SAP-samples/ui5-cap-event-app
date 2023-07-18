@@ -6,7 +6,7 @@ import Page from "sap/m/Page";
 import Filter from "sap/ui/model/Filter";
 import FilterOperator from "sap/ui/model/FilterOperator";
 import ODataModel from "sap/ui/model/odata/v4/ODataModel";
-import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
+import ODataListBinding, { ODataListBinding$CreateCompletedEvent } from "sap/ui/model/odata/v4/ODataListBinding";
 import V4Context from "sap/ui/model/odata/v4/Context";
 import ResourceBundle from "sap/base/i18n/ResourceBundle";
 import ResourceModel from "sap/ui/model/resource/ResourceModel";
@@ -90,7 +90,7 @@ export default class Registration extends Controller {
 		// CREATE
 		if (!contexts || contexts.length === 0) { // no data for this user yet
 			const binding = this.oDataModel.bindList("/Person");
-			binding.attachCreateCompleted((event : UI5Event) => {
+			binding.attachCreateCompleted((event: ODataListBinding$CreateCompletedEvent & /* FIXME */ {getParameter: (parameter: string) => object}) => { // FIXME: due to a bug in the 1.116.0 types the parameters in the ODataListBinding$CreateCompletedEvent and a few others are missing
 				if (event.getParameter("success")) {
 					const path : string = (event.getParameter("context") as ODataContextBinding).getPath();
 					this.getView().bindObject({path: path});
