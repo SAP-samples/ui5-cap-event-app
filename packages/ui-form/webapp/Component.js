@@ -23,6 +23,7 @@ function (UIComponent, Device, models) {
 	"use strict";
 	
 	return UIComponent.extend("sap.ui.eventregistration.form.AppComponent", {
+		_sContentDensityClass: undefined,
 
 		metadata : {
 			manifest: "json"

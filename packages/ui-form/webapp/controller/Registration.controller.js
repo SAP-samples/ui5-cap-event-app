@@ -22,7 +22,7 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 	// sap.ui.eventregistration.form.controller.Registration
 	class RegistrationController extends Controller {
 
-		constructor(/** @type {(string | object[])} */ arg) {
+		constructor(/** @type {(string)} */ arg) {
 			super(arg);
 			/** @type {import('sap/base/i18n/ResourceBundle').default} */ // @ts-ignore
 			this.oBundle = {};
@@ -84,8 +84,10 @@ function (Controller, MessageBox, MessageToast, InputBase, Filter, FilterOperato
 			// CREATE
 			if (!aContexts || aContexts.length === 0) { // no data for this user yet
 				var oBinding = /** @type {import("sap/ui/model/odata/v4/ODataListBinding").default} */ (this.oDataModel.bindList("/Person"));
-				oBinding.attachCreateCompleted((/** @type {import("sap/ui/base/Event").default} */ oEvent) => {
+				oBinding.attachCreateCompleted((/** @type {import("sap/ui/model/odata/v4/ODataListBinding").ODataListBinding$CreateCompletedEvent} */ oEvent) => {
+					// @ts-ignore parameters of ODataListBinding$CreateCompletedEvent had been missing due to a bug in the 1.116 types and will be available in the 1.117 types
 					if (oEvent.getParameter("success")) {
+						// @ts-ignore parameters of ODataListBinding$CreateCompletedEvent had been missing due to a bug in the 1.116 types and will be available in the 1.117 types
 						this.getView().bindObject({path: oEvent.getParameter("context").getPath()});
 					} else {
 						var sText = this.oBundle.getText("emptyCreateErrorText");

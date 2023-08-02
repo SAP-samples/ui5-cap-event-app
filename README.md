@@ -4,7 +4,7 @@ This `js-with-typescript-support` branch of the "UI5 CAP Event App" repository d
 
 <b>Overall, the central entry point for all TypeScript-related information, documentation, samples, tutorials etc. about UI5 can be found at [https://sap.github.io/ui5-typescript](https://sap.github.io/ui5-typescript/).</b>
 
-For general information about the app and for setup instructions, please check the [main branch](../../tree/main).
+For general information about the app and for setup instructions and requirements, please check the [main branch](../../tree/main).
 
 # Table of Content
 
@@ -87,7 +87,7 @@ yarn add typescript --dev
 The [UI5 type definitions](https://www.npmjs.com/package/@sapui5/types) need to be installed as dev dependency as well. You should choose the same major/minor version of the type definitions as used by your application code. (If this is not possible because you are working with an older version of UI5 at runtime, you can also try using a higher version of the type definitions, but be aware that some of the proposed APIs might not exist in your actually used UI5 version.)
 
 ```sh
-yarn add @sapui5/types@1.113.0 --dev
+yarn add @sapui5/types@1.116.0 --dev
 ```
 
 NOTE: we are working with the new "-esm" flavor of the type definitions. This has advantages but also disadvantages when developing in JavaScript, so you might also choose the `@sapui5/ts-types` package instead:
@@ -326,7 +326,7 @@ this.getView().addStyleClass(appComponent.getContentDensityClass());
 
 ### Fix Actual App Code Issues
 
-Some of the errors are actually application code errors: as of writing, the UI5 CAP event app called the `MessageBox.error(...)` API with a `duration` parameter, but when you check [the official documentation](https://ui5.sap.com/1.113.0/#/api/sap.m.MessageBox%23methods/sap.m.MessageBox.error), the `error` method does not support this parameter! (Actually the implementation does, but this is a mismatch within UI5 and sort of indended... long story...). To fix it, remove the `duration` parameter.
+Some of the errors are actually application code errors: as of writing, the UI5 CAP event app called the `MessageBox.error(...)` API with a `duration` parameter, but when you check [the official documentation](https://ui5.sap.com/1.116.0/#/api/sap.m.MessageBox%23methods/sap.m.MessageBox.error), the `error` method does not support this parameter! (Actually the implementation does, but this is a mismatch within UI5 and sort of indended... long story...). To fix it, remove the `duration` parameter.
 
 
 ### Ignore the Rest
@@ -358,7 +358,7 @@ While most variables are typed and TypeScript does not report any further issues
 "noImplicitAny": true
 ```
 
-As result, there will be a lot of new errors again - 20 of them in the UI5 CAP event app.
+As result, there will be a lot of new errors again - one or two dozen of them in the UI5 CAP event app.
 
 ### Type the Method Parameters
 
@@ -470,7 +470,7 @@ Most new errors are targeting the same variable: `this.oBundle` (the ResourceBun
 The same kind of error will likely occur for any class members. A solution is to create a dummy constructor which does nothing - it just initializes these members:
 
 ```js
-constructor(/** @type {(string | object[])} */ arg) {
+constructor(/** @type {string} */ arg) {
 	super(arg);
 	/** @type {import('sap/base/i18n/ResourceBundle').default} */ // @ts-ignore
 	this.oBundle = {};
@@ -516,5 +516,5 @@ The sample code is provided **as-is**. No support is provided.
 
 # License
 
-Copyright (c) 2021 SAP SE or an SAP affiliate company. All rights reserved.
+Copyright (c) 2021-2023 SAP SE or an SAP affiliate company. All rights reserved.
 This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSE) file.

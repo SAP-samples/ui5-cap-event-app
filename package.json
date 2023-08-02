@@ -29,7 +29,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "cpy-cli": "^4.1.0",
+    "cpy-cli": "^5.0.0",
     "npm-run-all": "^4.1.5",
     "rimraf": "^5.0.0"
   }
