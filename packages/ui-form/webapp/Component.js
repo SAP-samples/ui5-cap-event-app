@@ -87,7 +87,7 @@ function (UIComponent, Device, models) {
 		doLogout: function() {
 			jQuery.ajax({
 				type: "POST",
-				url: "/event-registration/logout",
+				url: "/odata/v4/event-registration/logout",
 				async: false,
 				headers: { "Authorization": "Basic xxx" }
 			})
