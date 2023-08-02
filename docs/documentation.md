@@ -198,11 +198,11 @@ The other interesting configuration in `manifest.json` is the `models` section, 
 },
 ```
 
-It points to the `eventregistration` datasource also defined in the manifest file, where the model type and version is defined and the URL `/event-registration/` is given, at which the server can be reached:
+It points to the `eventregistration` datasource also defined in the manifest file, where the model type and version is defined and the URL `/odata/v4/event-registration/` is given, at which the server can be reached:
 
 ```json
 "eventregistration": {
-	"uri": "/event-registration/",
+	"uri": "/odata/v4/event-registration/",
 	"type": "OData",
 	"settings": {
 		"odataVersion": "4.0"
@@ -217,13 +217,13 @@ The reason is this setting in [ui5.yaml](../packages/ui-form/ui5.yaml), where a 
 server:
   customMiddleware:
   - name: ui5-middleware-simpleproxy
-    mountPath: /event-registration/
+    mountPath: /odata/v4/event-registration/
     afterMiddleware: compression
     configuration:
       baseUri: http://localhost:4004/odata/v4/event-registration/ 
 ```
 
-> Note that the proxy resides directly at the server root (`/event-registration`) to keep URLs in the UI5 application simple, while the forwarding target is the actual path (`/odata/v4/event-registration`) which is the default path prefix for v4 services since CAP version 7. Everything on the server uses the latter path, everything on the client side can talk to the shorter path.
+All requests going to `/odata/v4/event-registration/...` will be forwarded to `http://localhost:4004/odata/v4/event-registration/`.
 
 The [Component.js](../packages/ui-form/Component.js) file only has typical boilerplate code, except for the `doLogout` function. This function is triggered by buttons in different views and sends a POST request to the custom Express.js route we registered earlier to send a `401` response and make the browser forget the current login. On error, which is the expected case here, the browser is redirected to `index.html`, which will restart the app and prompt the user to log in anew.
 
@@ -798,7 +798,7 @@ type: application
 server:
   customMiddleware:
   - name: ui5-middleware-simpleproxy
-    mountPath: /event-registration/
+    mountPath: /odata/v4/event-registration/
     afterMiddleware: compression
     configuration:
       baseUri: http://localhost:4004/odata/v4/event-registration/
@@ -812,7 +812,7 @@ server:
       path: "webapp"
 ```
 
-The `ui5-middleware-simpleproxy` is proxying all requests to `/event-registration` to `http://localhost:4004/odata/v4/event-registration`. With the option `removeETag` we ensure that the express server running behind the scenes is not adding an ETag to the response, which causes issues at runtime.
+The `ui5-middleware-simpleproxy` is proxying all requests to `/odata/v4/event-registration` to `http://localhost:4004/odata/v4/event-registration`. With the option `removeETag` we ensure that the express server running behind the scenes is not adding an ETag to the response, which causes issues at runtime.
 
 The `ui5-middleware-livereload` is monitoring the `webapp` folder for changes. The option `extraExts` extends the monitoring for some additional file extensions which are not monitored by default but used for UI5 application development.
 
