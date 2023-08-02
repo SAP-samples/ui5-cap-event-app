@@ -239,13 +239,13 @@ Now enjoy also the other benefits of TypeScript, like the code completion and in
 
 You can run a TypeScript check of the app from the command line with:
 ```
-yarn verify:ui-form
+yarn ts-typecheck
 ```
 This will run a test compilation of the app and output any TypeScript errors.
 
 You can also lint the TypeScript code with:
 ```
-yarn lint:ui-form
+yarn lint
 ```
 
 

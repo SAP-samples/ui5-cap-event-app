@@ -23,9 +23,9 @@ server:
   customMiddleware:
   - name: ui5-middleware-simpleproxy
     afterMiddleware: compression
-    mountPath: /event-registration
+    mountPath: /odata/v4/event-registration
     configuration:
-      baseUri: "http://localhost:4004/event-registration"
+      baseUri: "http://localhost:4004/odata/v4/event-registration"
       removeETag: true
   - name: ui5-middleware-livereload
     afterMiddleware: compression

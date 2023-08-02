@@ -26,7 +26,10 @@ Further details about how the functionality is implemented can be found in the [
 
 ## Requirements
 
-[Node.js](https://nodejs.org), [Yarn 1.x](https://classic.yarnpkg.com/) (just do `npm install -g yarn`), [sqlite3](https://www.sqlite.org) (only needed separately on Windows, [commandline tools](https://www.sqlite.org/download.html) zip need to be downloaded, extracted, and directory added to the PATH)
+- [Node.js](https://nodejs.org)
+- [Yarn 1.x](https://classic.yarnpkg.com/) (just do `npm install -g yarn`)
+- [SAP CAP CLI](https://www.npmjs.com/package/@sap/cds-dk) (do `npm install -g @sap/cds-dk`)
+- [sqlite3](https://www.sqlite.org) (only needed separately on Windows, [commandline tools](https://www.sqlite.org/download.html) zip need to be downloaded, extracted, and directory added to the PATH)
 
 ## Download and Installation
 
@@ -45,8 +48,6 @@ Further details about how the functionality is implemented can be found in the [
     ```sh
     yarn
     ```
-
-    (if you do not have yarn installed, simply get it with `npm install --global yarn`)
 
 ## Running the Project
 
@@ -70,7 +71,7 @@ Execute the following command to build the project and get one integrated app th
 yarn build
 ```
 
-**Prerequisite:** `yarn build` runs `cds build` in the CDS server package which requires `@sap/cds-dk`. Please ensure to install `@sap/cds-dk` globally via:
+**Prerequisite:** `yarn build` runs `cds build` in the CDS server package which requires `@sap/cds-dk`. If you haven't done so, please install `@sap/cds-dk` globally via:
 ```sh
 npm i -g @sap/cds-dk
 ```

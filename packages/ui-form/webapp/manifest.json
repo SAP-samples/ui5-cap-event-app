@@ -15,7 +15,7 @@
 		"resources": "resources.json",
 		"dataSources": {
 			"eventregistration": {
-				"uri": "/event-registration/",
+				"uri": "/odata/v4/event-registration/",
 				"type": "OData",
 				"settings": {
 					"odataVersion": "4.0"

@@ -19,10 +19,9 @@
     "start:ui-admin": "yarn workspace ui5-cap-event-app-ui-admin start",
     "debug": "npm-run-all --parallel debug:server start:ui-form start:ui-admin",
     "debug:server": "yarn workspace ui5-cap-event-app-server cds:debug",
-    "verify": "npm-run-all --parallel verify:ui-form",
-    "verify:ui-form": "yarn workspace ui5-cap-event-app-ui-form ts-typecheck",
     "lint": "npm-run-all --parallel lint:ui-form",
-    "lint:ui-form": "yarn workspace ui5-cap-event-app-ui-form lint"
+    "lint:ui-form": "yarn workspace ui5-cap-event-app-ui-form lint",
+    "ts-typecheck": "yarn workspace ui5-cap-event-app-ui-form ts-typecheck"
   },
   "repository": {
     "type": "git",
@@ -34,6 +33,6 @@
   "dependencies": {
     "cpy-cli": "^5.0.0",
     "npm-run-all": "^4.1.5",
-    "rimraf": "^5.0.0"
+    "rimraf": "^5.0.1"
   }
 }

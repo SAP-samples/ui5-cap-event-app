@@ -18,10 +18,10 @@ builder:
 server:
   customMiddleware:
   - name: ui5-middleware-simpleproxy
-    mountPath: /event-registration/
+    mountPath: /odata/v4/event-registration/
     afterMiddleware: compression
     configuration:
-      baseUri: http://localhost:4004/event-registration/ 
+      baseUri: http://localhost:4004/odata/v4/event-registration/ 
       removeETag: true
   - name: ui5-tooling-transpile-middleware
     afterMiddleware: compression
