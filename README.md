@@ -13,7 +13,10 @@ Further details about how the functionality is implemented can be found [in the 
 
 ## Requirements
 
-[Node.js](https://nodejs.org), [Yarn 1.x](https://classic.yarnpkg.com/) (just do `npm install -g yarn`), [sqlite3](https://www.sqlite.org) (only needed separately on Windows, [commandline tools](https://www.sqlite.org/download.html) zip need to be downloaded, extracted, and directory added to the PATH)
+- [Node.js](https://nodejs.org)
+- [Yarn 1.x](https://classic.yarnpkg.com/) (just do `npm install -g yarn`)
+- [SAP CAP CLI](https://www.npmjs.com/package/@sap/cds-dk) (do `npm install -g @sap/cds-dk`)
+- [sqlite3](https://www.sqlite.org) (only needed separately on Windows, [commandline tools](https://www.sqlite.org/download.html) zip need to be downloaded, extracted, and directory added to the PATH)
 
 ## Download and Installation
 
@@ -107,5 +110,5 @@ Other projects demonstrating similar use-cases:
 
 ## License
 
-Copyright (c) 2020 SAP SE or an SAP affiliate company. All rights reserved.
+Copyright (c) 2020-2023 SAP SE or an SAP affiliate company. All rights reserved.
 This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSE) file.

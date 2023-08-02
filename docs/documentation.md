@@ -139,7 +139,7 @@ To achieve this, a custom [`server.js`](../packages/server/server.js) file was c
 
 ```js
 cds.on('bootstrap',(app) => {
-    app.post("/event-registration/logout", (req, res) => {
+    app.post("/odata/v4/event-registration/logout", (req, res) => {
         // Send 401 Unauthorized to tell the browser to forget the credentials.
         // NOTE: while this works for the sample app, it is not double-checked for 100% security! 
         res.status(401);
@@ -220,8 +220,10 @@ server:
     mountPath: /event-registration/
     afterMiddleware: compression
     configuration:
-      baseUri: http://localhost:4004/event-registration/ 
+      baseUri: http://localhost:4004/odata/v4/event-registration/ 
 ```
+
+> Note that the proxy resides directly at the server root (`/event-registration`) to keep URLs in the UI5 application simple, while the forwarding target is the actual path (`/odata/v4/event-registration`) which is the default path prefix for v4 services since CAP version 7. Everything on the server uses the latter path, everything on the client side can talk to the shorter path.
 
 The [Component.js](../packages/ui-form/Component.js) file only has typical boilerplate code, except for the `doLogout` function. This function is triggered by buttons in different views and sends a POST request to the custom Express.js route we registered earlier to send a `401` response and make the browser forget the current login. On error, which is the expected case here, the browser is redirected to `index.html`, which will restart the app and prompt the user to log in anew.
 
@@ -229,7 +231,7 @@ The [Component.js](../packages/ui-form/Component.js) file only has typical boile
 doLogout: function() {
 	jQuery.ajax({
 		type: "POST",
-		url: "/event-registration/logout",
+		url: "/odata/v4/event-registration/logout",
 		async: false,
 		headers: { "Authorization": "Basic xxx" }
 	})
@@ -761,7 +763,7 @@ packages/ui-form
   [...]
 
   <script id="sap-ui-bootstrap"
-          src="https://ui5.sap.com/1.108.0/resources/sap-ui-core.js"
+          src="https://ui5.sap.com/1.116.0/resources/sap-ui-core.js"
 ```
 
 Another important aspect is the development server of the UI5 Tooling used to serve the UI5 applications at development time. The UI5 Tooling can be extended with custom middlewares to improve the development experience or to proxy OData services. For the Form UI project we are using the [ui5-middleware-livereload](https://www.npmjs.com/package/ui5-middleware-livereload) to improve the development experience by getting a save and update behavior (once a resource has been changed and saved in your editor, the UI5 application is reloaded) and [ui5-middleware-simpleproxy](https://www.npmjs.com/package/ui5-middleware-simpleproxy) to proxy the CAP server running on port `4004` to avoid [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues.
@@ -799,7 +801,7 @@ server:
     mountPath: /event-registration/
     afterMiddleware: compression
     configuration:
-      baseUri: http://localhost:4004/event-registration/
+      baseUri: http://localhost:4004/odata/v4/event-registration/
       removeETag: true
   - name: ui5-middleware-livereload
     afterMiddleware: compression
@@ -810,7 +812,7 @@ server:
       path: "webapp"
 ```
 
-The `ui5-middleware-simpleproxy` is proxying all requests to `/event-registration` to `http://localhost:4004/event-registration`. With the option `removeETag` we ensure that the express server running behind the scenes is not adding an ETag to the response, which causes issues at runtime.
+The `ui5-middleware-simpleproxy` is proxying all requests to `/event-registration` to `http://localhost:4004/odata/v4/event-registration`. With the option `removeETag` we ensure that the express server running behind the scenes is not adding an ETag to the response, which causes issues at runtime.
 
 The `ui5-middleware-livereload` is monitoring the `webapp` folder for changes. The option `extraExts` extends the monitoring for some additional file extensions which are not monitored by default but used for UI5 application development.
 

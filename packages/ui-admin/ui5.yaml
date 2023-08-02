@@ -5,7 +5,7 @@ metadata:
 type: application
 framework:
   name: SAPUI5
-  version: "1.108.0"
+  version: "1.116.0"
   libraries:
     - name: sap.f
     - name: sap.fe.templates
@@ -25,7 +25,7 @@ server:
     afterMiddleware: compression
     mountPath: /event-registration
     configuration:
-      baseUri: "http://localhost:4004/event-registration"
+      baseUri: "http://localhost:4004/odata/v4/event-registration"
       removeETag: true
   - name: ui5-middleware-livereload
     afterMiddleware: compression
