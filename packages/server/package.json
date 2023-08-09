@@ -5,17 +5,21 @@
   "private": true,
   "dependencies": {
     "@sap/cds": "^7.1.1",
-    "express": "*",
+    "express": "^4.18.2",
     "passport": "^0.6.0",
-    "sqlite3": "^5.0.0"
+    "sqlite3": "^5.1.6"
+  },
+  "devDependencies": {
+    "cds-plugin-ui5": "^0.2.2",
+    "rimraf": "^5.0.1",
+    "ui5-cap-event-app-ui-admin": "*",
+    "ui5-cap-event-app-ui-form": "*"
   },
   "scripts": {
-    "cds:build": "cds build",
-    "cds:start": "cds run",
-    "cds:watch": "cds watch",
-    "cds:debug": "node --inspect bin/cds run",
-    "cds:debug-brk": "node --inspect-brk bin/cds run",
-    "start": "npm run cds:start"
+    "clean": "rimraf gen",
+    "build": "cds build",
+    "watch": "cds watch",
+    "start": "cds-serve"
   },
   "cds": {
     "requires": {

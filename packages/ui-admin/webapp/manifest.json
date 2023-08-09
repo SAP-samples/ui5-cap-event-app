@@ -72,12 +72,12 @@
         "routing": {
             "routes": [
                 {
-                    "pattern": "",
+                    "pattern": ":?query:",
                     "name": "PersonList",
                     "target": "PersonList"
                 },
                 {
-                    "pattern": "Person({key})",
+                    "pattern": "Person({key}):?query:",
                     "name": "PersonObjectPage",
                     "target": "PersonObjectPage"
                 }
