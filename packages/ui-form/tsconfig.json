@@ -1,28 +1,18 @@
 {
     "compilerOptions": {
-        "target": "es2015",
-        "module": "es2015",
+        "target": "es2022",
+        "module": "es2022",
+        "moduleResolution": "node",
         "skipLibCheck": true,
-        "preserveConstEnums": true,
-        "sourceMap": false,
         "allowJs": true,
         "strict": true,
         "strictNullChecks": false,
         "strictPropertyInitialization": false,
         "rootDir": "./webapp",
-        "outDir": "./dist",
-        "baseUrl": "./",
-        "typeRoots": [
-            "../../node_modules/@types/",
-            "../../node_modules/@sapui5/types/"
-        ],
+        "types": ["@sapui5/types", "@types/dompurify"],
         "paths": {
-            "sap/ui/eventregistration/form/*": [
-                "./webapp/*"
-            ]
+            "sap/ui/eventregistration/form/*": ["./webapp/*"]
         }
     },
-    "include": [
-        "./webapp/**/*"
-    ]
+    "include": ["./webapp/**/*"]
 }

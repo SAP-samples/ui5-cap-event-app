@@ -4,35 +4,29 @@
   "description": "UI5 CAP Event Application",
   "private": true,
   "scripts": {
-    "build": "npm-run-all build:clean --parallel build:server build:ui-form build:ui-admin --parallel build:server:copy-app build:server:copy-gen build:ui-form:copy build:ui-admin:copy",
-    "build:clean": "rimraf dist",
-    "build:server": "yarn workspace ui5-cap-event-app-server cds:build",
-    "build:server:copy-app": "cpy \"packages/server/app/sandbox.html\" dist/app --rename=index.html --flat",
-    "build:server:copy-gen": "cpy \"packages/server/gen/srv/**\" dist",
-    "build:ui-form": "yarn workspace ui5-cap-event-app-ui-form build",
-    "build:ui-form:copy": "cpy \"packages/ui-form/dist/**\" dist/app/form",
-    "build:ui-admin": "yarn workspace ui5-cap-event-app-ui-admin build",
-    "build:ui-admin:copy": "cpy \"packages/ui-admin/dist/**\" dist/app/admin",
-    "start": "npm-run-all --parallel start:server start:ui-form start:ui-admin",
-    "start:server": "yarn workspace ui5-cap-event-app-server cds:start",
-    "start:ui-form": "yarn workspace ui5-cap-event-app-ui-form start",
-    "start:ui-admin": "yarn workspace ui5-cap-event-app-ui-admin start",
-    "debug": "npm-run-all --parallel debug:server start:ui-form start:ui-admin",
-    "debug:server": "yarn workspace ui5-cap-event-app-server cds:debug",
-    "lint": "npm-run-all --parallel lint:ui-form",
-    "lint:ui-form": "yarn workspace ui5-cap-event-app-ui-form lint",
-    "ts-typecheck": "yarn workspace ui5-cap-event-app-ui-form ts-typecheck"
+    "clean": "rimraf dist && npm run clean --workspaces --if-present",
+    "build": "npm run clean && mkdirp dist && npm run build --workspaces --if-present && npm run copy",
+    "copy": "npm run copy:server:gen && npm run copy:server:app && npm run copy:ui-form && npm run copy:ui-admin",
+    "copy:server:app": "cpy \"packages/server/app/sandbox.html\" dist/app --rename=index.html --flat",
+    "copy:server:gen": "cpy \"packages/server/gen/srv/**\" dist",
+    "copy:ui-form": "cpy \"packages/ui-form/dist/**\" dist/app/form",
+    "copy:ui-admin": "cpy \"packages/ui-admin/dist/**\" dist/app/admin",
+    "start": "npm run start:server",
+    "start:server": "npm run start -w=ui5-cap-event-app-server",
+    "start:ui-form": "npm run start -w=ui5-cap-event-app-ui-form",
+    "start:ui-admin": "npm run start -w=ui5-cap-event-app-ui-admin",
+    "lint": "npm run lint --workspaces --if-present"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/SAP-samples/ui5-cap-event-app.git"
   },
-  "workspaces": [
-    "packages/*"
-  ],
   "dependencies": {
     "cpy-cli": "^5.0.0",
-    "npm-run-all": "^4.1.5",
+    "mkdirp": "^3.0.1",
     "rimraf": "^5.0.1"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
