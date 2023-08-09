@@ -6,9 +6,10 @@
   "scripts": {
     "clean": "rimraf dist && npm run clean --workspaces --if-present",
     "build": "npm run clean && mkdirp dist && npm run build --workspaces --if-present && npm run copy",
-    "copy": "npm run copy:server:gen && npm run copy:server:app && npm run copy:ui-form && npm run copy:ui-admin",
+    "copy": "npm run copy:server:gen && npm run copy:server:app && npm run copy:ui-form && npm run copy:ui-admin && npm run copy:server:pkgJson",
     "copy:server:app": "cpy \"packages/server/app/sandbox.html\" dist/app --rename=index.html --flat",
     "copy:server:gen": "cpy \"packages/server/gen/srv/**\" dist",
+    "copy:server:pkgJson": "rimraf dist/package*.json && cpy \"packages/server/package-dist.json\" dist --rename=package.json --flat",
     "copy:ui-form": "cpy \"packages/ui-form/dist/**\" dist/app/form",
     "copy:ui-admin": "cpy \"packages/ui-admin/dist/**\" dist/app/admin",
     "start": "npm run start:server",
