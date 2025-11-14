@@ -22,9 +22,9 @@
     "url": "git@github.wdf.sap.corp:uics-innersource/ui5-cap-event-app.git"
   },
   "dependencies": {
-    "cpy-cli": "^5.0.0",
+    "cpy-cli": "^6.0.0",
     "mkdirp": "^3.0.1",
-    "rimraf": "^5.0.1"
+    "rimraf": "^6.1.0"
   },
   "workspaces": [
     "packages/*"
