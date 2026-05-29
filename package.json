@@ -6,12 +6,13 @@
   "scripts": {
     "clean": "rimraf dist && npm run clean --workspaces --if-present",
     "build": "npm run clean && mkdirp dist && npm run build --workspaces --if-present && npm run copy",
-    "copy": "npm run copy:server:gen && npm run copy:server:app && npm run copy:ui-form && npm run copy:ui-admin && npm run copy:server:pkgJson",
+    "copy": "npm run copy:server:gen && mkdirp dist/app && npm run copy:server:app && npm run copy:ui-form && npm run copy:ui-admin && npm run copy:server:pkgJson",
     "copy:server:app": "cpy \"packages/server/app/sandbox.html\" dist/app --rename=index.html --flat",
     "copy:server:gen": "cpy \"packages/server/gen/srv/**\" dist",
     "copy:server:pkgJson": "rimraf dist/package*.json && cpy \"packages/server/package-dist.json\" dist --rename=package.json --flat",
     "copy:ui-form": "cpy \"packages/ui-form/dist/**\" dist/app/form",
     "copy:ui-admin": "cpy \"packages/ui-admin/dist/**\" dist/app/admin",
+    "lint:lockfile": "lockfile-lint --path package-lock.json --type npm --allowed-hosts npm --validate-https",
     "start": "npm run start:server",
     "start:server": "npm run start -w=ui5-cap-event-app-server",
     "start:ui-form": "npm run start -w=ui5-cap-event-app-ui-form",
@@ -22,9 +23,12 @@
     "url": "git@github.wdf.sap.corp:uics-innersource/ui5-cap-event-app.git"
   },
   "dependencies": {
-    "cpy-cli": "^6.0.0",
-    "mkdirp": "^3.0.1",
-    "rimraf": "^6.1.0"
+    "cpy-cli": "7.0.0",
+    "mkdirp": "3.0.1",
+    "rimraf": "6.1.3"
+  },
+  "devDependencies": {
+    "lockfile-lint": "5.0.0"
   },
   "workspaces": [
     "packages/*"

@@ -7,7 +7,7 @@ customConfiguration:
   mountPath: /admin
 framework:
   name: SAPUI5
-  version: "1.116.0"
+  version: "1.136.18"
   libraries:
     - name: sap.f
     - name: sap.fe.templates

@@ -4,14 +4,15 @@
   "description": "A simple CAP-based UI5 Event Application Server.",
   "private": true,
   "dependencies": {
-    "@sap/cds": "^7.1.1",
-    "express": "^4.18.2",
-    "passport": "^0.6.0",
-    "sqlite3": "^5.1.6"
+    "@cap-js/sqlite": "2.4.0",
+    "@sap/cds": "9.9.1",
+    "express": "4.21.2",
+    "passport": "0.7.0"
   },
   "devDependencies": {
-    "cds-plugin-ui5": "^0.2.2",
-    "rimraf": "^5.0.1",
+    "@sap/cds-dk": "9.9.1",
+    "cds-plugin-ui5": "0.17.1",
+    "rimraf": "5.0.10",
     "ui5-cap-event-app-ui-admin": "*",
     "ui5-cap-event-app-ui-form": "*"
   },
@@ -24,11 +25,10 @@
   "cds": {
     "requires": {
       "db": {
-        "kind": "sql",
-        "model": [
-          "db",
-          "srv"
-        ]
+        "kind": "sqlite",
+        "credentials": {
+          "url": ":memory:"
+        }
       }
     }
   }

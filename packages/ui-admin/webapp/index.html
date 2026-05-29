@@ -21,14 +21,14 @@
                     fiori2: {
                         componentData: {
                             config: {
-                                rootIntent: "fe-lrop-v4",
+                                rootIntent: "Admin-display",
                                 search: "hidden"
                             }
                         }
                     }
                 },
                 applications: {
-                    "fe-lrop-v4": {
+                    "Admin-display": {
                         title: "Admin UI",
                         description: "Admin UI",
                         additionalInformation: "SAPUI5.Component=sap.ui.eventregistration.admin",
@@ -40,31 +40,28 @@
             };
         </script>
 
-        <script id="sap-ushell-bootstrap"
-            src="https://ui5.sap.com/1.116.0/resources/sap-ui-core.js"
+        <script id="sap-ushell-bootstrap" src="https://ui5.sap.com/1.136.18/test-resources/sap/ushell/bootstrap/sandbox.js"></script>
+
+        <script id="sap-ui-bootstrap"
+            src="https://ui5.sap.com/1.136/resources/sap-ui-core.js"
             data-sap-ui-async="true"
             data-sap-ui-libs="sap.m, sap.ushell, sap.ui.core, sap.f, sap.fe.templates, sap.ui.table, sap.ui.layout"
             data-sap-ui-compatVersion="edge"
             data-sap-ui-theme="sap_fiori_3"
             data-sap-ui-frameOptions="allow"
-			data-sap-ui-language="en"
-			data-sap-ui-xx-supportedLanguages="en,de"
+            data-sap-ui-language="en"
+            data-sap-ui-xx-supportedLanguages="en,de"
             data-sap-ui-bindingSyntax="complex"
         ></script>
 
-        <!-- moved the sandbox.js script after the UI5 bootstrap -->
-        <script src="https://ui5.sap.com/1.116.0/test-resources/sap/ushell/bootstrap/sandbox.js"></script>
-
         <script>
-
-            sap.ui.getCore().attachInit(function () {
-                // call the boot-task of the sandbox.js manually
-                window['sap-ui-config']['xx-bootTask'](function() {
-                    // initialize the ushell sandbox component
-                    sap.ushell.Container.createRenderer().placeAt("content");
+            sap.ui.require(["sap/ui/core/Core"], function (Core) {
+                Core.ready().then(function () {
+                    sap.ushell.Container.createRenderer(undefined, true).then(function (oRenderer) {
+                        oRenderer.placeAt("content");
+                    });
                 });
             });
-
         </script>
     </head>
     <body class="sapUiBody" id="content"></body>

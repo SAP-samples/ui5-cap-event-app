@@ -14,8 +14,6 @@ Further details about how the functionality is implemented can be found [in the 
 ## Requirements
 
 - [Node.js](https://nodejs.org) (latest LTS version which supports npm workspaces)
-- [SAP CAP CLI](https://www.npmjs.com/package/@sap/cds-dk) (do `npm install -g @sap/cds-dk`)
-- [sqlite3](https://www.sqlite.org) (only needed separately on Windows, [commandline tools](https://www.sqlite.org/download.html) zip need to be downloaded, extracted, and directory added to the PATH)
 
 ## Download and Installation
 
@@ -29,8 +27,11 @@ Further details about how the functionality is implemented can be found [in the 
 2. Use npm to install the dependencies.
 
     ```sh
-    npm i
+    npm install
+    npm rebuild better-sqlite3
     ```
+
+    > **Note:** This project uses `ignore-scripts=true` in `.npmrc` for supply-chain security. The `npm rebuild better-sqlite3` step is needed to compile the native SQLite bindings that are blocked by this setting.
 
 ## Running the Project
 
@@ -50,11 +51,6 @@ Execute the following command to build the project and get one integrated app th
 
 ```sh
 npm run build
-```
-
-**Prerequisite:** `npm run build` runs `cds build` in the CDS server package which requires `@sap/cds-dk`. Please ensure to install `@sap/cds-dk` globally via:
-```sh
-npm i -g @sap/cds-dk
 ```
 
 After building the individual packages, the build results will be copied to the central `dist` folder. The resulting package inside the `dist` folder consists of the CDS server hosting the form UI and the admin UI as well as a sandbox Fiori launchpad to start the individual UIs.
@@ -92,5 +88,5 @@ Other projects demonstrating similar use-cases:
 
 ## License
 
-Copyright (c) 2020-2023 SAP SE or an SAP affiliate company. All rights reserved.
+Copyright (c) 2020-2026 SAP SE or an SAP affiliate company. All rights reserved.
 This project is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSE) file.

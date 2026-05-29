@@ -115,7 +115,7 @@ srv.on('NEW', 'Person', (req, next) => {
 });
 ```
 
-Mock authentication is used in this sample. The roles and users are defined in the file [`.csrc.json`](../packages/server/.cdsrc.json). Never use mock authentication (plaintext passwords!) in production scenarios! Only use [token-based authentication](https://cap.cloud.sap/docs/node.js/authentication#jwt) in production!
+Mock authentication is used in this sample. The roles and users are defined in the file [`.cdsrc.json`](../packages/server/.cdsrc.json). In CDS 9, mock users are configured under `requires.auth` with the user's email as the key (this is what `$user.id` resolves to at runtime). Never use mock authentication (plaintext passwords!) in production scenarios! Only use [token-based authentication](https://cap.cloud.sap/docs/node.js/authentication#jwt) in production!
 
 There are plenty of annotations describing the data in [`eventregistration-service-annotations.cds`](../packages/server/srv/eventregistration-service-annotations.cds). The most important ones:
 
@@ -210,20 +210,17 @@ It points to the `eventregistration` datasource also defined in the manifest fil
 }
 ```
 
-But... why can the server be reached at this server-absolute URL? After all, the CAP server is running on a different port (`4004`)!  
-The reason is this setting in [ui5.yaml](../packages/ui-form/ui5.yaml), where a forwarding proxy is registered for this url as custom middleware:
+But... why can the server be reached at this server-absolute URL? After all, when running the UI separately, the CAP server is running on a different port (`4004`)!  
+The reason is that this project uses [cds-plugin-ui5](https://www.npmjs.com/package/cds-plugin-ui5), which embeds the UI5 apps directly into the CDS server. When running via `npm start`, both the UI and the OData service are served from the same origin (`http://localhost:4004`), so no proxy is needed.
+
+For standalone UI development (running the UI5 dev server separately), [ui5-middleware-cap](https://www.npmjs.com/package/ui5-middleware-cap) is configured in [ui5.yaml](../packages/ui-form/ui5.yaml) as a custom middleware to proxy OData requests to the CAP server:
 
 ```yaml
 server:
   customMiddleware:
-  - name: ui5-middleware-simpleproxy
-    mountPath: /odata/v4/event-registration/
+  - name: ui5-middleware-cap
     afterMiddleware: compression
-    configuration:
-      baseUri: http://localhost:4004/odata/v4/event-registration/ 
 ```
-
-All requests going to `/odata/v4/event-registration/...` will be forwarded to `http://localhost:4004/odata/v4/event-registration/`.
 
 The [Component.js](../packages/ui-form/Component.js) file only has typical boilerplate code, except for the `doLogout` function. This function is triggered by buttons in different views and sends a POST request to the custom Express.js route we registered earlier to send a `401` response and make the browser forget the current login. On error, which is the expected case here, the browser is redirected to `index.html`, which will restart the app and prompt the user to log in anew.
 
@@ -498,10 +495,10 @@ The admin UI is based on [SAP Fiori elements for OData V4](https://blogs.sap.com
 
 The few files comprising the app are:
 
-* just two translatable texts in the [`i18n`](../packages/server/ui-admin/webapp/i18n) directory
-* an almost empty [`Component.js`](../packages/server/ui-admin/webapp/Component.js) file (only the logout method explained earlier in the Form UI app has some lines of code)
-* an [`index.html`](../packages/server/ui-admin/webapp/index.html) file which is  needed for running the app locally in a sandbox
-* the [`the manifest.json`](../packages/server/ui-admin/webapp/manifest.json) file. Even this content looks largely standard, pointing to the data service as described before for the Form UI app.
+* just two translatable texts in the [`i18n`](../packages/ui-admin/webapp/i18n) directory
+* an almost empty [`Component.js`](../packages/ui-admin/webapp/Component.js) file (only the logout method explained earlier in the Form UI app has some lines of code)
+* an [`index.html`](../packages/ui-admin/webapp/index.html) file which is  needed for running the app locally in a sandbox
+* the [`manifest.json`](../packages/ui-admin/webapp/manifest.json) file. Even this content looks largely standard, pointing to the data service as described before for the Form UI app.
 
 Some parts of `manifest.json` are worth a look, though, to understand how the generic floorplan is configured:  
 The default routing target, the "PersonList", is not a View, but a Component. And it's not a Component provided as part of the app, but one named "sap.fe.templates.ListReport", which comes with SAPUI5 and is the generic ListReport floorplan. In the "options" block of the manifest, there are some floorplan-specific settings, most importantly the entity set to display ("Person").  
@@ -544,7 +541,7 @@ Behind the scenes, it's the controls of the still-under-development "[sap.ui.mdc
 
 ## Project Structure and Lifecycle
 
-The project is organized as mono repository using [Yarn 1.x](https://classic.yarnpkg.com/) workspaces. This allows to have multiple packages in a single GitHub repository, manage, and link them via Yarn. The project structure looks like this:
+The project is organized as mono repository using [npm workspaces](https://docs.npmjs.com/cli/using-npm/workspaces). This allows to have multiple packages in a single GitHub repository, manage, and link them via npm. The project structure looks like this:
 
 ```text
 package.json
@@ -570,7 +567,7 @@ There is a `package.json` in the workspace root and each package is located in t
 
 ### Workspace Root
 
-In the workspace root a `package.json` is located which contains the metadata for the Yarn workspace. Looking into the `package.json` besides the regular metadata (`name`, `version`, ...) and the `dependencies` section, the `workspaces` section defines the packages which belong to the workspace. This project follows the best-practices of Yarn workspaces and maintains the packages inside the `packages`folder.
+In the workspace root a `package.json` is located which contains the metadata for the npm workspace. Looking into the `package.json` besides the regular metadata (`name`, `version`, ...) and the `dependencies` section, the `workspaces` section defines the packages which belong to the workspace. This project follows the best-practices of npm workspaces and maintains the packages inside the `packages` folder.
 
 ```json
 {
@@ -592,35 +589,31 @@ In the workspace root a `package.json` is located which contains the metadata fo
 
 Additionally, the workspace root is a *private* package which must not be published on the npm registry. Therefore, the package is marked as `private`.
 
-To simplify the handling of the mono repository, the `package.json` in the workspace root provides npm scripts to build, to debug, or to start the project.
+To simplify the handling of the mono repository, the `package.json` in the workspace root provides npm scripts to build or to start the project.
 
 ```json
 {
   [...]
   "scripts": {
     "build": [...],
-    "start": [...],
-    "debug": [...]
+    "start": [...]
   },
   [...]
 }
 ```
 
-The npm scripts can be called with Yarn via: `yarn build`, `yarn start`, or `yarn debug`. All those npm scripts are using [npm-run-all](https://www.npmjs.com/package/npm-run-all) to run *sub-scripts* sequential or in parallel.
-
-Most of the *subscripts* are using the `yarn workspace` command to run the npm scripts of the concrete package, e.g. `yarn workspace ui5-cap-event-app-ui-form start` runs the `yarn start` script in the `ui5-cap-event-app-ui-form` which is the package name of the `packages/ui-form` package.
+The npm scripts can be called with npm via: `npm run build` or `npm start`. The build script runs the individual workspace `build` scripts sequentially using `npm run build --workspaces --if-present`, then copies the results into the `dist` folder.
 
 The following snippet visualizes the **`build`** script execution:
 
 ```text
-                                                      build:server:copy-app
-                                build:server          build:server:copy-cdsrc
-build   >>   build:clean   >>   build:ui-form    >>   build:server:copy-gen
-                                build:ui-admin        build:ui-form:copy
-                                                      build:ui-admin:copy
+                                build (per workspace)
+build   >>   clean   >>        ├── server: cds build      >>   copy results to dist/
+                               ├── ui-admin: ui5 build
+                               └── ui-form: ui5 build
 ```
 
-First, the `build` script cleans the `dist` folder, then it builds the CAP server, the form UI, and the admin UI in parallel and finally it copies the build results from the individual packages into the `dist` folder.
+First, the `build` script cleans the `dist` folder, then it builds the CAP server, the form UI, and the admin UI sequentially and finally it copies the build results from the individual packages into the `dist` folder.
 
 The build result in the `dist` folder looks like this:
 
@@ -639,25 +632,7 @@ dist
 └── server.js          // extensions to the CDS server
 ```
 
-The following snippet visualizes the **`start`** script execution:
-
-```text
-             start:server
-start   >>   start:ui-form
-             start:ui-admin
-```
-
-First, the `start` script just starts the CAP server, the form UI, and the admin UI in parallel. The form UI is then running on http://localhost:8080/index.html, the admin UI on http://localhost:8081/index.html, and the CDS server on http://localhost:4004/.
-
-The following snippet visualizes the **`debug`** script execution:
-
-```text
-             debug:server
-debug   >>   start:ui-form
-             start:ui-admin
-```
-
-First, the `debug` script just starts the CAP server in debug mode, the form UI, and the admin UI in parallel. The form UI is then running on http://localhost:8080/index.html, the admin UI on http://localhost:8081/index.html, and the CDS server on http://localhost:4004/.
+The **`start`** script starts the CDS server with both UI5 apps embedded (via `cds-plugin-ui5`). The CDS server is available on http://localhost:4004/.
 
 ### CAP Server
 
@@ -677,27 +652,40 @@ packages/server
 └── server.js          // extensions to the CDS server
 ```
 
-As the project is setup as a mono repository the overall project will be run with the `package.json` scripts from the workspace root. But the workspace root scripts are calling the scripts from the local `package.json` with the `yarn workspace` command. The CAP server package contains the following scripts:
+As the project is setup as a mono repository the overall project will be run with the `package.json` scripts from the workspace root. But the workspace root scripts are calling the scripts from the local `package.json` via npm workspaces. The CAP server package contains the following scripts:
 
 ```json
 {
   "name": "ui5-cap-event-app-server",
   [...]
   "scripts": {
-    "cds:build": "cds build",
-    "cds:start": "cds run",
-    "cds:watch": "cds watch",
-    "cds:debug": "node --inspect bin/cds run",
-    "cds:debug-brk": "node --inspect-brk bin/cds run",
-    "start": "npm run cds:start"
+    "clean": "rimraf gen",
+    "build": "cds build",
+    "watch": "cds watch",
+    "start": "cds-serve"
   },
   [...]
 }
 ```
 
-The `package.json` contains scripts to build, start, watch or debug the CAP server. In the workspace root, only the build and start script it beeing used.
+The `package.json` contains scripts to build, start, or watch the CAP server. The `@sap/cds-dk` development toolkit is included as a local devDependency (no global install required).
 
-To run just a single script (e.g. `cds watch` for development) of the CAP server project from within the workspace root, just run `yarn workspace ui5-cap-event-app-server cds:watch`.
+The project uses [`@cap-js/sqlite`](https://github.com/cap-js/cds-dbs/tree/main/sqlite) for the in-memory database (based on `better-sqlite3`). This is a CDS plugin that auto-registers — the only configuration needed is in the `cds` section of `package.json`:
+
+```json
+{
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "url": ":memory:"
+        }
+      }
+    }
+  }
+}
+```
 
 ### Form UI
 
@@ -735,7 +723,7 @@ The Form UI package also contains a `package.json` defining the basic scripts ne
 }
 ```
 
-The build script is running the `ui5 build` command with the option `--clean-dest` to ensure having a clean `dist` folder into which the UI5 Tooling by default builds the project. The `ui5 build` command is creating a preload bundle for the component which is essential for productive usage to improve the loading performance. To just run the build step individually you can use the `yarn workspace` command `yarn workspace ui5-cap-event-app-ui-form build` from the workspace root. This produces the following output:
+The build script is running the `ui5 build` command with the option `--clean-dest` to ensure having a clean `dist` folder into which the UI5 Tooling by default builds the project. The `ui5 build` command is creating a preload bundle for the component which is essential for productive usage to improve the loading performance. To just run the build step individually you can use the workspace command `npm run build -w=ui5-cap-event-app-ui-form` from the workspace root. This produces the following output:
 
 ```text
 packages/ui-form
@@ -753,7 +741,7 @@ packages/ui-form
     └── manifest.json
 ```
 
-*Remark:* for the sake of simplicity, UI5 is loaded from CDN rather than using the local UI5 resources which are available as npm dependencies via the development server of the UI5 Tooling. To use the local UI5 resources you can change the `src` attribute of the UI5 bootstrap tag to `resources/sap-ui-core.js`.
+*Remark:* for the sake of simplicity, UI5 is loaded from CDN using the patch-level independent bootstrap URL rather than using the local UI5 resources which are available as npm dependencies via the development server of the UI5 Tooling. The patch-level independent URL (e.g., `https://ui5.sap.com/1.136/`) always serves the latest patch of the specified minor version — no manual updates needed for patch-level fixes. To use the local UI5 resources you can change the `src` attribute of the UI5 bootstrap tag to `resources/sap-ui-core.js`.
 
 ```html
 <!DOCTYPE html>
@@ -763,26 +751,20 @@ packages/ui-form
   [...]
 
   <script id="sap-ui-bootstrap"
-          src="https://ui5.sap.com/1.116.0/resources/sap-ui-core.js"
+          src="https://ui5.sap.com/1.136/resources/sap-ui-core.js"
 ```
 
-Another important aspect is the development server of the UI5 Tooling used to serve the UI5 applications at development time. The UI5 Tooling can be extended with custom middlewares to improve the development experience or to proxy OData services. For the Form UI project we are using the [ui5-middleware-livereload](https://www.npmjs.com/package/ui5-middleware-livereload) to improve the development experience by getting a save and update behavior (once a resource has been changed and saved in your editor, the UI5 application is reloaded) and [ui5-middleware-simpleproxy](https://www.npmjs.com/package/ui5-middleware-simpleproxy) to proxy the CAP server running on port `4004` to avoid [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues.
+Another important aspect is the development server of the UI5 Tooling used to serve the UI5 applications at development time. The UI5 Tooling can be extended with custom middlewares to improve the development experience or to proxy OData services. For the Form UI project we are using the [ui5-middleware-livereload](https://www.npmjs.com/package/ui5-middleware-livereload) to improve the development experience by getting a save and update behavior (once a resource has been changed and saved in your editor, the UI5 application is reloaded) and [ui5-middleware-cap](https://www.npmjs.com/package/ui5-middleware-cap) to proxy the CAP server running on port `4004` to avoid [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS) issues.
 
-To use those custom middlewares, they need to be imported in the `package.json` and declared as UI5 dependencies:
+To use those custom middlewares, they need to be imported in the `package.json` as devDependencies:
 
 ```json
 {
   "name": "ui5-cap-event-app-ui-form",
   [...]
   "devDependencies": {
-    "ui5-middleware-livereload": "^0.4.3",
-    "ui5-middleware-simpleproxy": "^0.5.1"
-  },
-  "ui5": {
-    "dependencies": [
-      "ui5-middleware-simpleproxy",
-      "ui5-middleware-livereload"
-    ]
+    "ui5-middleware-cap": "3.3.4",
+    "ui5-middleware-livereload": "3.3.0"
   }
 }
 ```
@@ -790,31 +772,22 @@ To use those custom middlewares, they need to be imported in the `package.json` 
 In addition, they need to be added to the development server by declaring the custom middlewares in the UI5 project metadata `ui5.yaml`:
 
 ```yaml
-specVersion: "2.0"
+specVersion: "3.0"
 metadata:
   name: sap.ui.eventregistration.form
 type: application
 [...]
 server:
   customMiddleware:
-  - name: ui5-middleware-simpleproxy
-    mountPath: /odata/v4/event-registration/
+  - name: ui5-middleware-cap
     afterMiddleware: compression
-    configuration:
-      baseUri: http://localhost:4004/odata/v4/event-registration/
-      removeETag: true
   - name: ui5-middleware-livereload
     afterMiddleware: compression
-    configuration:
-      debug: true
-      extraExts: "xml,json,properties"
-      port: 35729
-      path: "webapp"
 ```
 
-The `ui5-middleware-simpleproxy` is proxying all requests to `/odata/v4/event-registration` to `http://localhost:4004/odata/v4/event-registration`. With the option `removeETag` we ensure that the express server running behind the scenes is not adding an ETag to the response, which causes issues at runtime.
+The `ui5-middleware-cap` automatically proxies OData requests to the CAP server. When using `cds-plugin-ui5`, the UI5 apps are served directly from the CAP server (no separate proxy configuration needed).
 
-The `ui5-middleware-livereload` is monitoring the `webapp` folder for changes. The option `extraExts` extends the monitoring for some additional file extensions which are not monitored by default but used for UI5 application development.
+The `ui5-middleware-livereload` monitors the `webapp` folder for changes and reloads the UI5 application when files are saved.
 
 ### Admin UI
 
@@ -849,7 +822,7 @@ The Admin UI package also contains a `package.json` defining the basic scripts n
 }
 ```
 
-The build script is running the `ui5 build` command with the option `--clean-dest` to ensure having a clean `dist` folder into which the UI5 Tooling by default builds the project. The `ui5 build` command is creating a preload bundle for the component which is essential for productive usage to improve the loading performance. To just run the build step individually you can use the `yarn workspace` command `yarn workspace ui5-cap-event-app-ui-admin build` from the workspace root. This produces the following output:
+The build script is running the `ui5 build` command with the option `--clean-dest` to ensure having a clean `dist` folder into which the UI5 Tooling by default builds the project. The `ui5 build` command is creating a preload bundle for the component which is essential for productive usage to improve the loading performance. To just run the build step individually you can use the workspace command `npm run build -w=ui5-cap-event-app-ui-admin` from the workspace root. This produces the following output:
 
 ```text
 packages/ui-admin
@@ -864,7 +837,7 @@ packages/ui-admin
     └── manifest.json
 ```
 
-Similar like for the Form UI, the Admin UI is bootstrapping from CDN for the sake of simplicity and uses custom middlewares to improve the development experience and to proxy the OData service to overcome cross-domain issues.
+Similar like for the Form UI, the Admin UI is bootstrapping from CDN for the sake of simplicity and uses custom middlewares to improve the development experience and to proxy the OData service via `ui5-middleware-cap`.
 
 
 ### Deployment

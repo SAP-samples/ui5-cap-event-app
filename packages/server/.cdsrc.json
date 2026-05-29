@@ -1,42 +1,27 @@
 {
-    "auth": {
-        "passport": {
-            "strategy": "mock",
+    "requires": {
+        "auth": {
+            "kind": "mocked",
             "users": {
-                "Employee": {
+                "employee@test.com": {
                     "password": "123",
-                    "ID": "employee@test.com",
-                    "roles": [
-                        "Employee"
-                    ]
+                    "roles": ["Employee"]
                 },
-                "Employee2": {
+                "employee2@test.com": {
                     "password": "123",
-                    "ID": "employee2@test.com",
-                    "roles": [
-                        "Employee"
-                    ]
+                    "roles": ["Employee"]
                 },
-                "firstname1": {
+                "firstname1.lastname1@sap.com": {
                     "password": "123",
-                    "ID": "firstname1.lastname1@sap.com",
-                    "roles": [
-                        "Employee"
-                    ]
+                    "roles": ["Employee"]
                 },
-                "F2": {
+                "firstname2.lastname2@sap.com": {
                     "password": "123",
-                    "ID": "firstname2.lastname2@sap.com",
-                    "roles": [
-                        "Employee"
-                    ]
+                    "roles": ["Employee"]
                 },
-                "Admin": {
+                "admin@test.com": {
                     "password": "123",
-                    "ID": "admin@test.com",
-                    "roles": [
-                        "Admin"
-                    ]
+                    "roles": ["Admin"]
                 }
             }
         }

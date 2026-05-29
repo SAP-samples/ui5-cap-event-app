@@ -9,10 +9,10 @@
     "start": "ui5 serve --port 8080"
   },
   "devDependencies": {
-    "@ui5/cli": "^3.4.0",
-    "rimraf": "^5.0.1",
+    "@ui5/cli": "3.4.0",
+    "rimraf": "5.0.10",
     "ui5-cap-event-app-server": "*",
-    "ui5-middleware-cap": "^3.0.0",
-    "ui5-middleware-livereload": "^3.0.0"
+    "ui5-middleware-cap": "3.3.4",
+    "ui5-middleware-livereload": "3.3.0"
   }
 }
