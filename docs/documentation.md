@@ -444,7 +444,7 @@ for (var i = 0; i < oNewObject.FamilyMembers.length; i++) {
 }
 ```
 
-`aMissing` is finally an array containing a well-understandable desription for each missing piece of data. If any text is returned in this array, after `validateData` has been called at the beginning of `onSubmit`, the data submission is aboted and the error texts are shown in a MessageBox:
+`aMissing` is finally an array containing a well-understandable description for each missing piece of data. If any text is returned in this array, after `validateData` has been called at the beginning of `onSubmit`, the data submission is aborted and the error texts are shown in a MessageBox:
 
 ```js
 // run validation and report validation errors
@@ -461,7 +461,7 @@ if (aMissing.length > 0) {
 
 When the user has pressed the "Submit" button and validation has succeeded, the data is saved.
 
-Well, actually that's wrong: the data has been saved all the time, as the user entered field by field, each change was sent to the server with a PATCH request. All those changes have been applied to the draft element of the data. This means the user could close the browser window at any time, without loosing data, and resume data entry later. So what actually happens when the user presses the "Submit" button is that the draft data is "activated" - transferreed from the draft data element into a new or already existing fully persisted data element.
+Well, actually that's wrong: the data has been saved all the time, as the user entered field by field, each change was sent to the server with a PATCH request. All those changes have been applied to the draft element of the data. This means the user could close the browser window at any time, without losing data, and resume data entry later. So what actually happens when the user presses the "Submit" button is that the draft data is "activated" - transferred from the draft data element into a new or already existing fully persisted data element.
 
 Like switching data to draft mode, this again happens by creating an OData operation and executing it. This time it's `EventRegistrationService.draftActivate(...)`.
 
@@ -484,7 +484,7 @@ oOperation.execute()
 }.bind(this));
 ```
 
-Upon success, the router is navigating to the "confirmation" page. In case of error, a Dialog is shown and the user remains on the data entry page, so there is a chance to try again without loosing all the entered data.
+Upon success, the router is navigating to the "confirmation" page. In case of error, a Dialog is shown and the user remains on the data entry page, so there is a chance to try again without losing all the entered data.
 
 In the original app which served as inspiration for this sample app, the very first issue observed in productive use was lots of identical data sets being received by the server within fractions of a second. This was likely caused by people double-clicking the "Submit" button. As there is no standard mechanism in UI5 to prevent very quick subsequent clicks, the `onSubmit` method was just called twice. As this original app did not use draft mode, but created a new data element in `onSubmit`, this triggered the creation of two separate data elements in the backend.
 Hence, in the beginning of the code snippet above, the "Submit" button is disabled to prevent such a double-click effect. In case of an error (in `showErrorDialog`) the button is re-enabled, so the users has a chance to re-try.
@@ -537,7 +537,7 @@ In the "controlConfiguration" section, there are even settings configuring the a
 
 All other needed information to compose the UI comes from the CAP service metadata, e.g. the list of fields to display and their data types, the translated texts maintained in the annotations, etc. 
 
-Behind the scenes, it's the controls of the still-under-development "[sap.ui.mdc](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc)" ("metadata-driven controls") library, together with OData-V4-specific delegates doing all the interpretation of the OData metadata and annotations.
+Behind the scenes, it's the controls of the "[sap.ui.mdc](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc)" ("metadata-driven controls") library, together with OData-V4-specific delegates doing all the interpretation of the OData metadata and annotations.
 
 ## Project Structure and Lifecycle
 
@@ -736,7 +736,7 @@ packages/ui-form
     ├── view
     ├── Component-dbg.js        //   -> Component controller (sources)
     ├── Component-preload.js    //   -> Component preload bundle
-    ├── Component.js            //   -> Component controller (minifed)
+    ├── Component.js            //   -> Component controller (minified)
     ├── index.html
     └── manifest.json
 ```
@@ -832,7 +832,7 @@ packages/ui-admin
     │   └── sap-ui-version.json //   -> Version metadata
     ├── Component-dbg.js        //   -> Component controller (sources)
     ├── Component-preload.js    //   -> Component preload bundle
-    ├── Component.js            //   -> Component controller (minifed)
+    ├── Component.js            //   -> Component controller (minified)
     ├── index.html
     └── manifest.json
 ```
