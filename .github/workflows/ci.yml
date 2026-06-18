@@ -34,7 +34,7 @@ jobs:
 
       - name: Start server and verify it responds
         run: |
-          cleanup() { kill "$SERVER_PID" 2>/dev/null; }
+          cleanup() { kill "$SERVER_PID" 2>/dev/null || true; }
           trap cleanup EXIT
           npm run start &
           SERVER_PID=$!
