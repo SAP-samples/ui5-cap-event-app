@@ -34,17 +34,21 @@ jobs:
 
       - name: Start server and verify it responds
         run: |
+          cleanup() { kill "$SERVER_PID" 2>/dev/null; }
+          trap cleanup EXIT
           npm run start &
           SERVER_PID=$!
-          # Wait for the server to be ready
+          # Wait for the server to be ready (max 60s)
           for i in $(seq 1 30); do
             if curl -sf http://localhost:4004/ > /dev/null 2>&1; then
               echo "Server is up"
               break
             fi
+            if [ "$i" -eq 30 ]; then
+              echo "Server failed to start within 60s"
+              exit 1
+            fi
             sleep 2
           done
           # Verify the server responds
           curl -sf http://localhost:4004/ > /dev/null
-          # Stop the server
-          kill $SERVER_PID
