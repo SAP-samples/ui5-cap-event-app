@@ -24,7 +24,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Build native addons (better-sqlite3)
-        run: npm rebuild better-sqlite3
+        run: npm rebuild better-sqlite3 --ignore-scripts=false
 
       - name: Lint lockfile
         run: npm run lint:lockfile
