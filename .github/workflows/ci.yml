@@ -1,0 +1,47 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Lint lockfile
+        run: npm run lint:lockfile
+
+      - name: Build all packages
+        run: npm run build
+
+      - name: Start server and verify it responds
+        run: |
+          npm run start &
+          SERVER_PID=$!
+          # Wait for the server to be ready
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:4004/ > /dev/null 2>&1; then
+              echo "Server is up"
+              break
+            fi
+            sleep 2
+          done
+          # Verify the server responds
+          curl -sf http://localhost:4004/ > /dev/null
+          # Stop the server
+          kill $SERVER_PID
