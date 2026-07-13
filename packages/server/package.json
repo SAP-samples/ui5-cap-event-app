@@ -4,7 +4,7 @@
   "description": "A simple CAP-based UI5 Event Application Server.",
   "private": true,
   "dependencies": {
-    "@cap-js/sqlite": "2.4.0",
+    "@cap-js/sqlite": "3.0.0",
     "@sap/cds": "9.9.2",
     "express": "5.2.1",
     "passport": "0.7.0"
