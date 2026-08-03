@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@cap-js/sqlite": "2.4.0",
-    "@sap/cds": "9.9.2",
+    "@sap/cds": "10.0.3",
     "express": "5.2.1",
     "passport": "0.7.0"
   },
